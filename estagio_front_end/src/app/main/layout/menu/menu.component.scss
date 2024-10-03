@@ -1,0 +1,35 @@
+.menu{
+  background-color: var(--cor-secundaria);
+  width: 125px;
+  position: fixed;
+  transition: transform 0.3s ease;
+}
+.hidden{
+  transform: translateX(-100%);
+}
+button{
+  background-color: var(--cor-primaria);
+  height: 40px;
+  width: 100%;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  border: 0;
+  color: white;
+}
+button:hover{
+  color:#ddd;
+}
+
+.active{
+  background-color: var(--ativo);
+}
+.main{
+  height: fit-content;
+}
+.internal{
+  width: 90%;
+  float: right;
+}
+.active-internal{
+  background-color: var(--ativo);
+}
