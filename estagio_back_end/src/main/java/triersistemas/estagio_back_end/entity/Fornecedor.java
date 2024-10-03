@@ -4,7 +4,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
+import triersistemas.estagio_back_end.dto.FornecedorRequestDto;
+import triersistemas.estagio_back_end.enums.SituacaoCadastro;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -39,4 +40,14 @@ public class Fornecedor {
     @ManyToOne
     @JoinColumn(name = "filial_id")
     private Filial filial;
+
+    public  Fornecedor(FornecedorRequestDto dto, Filial filial){
+        this.nomeFantasia = dto.nomeFantasia();
+        this.razaoSocial = dto.razaoSocial();
+        this.cnpj = dto.cnpj();
+        this.telefone = dto.telefone();
+        this.email = dto.email();
+        this.situacaoCadastro = SituacaoCadastro.ATIVO;
+        this.filial = filial;
+    }
 }

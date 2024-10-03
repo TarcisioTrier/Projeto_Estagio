@@ -1,24 +1,34 @@
 package triersistemas.estagio_back_end.dto;
 
-import triersistemas.estagio_back_end.enuns.SituacaoContrato;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import triersistemas.estagio_back_end.enums.SituacaoContrato;
 
 public record FilialRequestDto(
-    String nomeFantasia,
-    String razaoSocial,
-    String cnpj,
-    String telefone,
-    String email,
-    SituacaoContrato situacaoContrato,
-    EnderecoDto endereco
-) {
+        @NotBlank(message = "Nome Fantasia é obrigatório")
+        String nomeFantasia,
 
-    public record EnderecoDto(
-        String cep,
-        String logradouro,
+        @NotBlank(message = "Razão Social é obrigatória")
+        String razaoSocial,
+
+        @NotBlank(message = "CNPJ é obrigatório")
+        String cnpj,
+
+        @NotBlank(message = "Telefone é obrigatório")
+        String telefone,
+
+        @Email(message = "Email inválido")
+        @NotBlank(message = "Email é obrigatório")
+        String email,
+
+        @NotNull(message = "Situação do Contrato é obrigatória")
+        SituacaoContrato situacaoContrato,
+
+        String rua,
         String numero,
         String complemento,
-        String bairro,
         String cidade,
-        String estado
-    ) {}
-}
+        String estado,
+        String cep
+) {}

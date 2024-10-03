@@ -4,9 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import triersistemas.estagio_back_end.enuns.Apresentacao;
-import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
-import triersistemas.estagio_back_end.enuns.TipoProduto;
+import triersistemas.estagio_back_end.dto.ProdutoRequestDto;
+import triersistemas.estagio_back_end.enums.Apresentacao;
+import triersistemas.estagio_back_end.enums.SituacaoCadastro;
+import triersistemas.estagio_back_end.enums.TipoProduto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -62,6 +63,20 @@ public class Produto {
     @Enumerated(EnumType.STRING)
     private SituacaoCadastro situacaoCadastro;
 
+    public Produto(ProdutoRequestDto dto, GrupoProduto grupoProduto) {
+        this.codigoBarras = dto.codigoBarras();
+        this.nome = dto.nome();
+        this.descricao = dto.descricao();
+        this.grupoProduto = grupoProduto;
+        this.tipoProduto = dto.tipoProduto();
+        this.apresentacao = dto.apresentacao();
+        this.margemLucro = dto.margemLucro();
+        this.aceitaAtualizacaoPreco = dto.aceitaAtualizacaoPreco();
+        this.valorProduto = dto.valorProduto();
+        this.situacaoCadastro = SituacaoCadastro.ATIVO;
+    }
+
+
     @PrePersist
     @PreUpdate
     private void calculateValorVenda() {
@@ -69,4 +84,5 @@ public class Produto {
             this.valorVenda = this.valorProduto.add(this.margemLucro);
         }
     }
+
 }

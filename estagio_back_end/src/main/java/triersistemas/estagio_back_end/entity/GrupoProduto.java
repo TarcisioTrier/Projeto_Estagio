@@ -1,12 +1,14 @@
 package triersistemas.estagio_back_end.entity;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
-import triersistemas.estagio_back_end.enuns.TipoGrupoProduto;
+import triersistemas.estagio_back_end.dto.GrupoProdutoRequestDto;
+import triersistemas.estagio_back_end.enums.SituacaoCadastro;
+import triersistemas.estagio_back_end.enums.TipoGrupoProduto;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -39,11 +41,22 @@ public class GrupoProduto {
     @Enumerated(EnumType.STRING)
     private SituacaoCadastro situacaoCadastro;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "grupoProduto", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Produto> produtos;
 
     @ManyToOne
     @JoinColumn(name = "filial_id")
     private Filial filial;
+
+    public GrupoProduto(GrupoProdutoRequestDto dto, Filial filial) {
+        this.nomeGrupo = dto.nomeGrupo();
+        this.tipoGrupo = dto.tipoGrupo();
+        this.margemLucro = dto.margemLucro();
+        this.atualizaPreco = dto.atualizaPreco();
+        this.situacaoCadastro = SituacaoCadastro.ATIVO;
+        this.filial = filial;
+    }
+
 
 }

@@ -1,10 +1,10 @@
-package triersistemas.estagio_back_end.enuns;
+package triersistemas.estagio_back_end.enums;
 
 public enum Apresentacao {
     CAPS_COMP_DRAG,
       GOTAS,
-      INJETÁVEL,
-      LÍQUIDO,
+      INJETAVEL,
+      LIQUIDO,
       OUTROS,
       POMADA_CREME,
 }

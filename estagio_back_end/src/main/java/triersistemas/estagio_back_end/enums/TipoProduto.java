@@ -1,19 +1,19 @@
-package triersistemas.estagio_back_end.enuns;
+package triersistemas.estagio_back_end.enums;
 
 public enum TipoProduto {
 
     ANTICONCEPCIONAIS,
-    FITOTERÁPICO,
+    FITOTERAPICO,
     FRALDAS,
-    GENÉRICO,
-    HOMEOPÁTICO,
+    GENERICO,
+    HOMEOPATICO,
     LEITES,
     MANIPULADO,
     MEDICAMENTO,
-    NÃO_DEFINIDO,
+    NAO_DEFINIDO,
     OFICINAL,
     PERFUMARIA,
-    REFERÊNCIA,
+    REFERENCIA,
     SIMILAR,
 
 }

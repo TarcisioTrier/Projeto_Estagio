@@ -16,10 +16,10 @@ public class Endereco {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "cep", nullable = false)
+    @Column(name = "cep")
     private String cep;
 
-    @Column(name = "logradouro", nullable = false)
+    @Column(name = "logradouro")
     private String logradouro;
 
     @Column(name = "numero")
@@ -28,15 +28,27 @@ public class Endereco {
     @Column(name = "complemento")
     private String complemento;
 
-    @Column(name = "bairro", nullable = false)
+    @Column(name = "bairro")
     private String bairro;
 
-    @Column(name = "cidade", nullable = false)
+    @Column(name = "cidade")
     private String cidade;
 
-    @Column(name = "estado", nullable = false)
+    @Column(name = "estado")
     private String estado;
+
+    @Column(name = "rua")
+    private String rua;
 
     @OneToOne(mappedBy = "endereco")
     private Filial filial;
+
+    public Endereco(String rua, String numero, String complemento, String cidade, String estado, String cep) {
+        this.rua = rua;
+        this.numero = numero;
+        this.complemento = complemento;
+        this.cidade = cidade;
+        this.estado = estado;
+        this.cep = cep;
+    }
 }
