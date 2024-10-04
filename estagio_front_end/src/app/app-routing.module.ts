@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: 'filial', loadChildren: () => import('./main/filial/filial.module').then((m) => m.FilialModule) },
 
   // Cadastro de Grupo de Produto
-  { path: 'grupo-produto', loadChildren: () => import('./main/grupo-produto/grupo-produto.module').then((m) => m.GrupoProdutoModule) },
+  { path: 'grupo-de-produto', loadChildren: () => import('./main/grupo-produto/grupo-produto.module').then((m) => m.GrupoProdutoModule) },
 
   // Cadastro de Fornecedor
   { path: 'fornecedor', loadChildren: () => import('./main/fornecedor/fornecedor.module').then((m) => m.FornecedorModule) },
@@ -24,7 +24,7 @@ const routes: Routes = [
   { path: 'medico', loadChildren: () => import('./main/medico/medico.module').then((m) => m.MedicoModule) },
 
   // Atualização de Preço
-  { path: 'atualizacao-preco', loadChildren: () => import('./main/atualizacao-preco/atualizacao-preco.module').then((m) => m.AtualizacaoPrecoModule) },
+  { path: 'atualizacao-de-preco', loadChildren: () => import('./main/atualizacao-preco/atualizacao-preco.module').then((m) => m.AtualizacaoPrecoModule) },
   { path: '**', component:NotFoundComponent}
 
 ];

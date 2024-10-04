@@ -2,6 +2,7 @@
   padding: 0;
   margin: 0;
   height: 100%;
+  box-sizing: border-box;
   font-family: 'MyriadPro-Regular', sans-serif, "Trebuchet MS", Arial, Geneva, Helvetica;
 }
 
@@ -12,4 +13,5 @@
 }
 app-not-found{
   width: 100%;
+  height: fit-content;
 }

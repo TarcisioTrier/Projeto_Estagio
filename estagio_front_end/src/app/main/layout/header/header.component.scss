@@ -3,12 +3,13 @@
   background-color: var(--cor-primaria);
   color: white;
 }
-header {
+div {
   display: flex;
   flex-direction: row;
   align-items: center;
   padding: 10px;
   justify-content: space-between;
+  height: 70px;
 }
 button {
   background: none;

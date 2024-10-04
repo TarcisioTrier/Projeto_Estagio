@@ -1,51 +1,8 @@
-<aside [class.hidden]="menuHidden" class="menu">
-  <button routerLink="/inicial" routerLinkActive="active">Inicial</button>
-  <!-- Filiais -->
-<button routerLink="/filial" routerLinkActive="active">Filiais</button>
-<div class="main" *ngIf="isCurrentRoute('/filial')">
-  <button class="internal" routerLink="/filial/cadastro" routerLinkActive="active">Cadastro de Filial</button>
-  <button class="internal" routerLink="/filial/listagem" routerLinkActive="active">Listagem de Filiais</button>
+<div [class.hidden]="menuHidden" class="menu">
+  <div class="button" *ngFor="let item of menu">
+    <button [routerLink]="item.id" routerLinkActive="active">{{item.nome}}</button>
+<li class="main" *ngIf="isCurrentRoute(item.id)">
+  <button *ngFor="let page of item.paginas" class="internal" routerLink={{page.url}} (click)="hideMenu()" routerLinkActive="active">{{page.info | titlecase}}</button>
+</li>
+  </div>
 </div>
-
-<!-- Grupo de Produto -->
-<button routerLink="/grupo-produto" routerLinkActive="active">Grupo de Produto</button>
-<div class="main" *ngIf="isCurrentRoute('/grupo-produto')">
-  <button class="internal" routerLink="/grupo-produto/cadastro" routerLinkActive="active">Cadastro de Grupo de Produto</button>
-  <button class="internal" routerLink="/grupo-produto/listagem" routerLinkActive="active">Listagem de Grupos de Produto</button>
-</div>
-
-<!-- Fornecedor -->
-<button routerLink="/fornecedor" routerLinkActive="active">Fornecedor</button>
-<div class="main" *ngIf="isCurrentRoute('/fornecedor')">
-  <button class="internal" routerLink="/fornecedor/cadastro" routerLinkActive="active">Cadastro de Fornecedor</button>
-  <button class="internal" routerLink="/fornecedor/listagem" routerLinkActive="active">Listagem de Fornecedores</button>
-</div>
-
-<!--Produto -->
-<button routerLink="/produto" routerLinkActive="active">Produto</button>
-<div class="main" *ngIf="isCurrentRoute('/produto')">
-  <button class="internal" routerLink="/produto/cadastro" routerLinkActive="active">Cadastro de Produto</button>
-  <button class="internal" routerLink="/produto/listagem" routerLinkActive="active">Listagem de Produtos</button>
-</div>
-
-<!--Especialidade Médica (BÔNUS) -->
-<button routerLink="/especialidade" routerLinkActive="active">Especialidade Médica</button>
-<div class="main" *ngIf="isCurrentRoute('/especialidade')">
-  <button class="internal" routerLink="/especialidade/cadastro" routerLinkActive="active">Especialidade</button>
-  <button class="internal" routerLink="/especialidade/listagem" routerLinkActive="active">Listagem de Especialidades</button>
-</div>
-
-<!-- Médico (BÔNUS) -->
-<button routerLink="/medico" routerLinkActive="active">Médico</button>
-<div class="main" *ngIf="isCurrentRoute('/medico')">
-  <button class="internal" routerLink="/medico/cadastro" routerLinkActive="active">Cadastro de Médico</button>
-  <button class="internal" routerLink="/medico/listagem" routerLinkActive="active">Listagem de Médicos</button>
-</div>
-
-<!-- Atualização de Preço -->
-<button routerLink="/atualizacao-preco" routerLinkActive="active">Atualização de Preço</button>
-<div class="main" *ngIf="isCurrentRoute('/atualizacao-preco')">
-  <button class="internal" routerLink="/atualizacao-preco/cadastro" routerLinkActive="active">Cadastrar Atualização de Preço</button>
-</div>
-
-</aside>
