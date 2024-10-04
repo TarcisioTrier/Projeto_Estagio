@@ -3,7 +3,7 @@ package triersistemas.estagio_back_end.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import triersistemas.estagio_back_end.enums.SituacaoCadastro;
+import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
 
 
 public record FornecedorRequestDto(

@@ -1,8 +1,8 @@
 package triersistemas.estagio_back_end.dto;
 
 import triersistemas.estagio_back_end.entity.GrupoProduto;
-import triersistemas.estagio_back_end.enums.SituacaoCadastro;
-import triersistemas.estagio_back_end.enums.TipoGrupoProduto;
+import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
+import triersistemas.estagio_back_end.enuns.TipoGrupoProduto;
 
 import java.math.BigDecimal;
 

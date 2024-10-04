@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import triersistemas.estagio_back_end.dto.FornecedorRequestDto;
-import triersistemas.estagio_back_end.enums.SituacaoCadastro;
+import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
 
 @AllArgsConstructor
 @NoArgsConstructor

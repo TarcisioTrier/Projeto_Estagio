@@ -1,4 +1,4 @@
-package triersistemas.estagio_back_end.enums;
+package triersistemas.estagio_back_end.enuns;
 
 public enum SituacaoContrato {
     ATIVO,

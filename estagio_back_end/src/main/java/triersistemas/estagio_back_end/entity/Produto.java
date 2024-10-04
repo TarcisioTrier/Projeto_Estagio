@@ -5,9 +5,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import triersistemas.estagio_back_end.dto.ProdutoRequestDto;
-import triersistemas.estagio_back_end.enums.Apresentacao;
-import triersistemas.estagio_back_end.enums.SituacaoCadastro;
-import triersistemas.estagio_back_end.enums.TipoProduto;
+import triersistemas.estagio_back_end.enuns.Apresentacao;
+import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
+import triersistemas.estagio_back_end.enuns.TipoProduto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

@@ -1,7 +1,7 @@
 package triersistemas.estagio_back_end.dto;
 
 import triersistemas.estagio_back_end.entity.Fornecedor;
-import triersistemas.estagio_back_end.enums.SituacaoCadastro;
+import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
 
 public record FornecedorResponseDto(Long id, String nomeFantasia, String razaoSocial, String cnpj, String telefone,
                                     String email, SituacaoCadastro situacaoCadastro, Long filialId) {

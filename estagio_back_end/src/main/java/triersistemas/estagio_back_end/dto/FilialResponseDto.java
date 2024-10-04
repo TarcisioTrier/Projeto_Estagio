@@ -1,7 +1,7 @@
 package triersistemas.estagio_back_end.dto;
 
 import triersistemas.estagio_back_end.entity.Filial;
-import triersistemas.estagio_back_end.enums.SituacaoContrato;
+import triersistemas.estagio_back_end.enuns.SituacaoContrato;
 
 public record FilialResponseDto(
         Long id,
@@ -11,15 +11,7 @@ public record FilialResponseDto(
         String telefone,
         String email,
         SituacaoContrato situacaoContrato,
-
-        //ENDEREÇO NÃO OBRIGATORIO
-
-        String rua,
-        String numero,
-        String complemento,
-        String cidade,
-        String estado,
-        String cep
+        EnderecosDto endereco
 ) {
     public FilialResponseDto(Filial filial) {
         this(
@@ -30,15 +22,15 @@ public record FilialResponseDto(
                 filial.getTelefone(),
                 filial.getEmail(),
                 filial.getSituacaoContrato(),
-
-                //ENDEREÇO NÃO OBRIGATORIO
-
-                filial.getEndereco() != null ? filial.getEndereco().getRua() : null,
-                filial.getEndereco() != null ? filial.getEndereco().getNumero() : null,
-                filial.getEndereco() != null ? filial.getEndereco().getComplemento() : null,
-                filial.getEndereco() != null ? filial.getEndereco().getCidade() : null,
-                filial.getEndereco() != null ? filial.getEndereco().getEstado() : null,
-                filial.getEndereco() != null ? filial.getEndereco().getCep() : null
+                filial.getEndereco() == null ? null :
+                        new EnderecosDto(
+                                filial.getEndereco().getLogradouro(),
+                                filial.getEndereco().getNumero(),
+                                filial.getEndereco().getComplemento(),
+                                filial.getEndereco().getCidade(),
+                                filial.getEndereco().getEstado(),
+                                filial.getEndereco().getCep(),
+                                filial.getEndereco().getBairro())
         );
     }
 }

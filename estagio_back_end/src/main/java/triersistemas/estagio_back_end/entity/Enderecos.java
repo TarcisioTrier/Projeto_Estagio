@@ -9,46 +9,44 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Entity(name = "Enderecos")
-public class Endereco {
+public class Enderecos {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "cep")
+    @Column(name = "cep", length = 8, nullable = false)
     private String cep;
 
-    @Column(name = "logradouro")
+    @Column(name = "logradouro", nullable = false)
     private String logradouro;
 
     @Column(name = "numero")
-    private String numero;
+    private Integer numero;
 
     @Column(name = "complemento")
     private String complemento;
 
-    @Column(name = "bairro")
+    @Column(name = "bairro", nullable = false)
     private String bairro;
 
-    @Column(name = "cidade")
+    @Column(name = "cidade", nullable = false)
     private String cidade;
 
-    @Column(name = "estado")
+    @Column(name = "estado", nullable = false)
     private String estado;
-
-    @Column(name = "rua")
-    private String rua;
 
     @OneToOne(mappedBy = "endereco")
     private Filial filial;
 
-    public Endereco(String rua, String numero, String complemento, String cidade, String estado, String cep) {
-        this.rua = rua;
+    public Enderecos(String logradouro, Integer numero, String complemento, String cidade, String estado, String cep, String bairro) {
+        this.logradouro = logradouro;
         this.numero = numero;
         this.complemento = complemento;
         this.cidade = cidade;
         this.estado = estado;
         this.cep = cep;
+        this.bairro = bairro;
     }
 }

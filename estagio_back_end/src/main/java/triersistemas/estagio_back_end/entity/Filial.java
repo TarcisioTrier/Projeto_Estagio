@@ -6,9 +6,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import triersistemas.estagio_back_end.dto.FilialRequestDto;
-import triersistemas.estagio_back_end.enums.SituacaoContrato;
+import triersistemas.estagio_back_end.enuns.SituacaoContrato;
 
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -50,7 +51,7 @@ public class Filial {
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "endereco_id", referencedColumnName = "id")
-    private Endereco endereco;
+    private Enderecos endereco;
 
     public Filial(FilialRequestDto dto) {
         this.nomeFantasia = dto.nomeFantasia();
@@ -58,16 +59,19 @@ public class Filial {
         this.cnpj = dto.cnpj();
         this.telefone = dto.telefone();
         this.email = dto.email();
-        this.situacaoContrato = dto.situacaoContrato();
-        if (dto.rua() != null && dto.cidade() != null && dto.estado() != null) {
-            this.endereco = new Endereco(
-                    dto.rua(),
-                    dto.numero(),
-                    dto.complemento(),
-                    dto.cidade(),
-                    dto.estado(),
-                    dto.cep()
+        this.situacaoContrato = Objects.nonNull(dto.situacaoContrato())? dto.situacaoContrato() : SituacaoContrato.ATIVO;
+        if(dto.endereco()!=null){
+            this.endereco = new Enderecos(
+                    dto.endereco().logradouro(),
+                    dto.endereco().numero(),
+                    dto.endereco().complemento(),
+                    dto.endereco().cidade(),
+                    dto.endereco().estado(),
+                    dto.endereco().cep(),
+                    dto.endereco().bairro()
             );
+
         }
+
     }
 }
