@@ -1,1 +1,17 @@
-/* You can add global styles to this file, and also import other style files */
+*{
+  padding: 0;
+  margin: 0;
+  height: 100%;
+  box-sizing: border-box;
+  font-family: 'MyriadPro-Regular', sans-serif, "Trebuchet MS", Arial, Geneva, Helvetica;
+}
+
+:root{
+  --cor-secundaria: #024c6f;
+  --cor-primaria: #005982;
+  --ativo:#024a6b;
+}
+app-not-found{
+  width: 100%;
+  height: fit-content;
+}

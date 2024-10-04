@@ -1,0 +1,22 @@
+* {
+  height: fit-content;
+  background-color: var(--cor-primaria);
+  color: white;
+}
+div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 10px;
+  justify-content: space-between;
+  height: 70px;
+}
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 30px;
+}
+button:hover {
+  color: #ddd;
+}
