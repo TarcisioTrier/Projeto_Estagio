@@ -1,15 +1,15 @@
-package triersistemas.estagio_back_end.dto;
+package triersistemas.estagio_back_end.dto.request;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import triersistemas.estagio_back_end.dto.EnderecosDto;
 import triersistemas.estagio_back_end.enuns.SituacaoContrato;
 
 
 public record FilialRequestDto(
-        @NotBlank(message = "Nome Fantasia é obrigatório")
 
+        @NotBlank(message = "Nome Fantasia é obrigatório")
         String nomeFantasia,
 
         @NotBlank(message = "Razão Social é obrigatória")
@@ -17,7 +17,6 @@ public record FilialRequestDto(
 
         @NotBlank(message = "CNPJ é obrigatório")
         String cnpj,
-
 
         @NotBlank(message = "Telefone é obrigatório")
         String telefone,

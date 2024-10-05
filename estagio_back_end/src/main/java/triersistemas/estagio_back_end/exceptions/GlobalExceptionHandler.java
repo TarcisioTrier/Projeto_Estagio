@@ -26,4 +26,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleInvalidCep(InvalidCepException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
+    @ExceptionHandler(InvalidCnpjException.class)
+    public ResponseEntity<String> handleInvalidCnpj(InvalidCnpjException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+    @ExceptionHandler(InvalidFoneException.class)
+    public ResponseEntity<String> handleInvalidFone(InvalidFoneException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
+    }
+
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<String> handleNotFound(NotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
 }

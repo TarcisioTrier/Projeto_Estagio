@@ -6,7 +6,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import triersistemas.estagio_back_end.dto.GrupoProdutoRequestDto;
+import triersistemas.estagio_back_end.dto.request.GrupoProdutoRequestDto;
 import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
 import triersistemas.estagio_back_end.enuns.TipoGrupoProduto;
 

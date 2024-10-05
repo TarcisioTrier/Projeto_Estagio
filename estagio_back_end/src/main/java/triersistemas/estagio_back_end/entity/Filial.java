@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import triersistemas.estagio_back_end.dto.FilialRequestDto;
+import triersistemas.estagio_back_end.dto.request.FilialRequestDto;
 import triersistemas.estagio_back_end.enuns.SituacaoContrato;
 
 import java.util.List;
@@ -65,7 +65,7 @@ public class Filial {
                     dto.endereco().logradouro(),
                     dto.endereco().numero(),
                     dto.endereco().complemento(),
-                    dto.endereco().cidade(),
+                    dto.endereco().localidade(),
                     dto.endereco().estado(),
                     dto.endereco().cep(),
                     dto.endereco().bairro()

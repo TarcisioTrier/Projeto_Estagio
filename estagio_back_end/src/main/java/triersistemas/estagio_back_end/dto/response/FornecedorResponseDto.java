@@ -1,4 +1,4 @@
-package triersistemas.estagio_back_end.dto;
+package triersistemas.estagio_back_end.dto.response;
 
 import triersistemas.estagio_back_end.entity.Fornecedor;
 import triersistemas.estagio_back_end.enuns.SituacaoCadastro;

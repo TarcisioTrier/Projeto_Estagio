@@ -1,5 +1,6 @@
-package triersistemas.estagio_back_end.dto;
+package triersistemas.estagio_back_end.dto.response;
 
+import triersistemas.estagio_back_end.dto.EnderecosDto;
 import triersistemas.estagio_back_end.entity.Filial;
 import triersistemas.estagio_back_end.enuns.SituacaoContrato;
 

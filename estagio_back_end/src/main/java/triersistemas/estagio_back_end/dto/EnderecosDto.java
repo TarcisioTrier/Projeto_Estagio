@@ -12,7 +12,7 @@ public record EnderecosDto(
         String complemento,
 
         @NotBlank(message = "Cidade é obrigatório")
-        String cidade,
+        String localidade,
 
         @NotBlank(message = "Estado é obrigatório")
         String estado,

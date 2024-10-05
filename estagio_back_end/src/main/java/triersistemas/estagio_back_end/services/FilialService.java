@@ -1,7 +1,8 @@
 package triersistemas.estagio_back_end.services;
 
-import triersistemas.estagio_back_end.dto.FilialRequestDto;
-import triersistemas.estagio_back_end.dto.FilialResponseDto;
+import triersistemas.estagio_back_end.dto.request.FilialRequestDto;
+import triersistemas.estagio_back_end.dto.response.FilialResponseDto;
+import triersistemas.estagio_back_end.entity.Filial;
 
 public interface FilialService {
 
@@ -11,5 +12,5 @@ public interface FilialService {
 
     void deleteFilial(Long id);
 
-    FilialResponseDto getFilialById(Long id);
+    Filial getFilialById(Long id);
 }

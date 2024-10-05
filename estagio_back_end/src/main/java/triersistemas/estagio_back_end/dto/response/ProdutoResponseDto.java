@@ -1,4 +1,4 @@
-package triersistemas.estagio_back_end.dto;
+package triersistemas.estagio_back_end.dto.response;
 
 import triersistemas.estagio_back_end.entity.Produto;
 import triersistemas.estagio_back_end.enuns.Apresentacao;

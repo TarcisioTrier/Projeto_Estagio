@@ -1,4 +1,4 @@
-package triersistemas.estagio_back_end.dto;
+package triersistemas.estagio_back_end.dto.request;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
