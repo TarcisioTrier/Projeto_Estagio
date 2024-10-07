@@ -19,6 +19,7 @@ export class MenuComponent implements OnInit {
     {id:'fornecedor', paginas:['cadastro','listagem']},
     {id:'produto', paginas:['cadastro','listagem']},
     {id:'especialista', paginas:['cadastro','listagem','verificacao']},
+    {id:'medico', paginas:['casdastro','listagem','vedacao']},
     {id:'atualizacao-de-produto',paginas:['cadastro']}
   ];
   getPaginas(i: any){

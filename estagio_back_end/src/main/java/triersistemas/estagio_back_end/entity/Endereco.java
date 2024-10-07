@@ -16,7 +16,7 @@ public class Endereco {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "cep")
+    @Column(name = "cep", length = 9)
     private String cep;
 
     @Column(name = "logradouro")
