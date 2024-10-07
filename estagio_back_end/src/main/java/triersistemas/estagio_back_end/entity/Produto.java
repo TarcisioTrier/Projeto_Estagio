@@ -4,13 +4,14 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import triersistemas.estagio_back_end.dto.ProdutoRequestDto;
-import triersistemas.estagio_back_end.enums.Apresentacao;
-import triersistemas.estagio_back_end.enums.SituacaoCadastro;
-import triersistemas.estagio_back_end.enums.TipoProduto;
+import triersistemas.estagio_back_end.dto.request.ProdutoRequestDto;
+import triersistemas.estagio_back_end.enuns.Apresentacao;
+import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
+import triersistemas.estagio_back_end.enuns.TipoProduto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -73,7 +74,7 @@ public class Produto {
         this.margemLucro = dto.margemLucro();
         this.aceitaAtualizacaoPreco = dto.aceitaAtualizacaoPreco();
         this.valorProduto = dto.valorProduto();
-        this.situacaoCadastro = SituacaoCadastro.ATIVO;
+        this.situacaoCadastro = Objects.nonNull(dto.situacaoCadastro()) ? dto.situacaoCadastro() : SituacaoCadastro.ATIVO;;
     }
 
 

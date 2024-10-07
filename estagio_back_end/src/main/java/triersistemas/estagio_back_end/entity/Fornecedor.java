@@ -4,8 +4,11 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import triersistemas.estagio_back_end.dto.FornecedorRequestDto;
-import triersistemas.estagio_back_end.enums.SituacaoCadastro;
+import triersistemas.estagio_back_end.dto.request.FornecedorRequestDto;
+import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
+import triersistemas.estagio_back_end.enuns.SituacaoContrato;
+
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -41,13 +44,13 @@ public class Fornecedor {
     @JoinColumn(name = "filial_id")
     private Filial filial;
 
-    public  Fornecedor(FornecedorRequestDto dto, Filial filial){
+    public Fornecedor(FornecedorRequestDto dto, Filial filial) {
         this.nomeFantasia = dto.nomeFantasia();
         this.razaoSocial = dto.razaoSocial();
         this.cnpj = dto.cnpj();
         this.telefone = dto.telefone();
         this.email = dto.email();
-        this.situacaoCadastro = SituacaoCadastro.ATIVO;
+        this.situacaoCadastro = Objects.nonNull(dto.situacaoCadastro()) ? dto.situacaoCadastro() : SituacaoCadastro.ATIVO;;
         this.filial = filial;
     }
 }

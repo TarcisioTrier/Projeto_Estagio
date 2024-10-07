@@ -1,9 +1,9 @@
-package triersistemas.estagio_back_end.dto;
+package triersistemas.estagio_back_end.dto.response;
 
 import triersistemas.estagio_back_end.entity.Produto;
-import triersistemas.estagio_back_end.enums.Apresentacao;
-import triersistemas.estagio_back_end.enums.SituacaoCadastro;
-import triersistemas.estagio_back_end.enums.TipoProduto;
+import triersistemas.estagio_back_end.enuns.Apresentacao;
+import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
+import triersistemas.estagio_back_end.enuns.TipoProduto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;

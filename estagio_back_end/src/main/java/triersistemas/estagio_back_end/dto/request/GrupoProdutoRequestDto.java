@@ -1,9 +1,9 @@
-package triersistemas.estagio_back_end.dto;
+package triersistemas.estagio_back_end.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import triersistemas.estagio_back_end.enums.SituacaoCadastro;
-import triersistemas.estagio_back_end.enums.TipoGrupoProduto;
+import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
+import triersistemas.estagio_back_end.enuns.TipoGrupoProduto;
 
 import java.math.BigDecimal;
 
@@ -21,4 +21,5 @@ public record GrupoProdutoRequestDto(
 
         @NotNull(message = "Situação do cadastro é obrigatória")
         SituacaoCadastro situacaoCadastro
-) {}
+) {
+}

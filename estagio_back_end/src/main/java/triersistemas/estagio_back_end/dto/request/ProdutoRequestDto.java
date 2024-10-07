@@ -1,11 +1,11 @@
-package triersistemas.estagio_back_end.dto;
+package triersistemas.estagio_back_end.dto.request;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import triersistemas.estagio_back_end.enums.Apresentacao;
-import triersistemas.estagio_back_end.enums.SituacaoCadastro;
-import triersistemas.estagio_back_end.enums.TipoProduto;
+import triersistemas.estagio_back_end.enuns.Apresentacao;
+import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
+import triersistemas.estagio_back_end.enuns.TipoProduto;
 
 import java.math.BigDecimal;
 
@@ -41,4 +41,5 @@ public record ProdutoRequestDto(
         BigDecimal valorVenda,
 
         SituacaoCadastro situacaoCadastro
-) {}
+) {
+}
