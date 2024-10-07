@@ -41,4 +41,5 @@ public record ProdutoRequestDto(
         BigDecimal valorVenda,
 
         SituacaoCadastro situacaoCadastro
-) {}
+) {
+}

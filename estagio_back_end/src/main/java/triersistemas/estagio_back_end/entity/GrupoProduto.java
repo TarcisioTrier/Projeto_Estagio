@@ -12,6 +12,7 @@ import triersistemas.estagio_back_end.enuns.TipoGrupoProduto;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -54,7 +55,7 @@ public class GrupoProduto {
         this.tipoGrupo = dto.tipoGrupo();
         this.margemLucro = dto.margemLucro();
         this.atualizaPreco = dto.atualizaPreco();
-        this.situacaoCadastro = SituacaoCadastro.ATIVO;
+        this.situacaoCadastro = Objects.nonNull(dto.situacaoCadastro()) ? dto.situacaoCadastro() : SituacaoCadastro.ATIVO;;
         this.filial = filial;
     }
 

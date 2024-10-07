@@ -10,6 +10,7 @@ import triersistemas.estagio_back_end.enuns.SituacaoContrato;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -59,8 +60,8 @@ public class Filial {
         this.cnpj = dto.cnpj();
         this.telefone = dto.telefone();
         this.email = dto.email();
-        this.situacaoContrato = Objects.nonNull(dto.situacaoContrato())? dto.situacaoContrato() : SituacaoContrato.ATIVO;
-        if(dto.endereco()!=null){
+        this.situacaoContrato = Objects.nonNull(dto.situacaoContrato()) ? dto.situacaoContrato() : SituacaoContrato.ATIVO;
+        if (dto.endereco() != null) {
             this.endereco = new Enderecos(
                     dto.endereco().logradouro(),
                     dto.endereco().numero(),
@@ -70,8 +71,22 @@ public class Filial {
                     dto.endereco().cep(),
                     dto.endereco().bairro()
             );
-
         }
+    }
+    public void alterarDados(FilialRequestDto dto) {
 
+        Optional.ofNullable(dto.nomeFantasia()).ifPresent(this::setNomeFantasia);
+        Optional.ofNullable(dto.razaoSocial()).ifPresent(this::setRazaoSocial);
+        Optional.ofNullable(dto.cnpj()).ifPresent(this::setCnpj);
+        Optional.ofNullable(dto.telefone()).ifPresent(this::setTelefone);
+        Optional.ofNullable(dto.email()).ifPresent(this::setEmail);
+        Optional.ofNullable(dto.situacaoContrato()).ifPresent(this::setSituacaoContrato);
+
+        Optional.ofNullable(dto.endereco()).ifPresent(enderecoDto -> {
+            if (this.endereco == null) {
+                this.endereco = new Enderecos();
+            }
+            this.endereco.alterarDados(enderecoDto);
+        });
     }
 }

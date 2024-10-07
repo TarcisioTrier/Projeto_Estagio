@@ -11,6 +11,7 @@ import triersistemas.estagio_back_end.enuns.TipoProduto;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -73,7 +74,7 @@ public class Produto {
         this.margemLucro = dto.margemLucro();
         this.aceitaAtualizacaoPreco = dto.aceitaAtualizacaoPreco();
         this.valorProduto = dto.valorProduto();
-        this.situacaoCadastro = SituacaoCadastro.ATIVO;
+        this.situacaoCadastro = Objects.nonNull(dto.situacaoCadastro()) ? dto.situacaoCadastro() : SituacaoCadastro.ATIVO;;
     }
 
 

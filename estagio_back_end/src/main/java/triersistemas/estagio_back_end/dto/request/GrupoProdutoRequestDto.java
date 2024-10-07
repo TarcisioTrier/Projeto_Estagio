@@ -21,4 +21,5 @@ public record GrupoProdutoRequestDto(
 
         @NotNull(message = "Situação do cadastro é obrigatória")
         SituacaoCadastro situacaoCadastro
-) {}
+) {
+}

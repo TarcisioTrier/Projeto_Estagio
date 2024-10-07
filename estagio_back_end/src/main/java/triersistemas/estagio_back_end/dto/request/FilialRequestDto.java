@@ -29,4 +29,5 @@ public record FilialRequestDto(
 
         @Valid
         EnderecosDto endereco
-) {}
+) {
+}

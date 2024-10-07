@@ -22,4 +22,5 @@ public record EnderecosDto(
 
         @NotBlank(message = "Bairro é obrigatório")
         String bairro
-) {}
+) {
+}

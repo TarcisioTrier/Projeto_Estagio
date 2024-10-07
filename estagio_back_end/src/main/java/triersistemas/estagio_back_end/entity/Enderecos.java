@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import triersistemas.estagio_back_end.dto.EnderecosDto;
+
+import java.util.Optional;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -48,5 +51,15 @@ public class Enderecos {
         this.estado = estado;
         this.cep = cep;
         this.bairro = bairro;
+    }
+
+    public void alterarDados(EnderecosDto dto) {
+        Optional.ofNullable(dto.logradouro()).ifPresent(this::setLogradouro);
+        Optional.ofNullable(dto.numero()).ifPresent(this::setNumero);
+        Optional.ofNullable(dto.complemento()).ifPresent(this::setComplemento);
+        Optional.ofNullable(dto.localidade()).ifPresent(this::setCidade);
+        Optional.ofNullable(dto.estado()).ifPresent(this::setEstado);
+        Optional.ofNullable(dto.cep()).ifPresent(this::setCep);
+        Optional.ofNullable(dto.bairro()).ifPresent(this::setBairro);
     }
 }

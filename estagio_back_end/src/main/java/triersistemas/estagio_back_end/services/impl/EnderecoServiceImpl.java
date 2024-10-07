@@ -28,7 +28,7 @@ public class EnderecoServiceImpl implements EnderecoService {
 
     private void validateCep(String cep) {
         cep = cep.replaceAll("[^0-9]", "");
-        if (cep.length()!= 8) {
+        if (cep.length() != 8) {
             throw new InvalidCepException("CEP inválido");
         }
     }
