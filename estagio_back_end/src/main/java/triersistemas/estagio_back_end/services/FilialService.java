@@ -6,6 +6,9 @@ import triersistemas.estagio_back_end.dto.request.FilialRequestDto;
 import triersistemas.estagio_back_end.dto.response.FilialResponseDto;
 import triersistemas.estagio_back_end.entity.Filial;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface FilialService {
 
     FilialResponseDto addFilial(FilialRequestDto requestDto);
@@ -16,7 +19,11 @@ public interface FilialService {
 
     FilialResponseDto getFilialById(Long id);
 
+    List<FilialResponseDto> getAllFiliais();
+
     Page<FilialResponseDto> getFilialFilter(String nome, String cnpj, Pageable pageable);
 
-    Filial findById(Long id);
+    Optional<Filial> buscaFilialPorId(Long id);
+
+    Filial filialById(Long id);
 }

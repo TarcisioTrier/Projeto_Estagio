@@ -36,7 +36,6 @@ public class FilialController {
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) String nome,
             @Valid @RequestParam(required = false) String cnpj) {
-
         Pageable pageable = PageRequest.of(page, size);
         return filialService.getFilialFilter(nome, cnpj, pageable);
     }

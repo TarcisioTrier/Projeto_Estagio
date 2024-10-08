@@ -14,6 +14,8 @@ import triersistemas.estagio_back_end.repository.GrupoProdutoRepository;
 import triersistemas.estagio_back_end.services.FilialService;
 import triersistemas.estagio_back_end.services.GrupoProdutoService;
 
+import java.util.Optional;
+
 @Service
 public class GrupoProdutoServiceImpl implements GrupoProdutoService {
 
@@ -25,13 +27,13 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
 
     @Override
     public GrupoProdutoResponseDto getGrupoProdutoById(Long id) {
-        var grupoProduto = this.BuscaGrupoProdutoPorId(id);
+        var grupoProduto = grupoProdutoById(id);
         return new GrupoProdutoResponseDto(grupoProduto);
     }
 
     @Override
     public GrupoProdutoResponseDto addGrupoProduto(GrupoProdutoRequestDto grupoProdutoRequestDto) {
-        var filial = filialService.findById(grupoProdutoRequestDto.filialId());
+        var filial = filialService.filialById(grupoProdutoRequestDto.filialId());
         var grupoProduto = new GrupoProduto(grupoProdutoRequestDto, filial);
         var saved = this.grupoProdutoRepository.save(grupoProduto);
         return new GrupoProdutoResponseDto(saved);
@@ -39,8 +41,8 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
 
     @Override
     public GrupoProdutoResponseDto updateGrupoProduto(Long id, GrupoProdutoRequestDto grupoProdutoRequestDto) {
-        var grupoProduto = this.BuscaGrupoProdutoPorId(id);
-        var filial = filialService.findById(id);
+        var grupoProduto = grupoProdutoById(id);
+        var filial = filialService.buscaFilialPorId(id);
         grupoProduto.alteraGrupoProduto(grupoProdutoRequestDto, filial);
         var saved = this.grupoProdutoRepository.save(grupoProduto);
         return new GrupoProdutoResponseDto(saved);
@@ -48,7 +50,7 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
 
     @Override
     public GrupoProdutoResponseDto deleteGrupoProdutoById(Long id) {
-        var grupoProduto = this.BuscaGrupoProdutoPorId(id);
+        var grupoProduto = grupoProdutoById(id);
         this.grupoProdutoRepository.delete(grupoProduto);
         return new GrupoProdutoResponseDto(grupoProduto);
 
@@ -61,7 +63,7 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
 
     @Override
     public GrupoProdutoResponseDto alteraGrupoProdutoById(Long id, boolean ativar) {
-       var grupoProduto =  BuscaGrupoProdutoPorId(id);
+       var grupoProduto =  grupoProdutoById(id);
        if(ativar){
            grupoProduto.setSituacaoCadastro(SituacaoCadastro.ATIVO);
        }else{
@@ -70,10 +72,15 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
 
         return new GrupoProdutoResponseDto(grupoProduto);
     }
-
-    GrupoProduto BuscaGrupoProdutoPorId(Long id){
-        return this.grupoProdutoRepository.findById(id).orElseThrow(() -> new NotFoundException("Grupo de Produto não encontrado"));
+    @Override
+    public Optional<GrupoProduto> buscaGrupoProdutoPorId(Long id){
+        return this.grupoProdutoRepository.findById(id);
     }
+    @Override
+    public GrupoProduto grupoProdutoById(Long id){
+       return this.buscaGrupoProdutoPorId(id).orElseThrow(() -> new NotFoundException("Grupo de Produto não encontrado"));
+    }
+
 
 
 }

@@ -12,6 +12,7 @@ import triersistemas.estagio_back_end.enuns.TipoProduto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Objects;
+import java.util.Optional;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -75,6 +76,19 @@ public class Produto {
         this.aceitaAtualizacaoPreco = dto.aceitaAtualizacaoPreco();
         this.valorProduto = dto.valorProduto();
         this.situacaoCadastro = Objects.nonNull(dto.situacaoCadastro()) ? dto.situacaoCadastro() : SituacaoCadastro.ATIVO;;
+    }
+    public void atualizaProduto(ProdutoRequestDto dto, Optional<GrupoProduto> grupoProduto) {
+        this.codigoBarras = Optional.ofNullable(dto.codigoBarras()).orElse(this.codigoBarras);
+        this.nome = Optional.ofNullable(dto.nome()).orElse(this.nome);
+        this.descricao = Optional.ofNullable(dto.descricao()).orElse(this.descricao);
+        this.grupoProduto = grupoProduto.orElse(this.grupoProduto);
+        this.tipoProduto = Optional.ofNullable(dto.tipoProduto()).orElse(this.tipoProduto);
+        this.apresentacao = Optional.ofNullable(dto.apresentacao()).orElse(this.apresentacao);
+        this.margemLucro = Optional.ofNullable(dto.margemLucro()).orElse(this.margemLucro);
+        this.aceitaAtualizacaoPreco = Optional.ofNullable(dto.aceitaAtualizacaoPreco()).orElse(this.aceitaAtualizacaoPreco);
+        this.valorProduto = Optional.ofNullable(dto.valorProduto()).orElse(this.valorProduto);
+        this.situacaoCadastro = Optional.ofNullable(dto.situacaoCadastro()).orElse(this.situacaoCadastro);
+
     }
 
 
