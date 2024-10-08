@@ -16,4 +16,6 @@ public interface GrupoProdutoService {
     GrupoProdutoResponseDto deleteGrupoProdutoById(Long id);
 
     Page<GrupoProdutoResponseDto> getGrupoProdutoFilter(String nomeGrupo, TipoGrupoProduto tipoGrupo, Long idFilial, Pageable pageable);
+
+    GrupoProdutoResponseDto alteraGrupoProdutoById(Long id, boolean ativo);
 }

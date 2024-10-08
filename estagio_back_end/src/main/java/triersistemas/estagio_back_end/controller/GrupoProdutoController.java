@@ -13,7 +13,7 @@ import triersistemas.estagio_back_end.enuns.TipoGrupoProduto;
 import triersistemas.estagio_back_end.services.GrupoProdutoService;
 
 @RestController
-@RequestMapping("/api/grupos-produtos")
+@RequestMapping("/grupos-produtos")
 public class GrupoProdutoController {
     final GrupoProdutoService grupoProdutoService;
 
@@ -37,15 +37,19 @@ public class GrupoProdutoController {
     }
 
     @PostMapping("/post")
-    public ResponseEntity<GrupoProdutoResponseDto> postGrupoProduto(@RequestBody GrupoProdutoRequestDto grupoProdutoRequestDto) {
+    public ResponseEntity<GrupoProdutoResponseDto> postGrupoProduto(@Valid @RequestBody GrupoProdutoRequestDto grupoProdutoRequestDto) {
         return ResponseEntity.ok(grupoProdutoService.addGrupoProduto(grupoProdutoRequestDto));
     }
     @PutMapping("/put/{id}")
-    public ResponseEntity<GrupoProdutoResponseDto> putGrupoProduto(@PathVariable Long id, @RequestBody GrupoProdutoRequestDto grupoProdutoRequestDto) {
+    public ResponseEntity<GrupoProdutoResponseDto> putGrupoProduto(@PathVariable Long id,@Valid @RequestBody GrupoProdutoRequestDto grupoProdutoRequestDto) {
         return ResponseEntity.ok(grupoProdutoService.updateGrupoProduto(id, grupoProdutoRequestDto));
     }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<GrupoProdutoResponseDto> deleteGrupoProdutoById(@PathVariable Long id) {
         return ResponseEntity.ok(grupoProdutoService.deleteGrupoProdutoById(id));
+    }
+    @DeleteMapping("/desativa/{id}")
+    public ResponseEntity<GrupoProdutoResponseDto> alteraGrupoProdutoById(@PathVariable Long id, @RequestParam boolean ativar) {
+        return ResponseEntity.ok(grupoProdutoService.alteraGrupoProdutoById(id, ativar));
     }
 }

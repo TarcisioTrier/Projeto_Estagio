@@ -9,6 +9,7 @@ import triersistemas.estagio_back_end.entity.Filial;
 import triersistemas.estagio_back_end.exceptions.InvalidCnpjException;
 import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.repository.FilialRepository;
+import triersistemas.estagio_back_end.services.EnderecoService;
 import triersistemas.estagio_back_end.services.FilialService;
 import triersistemas.estagio_back_end.utils.Utils;
 
@@ -22,9 +23,9 @@ import static triersistemas.estagio_back_end.utils.Utils.validateFone;
 public class FilialServiceImpl implements FilialService {
 
     private final FilialRepository filialRepository;
-    private final EnderecoServiceImpl enderecoService;
+    private final EnderecoService enderecoService;
 
-    public FilialServiceImpl(FilialRepository filialRepository, EnderecoServiceImpl enderecoService) {
+    public FilialServiceImpl(FilialRepository filialRepository, EnderecoService enderecoService) {
         this.filialRepository = filialRepository;
         this.enderecoService = enderecoService;
     }
