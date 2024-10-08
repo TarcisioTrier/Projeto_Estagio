@@ -9,9 +9,11 @@ import triersistemas.estagio_back_end.entity.Filial;
 import triersistemas.estagio_back_end.exceptions.InvalidCnpjException;
 import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.repository.FilialRepository;
+import triersistemas.estagio_back_end.services.EnderecoService;
 import triersistemas.estagio_back_end.services.FilialService;
 import triersistemas.estagio_back_end.utils.Utils;
 
+import java.util.List;
 import java.util.Optional;
 
 import static triersistemas.estagio_back_end.utils.Utils.validateCnpj;
@@ -21,9 +23,9 @@ import static triersistemas.estagio_back_end.utils.Utils.validateFone;
 public class FilialServiceImpl implements FilialService {
 
     private final FilialRepository filialRepository;
-    private final EnderecoServiceImpl enderecoService;
+    private final EnderecoService enderecoService;
 
-    public FilialServiceImpl(FilialRepository filialRepository, EnderecoServiceImpl enderecoService) {
+    public FilialServiceImpl(FilialRepository filialRepository, EnderecoService enderecoService) {
         this.filialRepository = filialRepository;
         this.enderecoService = enderecoService;
     }
@@ -42,7 +44,7 @@ public class FilialServiceImpl implements FilialService {
 
     @Override
     public FilialResponseDto updateFilial(Long id, FilialRequestDto requestDto) {
-        Filial filial = getFilialById(id);
+        Filial filial = buscaFilialPorId(id).orElseThrow(() -> new NotFoundException("Filial não encontrada"));
 
         if (requestDto.cnpj() != null && !requestDto.cnpj().equals(filial.getCnpj())) {
             validateCnpjUpdate(requestDto.cnpj(), id);
@@ -66,18 +68,20 @@ public class FilialServiceImpl implements FilialService {
 
     @Override
     public void deleteFilial(Long id) {
-        Filial filial = getFilialById(id);
+        Filial filial = buscaFilialPorId(id).orElseThrow(() -> new NotFoundException("Filial não encontrada"));
         filialRepository.delete(filial);
     }
 
     @Override
-    public Filial getFilialById(Long id) {
-        return filialRepository.findById(id).orElseThrow(() -> new NotFoundException("Filial não encontrada"));
+    public FilialResponseDto getFilialById(Long id) {
+        var filial = buscaFilialPorId(id).orElseThrow(() -> new NotFoundException("Filial não encontrada"));
+        return new FilialResponseDto(filial);
     }
 
     @Override
-    public Filial getAllFiliais() {
-        return null;
+    public List<FilialResponseDto> getAllFiliais() {
+        var filial = filialRepository.findAll();
+        return filial.stream().map(FilialResponseDto::new).toList();
     }
 
     @Override
@@ -100,4 +104,9 @@ public class FilialServiceImpl implements FilialService {
             throw new InvalidCnpjException("CNPJ já cadastrado em outra empresa.");
         }
     }
+    @Override
+    public Optional<Filial> buscaFilialPorId(Long id) {
+        return filialRepository.findById(id);
+    }
+
 }

@@ -13,6 +13,7 @@ import triersistemas.estagio_back_end.enuns.TipoGrupoProduto;
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -60,4 +61,13 @@ public class GrupoProduto {
     }
 
 
+    public void alteraGrupoProduto(GrupoProdutoRequestDto grupoProdutoRequestDto, Optional<Filial> filial) {
+        this.nomeGrupo = Optional.ofNullable(grupoProdutoRequestDto.nomeGrupo()).orElse(this.nomeGrupo);
+        this.tipoGrupo = Optional.ofNullable(grupoProdutoRequestDto.tipoGrupo()).orElse(this.tipoGrupo);
+        this.margemLucro = Optional.ofNullable(grupoProdutoRequestDto.margemLucro()).orElse(this.margemLucro);
+        this.atualizaPreco = Optional.ofNullable(grupoProdutoRequestDto.atualizaPreco()).orElse(this.atualizaPreco);
+        this.situacaoCadastro = Optional.ofNullable(grupoProdutoRequestDto.situacaoCadastro()).orElse(this.situacaoCadastro);
+        this.filial = filial.orElse(this.filial);
+
+    }
 }

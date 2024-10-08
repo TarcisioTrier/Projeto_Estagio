@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import triersistemas.estagio_back_end.entity.GrupoProduto;
 
 @Repository
-public interface GrupoProdutoRepository extends JpaRepository<GrupoProduto, Long> {
+public interface GrupoProdutoRepository extends JpaRepository<GrupoProduto, Long>, GrupoProdutoRepositoryCustom {
 }
