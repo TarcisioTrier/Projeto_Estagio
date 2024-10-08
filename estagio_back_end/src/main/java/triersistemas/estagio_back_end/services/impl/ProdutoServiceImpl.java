@@ -11,7 +11,6 @@ import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
 import triersistemas.estagio_back_end.enuns.TipoProduto;
 import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.repository.ProdutoRepository;
-import triersistemas.estagio_back_end.services.FilialService;
 import triersistemas.estagio_back_end.services.GrupoProdutoService;
 import triersistemas.estagio_back_end.services.ProdutoService;
 

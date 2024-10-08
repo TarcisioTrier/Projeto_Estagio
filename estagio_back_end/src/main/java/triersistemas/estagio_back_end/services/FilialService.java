@@ -25,5 +25,5 @@ public interface FilialService {
 
     Optional<Filial> buscaFilialPorId(Long id);
 
-    Filial filialById(Long id);
+    Filial findById(Long id);
 }

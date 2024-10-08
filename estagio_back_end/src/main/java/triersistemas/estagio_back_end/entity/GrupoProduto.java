@@ -61,13 +61,13 @@ public class GrupoProduto {
     }
 
 
-    public void alteraGrupoProduto(GrupoProdutoRequestDto grupoProdutoRequestDto, Filial filial) {
+    public void alteraGrupoProduto(GrupoProdutoRequestDto grupoProdutoRequestDto, Optional<Filial> filial) {
         this.nomeGrupo = Optional.ofNullable(grupoProdutoRequestDto.nomeGrupo()).orElse(this.nomeGrupo);
         this.tipoGrupo = Optional.ofNullable(grupoProdutoRequestDto.tipoGrupo()).orElse(this.tipoGrupo);
         this.margemLucro = Optional.ofNullable(grupoProdutoRequestDto.margemLucro()).orElse(this.margemLucro);
         this.atualizaPreco = Optional.ofNullable(grupoProdutoRequestDto.atualizaPreco()).orElse(this.atualizaPreco);
         this.situacaoCadastro = Optional.ofNullable(grupoProdutoRequestDto.situacaoCadastro()).orElse(this.situacaoCadastro);
-        this.filial = Objects.nonNull(filial)? filial : this.filial;
+        this.filial = filial.orElse(this.filial);
 
     }
 }
