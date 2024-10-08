@@ -31,7 +31,7 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
 
     @Override
     public GrupoProdutoResponseDto addGrupoProduto(GrupoProdutoRequestDto grupoProdutoRequestDto) {
-        var filial = filialService.buscaFilialPorId(grupoProdutoRequestDto.filialId()).orElseThrow(() -> new NotFoundException("Filial not found"));
+        var filial = filialService.findById(grupoProdutoRequestDto.filialId());
         var grupoProduto = new GrupoProduto(grupoProdutoRequestDto, filial);
         var saved = this.grupoProdutoRepository.save(grupoProduto);
         return new GrupoProdutoResponseDto(saved);
@@ -40,7 +40,7 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
     @Override
     public GrupoProdutoResponseDto updateGrupoProduto(Long id, GrupoProdutoRequestDto grupoProdutoRequestDto) {
         var grupoProduto = this.BuscaGrupoProdutoPorId(id);
-        var filial = filialService.buscaFilialPorId(id);
+        var filial = filialService.findById(id);
         grupoProduto.alteraGrupoProduto(grupoProdutoRequestDto, filial);
         var saved = this.grupoProdutoRepository.save(grupoProduto);
         return new GrupoProdutoResponseDto(saved);

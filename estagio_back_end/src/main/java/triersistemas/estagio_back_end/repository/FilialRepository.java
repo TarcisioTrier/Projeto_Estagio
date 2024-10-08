@@ -9,7 +9,5 @@ import java.util.Optional;
 @Repository
 public interface FilialRepository extends JpaRepository<Filial, Long>, FilialRepositoryCustom {
 
-    boolean existsByCnpj(String cnpj);
-
     Optional<Filial> findByCnpj(String cnpj);
 }

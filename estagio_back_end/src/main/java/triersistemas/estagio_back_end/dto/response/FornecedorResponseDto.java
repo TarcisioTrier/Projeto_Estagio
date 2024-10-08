@@ -11,7 +11,8 @@ public record FornecedorResponseDto(
         String telefone,
         String email,
         SituacaoCadastro situacaoCadastro,
-        Long filialId) {
+        Long filialId
+){
 
 
     public FornecedorResponseDto(Fornecedor fornecedor) {
