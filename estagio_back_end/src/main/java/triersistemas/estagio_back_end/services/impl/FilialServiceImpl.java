@@ -108,5 +108,9 @@ public class FilialServiceImpl implements FilialService {
     public Optional<Filial> buscaFilialPorId(Long id) {
         return filialRepository.findById(id);
     }
+    @Override
+    public Filial filialById(Long id){
+        return buscaFilialPorId(id).orElseThrow(() -> new NotFoundException("Filial not found"));
+    }
 
 }

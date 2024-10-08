@@ -24,4 +24,6 @@ public interface FilialService {
     Page<FilialResponseDto> getFilialFilter(String nome, String cnpj, Pageable pageable);
 
     Optional<Filial> buscaFilialPorId(Long id);
+
+    Filial filialById(Long id);
 }

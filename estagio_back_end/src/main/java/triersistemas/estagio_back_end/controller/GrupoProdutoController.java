@@ -48,7 +48,7 @@ public class GrupoProdutoController {
     public ResponseEntity<GrupoProdutoResponseDto> deleteGrupoProdutoById(@PathVariable Long id) {
         return ResponseEntity.ok(grupoProdutoService.deleteGrupoProdutoById(id));
     }
-    @DeleteMapping("/desativa/{id}")
+    @DeleteMapping("/altera/{id}")
     public ResponseEntity<GrupoProdutoResponseDto> alteraGrupoProdutoById(@PathVariable Long id, @RequestParam boolean ativar) {
         return ResponseEntity.ok(grupoProdutoService.alteraGrupoProdutoById(id, ativar));
     }
