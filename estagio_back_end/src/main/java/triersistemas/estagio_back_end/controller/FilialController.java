@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import triersistemas.estagio_back_end.dto.request.FilialRequestDto;
 import triersistemas.estagio_back_end.dto.response.FilialResponseDto;
-import triersistemas.estagio_back_end.entity.Filial;
 import triersistemas.estagio_back_end.services.FilialService;
 
 @RestController
@@ -27,7 +26,7 @@ public class FilialController {
     }
 
     @GetMapping("/get/{id}")
-    public ResponseEntity<Filial> getFilialById(@PathVariable Long id) {
+    public ResponseEntity<FilialResponseDto> getFilialById(@PathVariable Long id) {
         return ResponseEntity.ok(filialService.getFilialById(id));
     }
 

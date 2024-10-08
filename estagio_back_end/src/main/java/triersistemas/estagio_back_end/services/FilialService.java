@@ -14,9 +14,9 @@ public interface FilialService {
 
     void deleteFilial(Long id);
 
-    Filial getFilialById(Long id);
-
-    Filial getAllFiliais();
+    FilialResponseDto getFilialById(Long id);
 
     Page<FilialResponseDto> getFilialFilter(String nome, String cnpj, Pageable pageable);
+
+    Filial findById(Long id);
 }

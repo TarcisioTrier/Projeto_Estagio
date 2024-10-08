@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import triersistemas.estagio_back_end.dto.request.FornecedorRequestDto;
 import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
-import triersistemas.estagio_back_end.enuns.SituacaoContrato;
 
 import java.util.Objects;
 
@@ -50,7 +49,25 @@ public class Fornecedor {
         this.cnpj = dto.cnpj();
         this.telefone = dto.telefone();
         this.email = dto.email();
-        this.situacaoCadastro = Objects.nonNull(dto.situacaoCadastro()) ? dto.situacaoCadastro() : SituacaoCadastro.ATIVO;;
+        this.situacaoCadastro = Objects.nonNull(dto.situacaoCadastro()) ? dto.situacaoCadastro() : SituacaoCadastro.ATIVO;
         this.filial = filial;
+    }
+
+    public void alterarDados(FornecedorRequestDto dto, Filial filial) {
+        this.nomeFantasia = Objects.nonNull(dto.nomeFantasia())? dto.nomeFantasia() : this.nomeFantasia;
+        this.razaoSocial = Objects.nonNull(dto.razaoSocial())? dto.razaoSocial() : this.razaoSocial;
+        this.cnpj = Objects.nonNull(dto.cnpj())? dto.cnpj() : this.cnpj;
+        this.telefone = Objects.nonNull(dto.telefone())? dto.telefone() : this.telefone;
+        this.email = Objects.nonNull(dto.email())? dto.email() : this.email;
+        this.situacaoCadastro = Objects.nonNull(dto.situacaoCadastro())? dto.situacaoCadastro() : this.situacaoCadastro;
+        this.filial = Objects.nonNull(filial)? filial : this.filial;
+    }
+
+    public void alterarSituacao() {
+        if (this.situacaoCadastro.equals(SituacaoCadastro.ATIVO)) {
+            this.situacaoCadastro = SituacaoCadastro.INATIVO;
+        } else {
+            this.situacaoCadastro = SituacaoCadastro.ATIVO;
+        }
     }
 }
