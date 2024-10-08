@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { FilialRoutingModule } from './filial-routing.module';
 import { FilialComponent } from './filial.component';
+import { FilialCadastroModule } from './filial-cadastro/filial-cadastro.module';
+import { FilialListagemModule } from './filial-listagem/filial-listagem.module';
 
 
 @NgModule({
@@ -11,7 +13,9 @@ import { FilialComponent } from './filial.component';
   ],
   imports: [
     CommonModule,
-    FilialRoutingModule
+    FilialRoutingModule,
+    FilialCadastroModule,
+    FilialListagemModule
   ]
 })
 export class FilialModule { }

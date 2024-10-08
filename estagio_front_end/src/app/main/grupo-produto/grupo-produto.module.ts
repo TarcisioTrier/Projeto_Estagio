@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 
 import { GrupoProdutoRoutingModule } from './grupo-produto-routing.module';
 import { GrupoProdutoComponent } from './grupo-produto.component';
+import { GrupoProdutoCadastroModule } from './grupo-produto-cadastro/grupo-produto-cadastro.module';
+import { GrupoProdutoListagemModule } from './grupo-produto-listagem/grupo-produto-listagem.module';
 
 
 @NgModule({
@@ -11,7 +13,9 @@ import { GrupoProdutoComponent } from './grupo-produto.component';
   ],
   imports: [
     CommonModule,
-    GrupoProdutoRoutingModule
+    GrupoProdutoRoutingModule,
+    GrupoProdutoCadastroModule,
+    GrupoProdutoListagemModule
   ]
 })
 export class GrupoProdutoModule { }

@@ -1,3 +1,4 @@
+import { DashboardModule } from './main/dashboard/dashboard.module';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { NotFoundComponent } from './main/not-found/not-found.component';
@@ -25,6 +26,7 @@ const routes: Routes = [
 
   // Atualização de Preço
   { path: 'atualizacao-de-preco', loadChildren: () => import('./main/atualizacao-preco/atualizacao-preco.module').then((m) => m.AtualizacaoPrecoModule) },
+  { path: '', loadChildren: () => import('./main/dashboard/dashboard.module').then((m) => m.DashboardModule) },
   { path: '**', component:NotFoundComponent}
 
 ];

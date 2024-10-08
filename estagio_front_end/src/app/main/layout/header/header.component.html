@@ -1,5 +1,12 @@
-<div>
-  <button (click)="toggleMenu()">☰</button>
-  <h1>Trier Sistemas</h1>
-  <img [src]="imagem" />
-</div>
+  <p-menubar [model]="items">
+    <ng-template pTemplate="start">
+      <img src="../../../../favicon.ico" height="40" class="mr-2">
+  </ng-template>
+  <ng-template pTemplate="end">
+    <div>
+      <input type="text" pInputText placeholder="Search">
+      <img [src]="imagem" />
+    </div>
+  </ng-template>
+
+  </p-menubar>

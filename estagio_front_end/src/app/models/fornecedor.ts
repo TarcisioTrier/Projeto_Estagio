@@ -8,5 +8,5 @@ export interface Fornecedor{
   telefone: string,
   email: string,
   situacaoContrato: SituacaoContrato,
-  filialId: number;
+  filialId: number,
   }

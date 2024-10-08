@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MenuComponent } from './menu.component';
 import { AppRoutingModule } from '../../../app-routing.module';
+import { MenubarModule } from 'primeng/menubar';
 
 
 
@@ -11,7 +12,9 @@ import { AppRoutingModule } from '../../../app-routing.module';
   ],
   imports: [
     CommonModule,
-    AppRoutingModule
+    AppRoutingModule,
+    MenubarModule,
+
   ],
   exports:[
     MenuComponent

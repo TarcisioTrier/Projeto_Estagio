@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { ToggleServiceService } from '../../../services/toggle-service.service';
 import { Menu, Paginas } from '../../../models/menu';
 import { TitleCasePipe } from '@angular/common';
+import { PrimeNGConfig } from 'primeng/api';
+
 
 @Component({
   selector: 'app-menu',
