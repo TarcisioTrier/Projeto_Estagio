@@ -49,7 +49,7 @@ public class FilialServiceImpl implements FilialService {
         Filial filial = findById(id);
 
         if (requestDto.cnpj() != null && !requestDto.cnpj().equals(filial.getCnpj())) {
-            validateCnpjUpdate(requestDto.cnpj(), id);
+            cnpjValidator.validateCnpjUpdateFilial(requestDto.cnpj(), id);
         }
 
         if (requestDto.telefone() != null) {
@@ -96,18 +96,13 @@ public class FilialServiceImpl implements FilialService {
         validateFone(requestDto.telefone());
     }
 
-    private void validateCnpjUpdate(String cnpj, Long id) {
-        Optional<Filial> filialExistente = filialRepository.findByCnpj(cnpj);
-        if (filialExistente.isPresent() && !filialExistente.get().getId().equals(id)) {
-            throw new InvalidCnpjException("CNPJ já cadastrado em outra empresa.");
-        }
-    }
     @Override
     public Optional<Filial> buscaFilialPorId(Long id) {
         return filialRepository.findById(id);
     }
+
     @Override
-    public Filial findById(Long id){
+    public Filial findById(Long id) {
         return buscaFilialPorId(id).orElseThrow(() -> new NotFoundException("Filial não Encontrada"));
     }
 
