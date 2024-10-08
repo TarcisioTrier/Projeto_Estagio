@@ -1,15 +1,13 @@
 package triersistemas.estagio_back_end.services.impl;
 
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import triersistemas.estagio_back_end.dto.EnderecosDto;
 import triersistemas.estagio_back_end.entity.Enderecos;
 import triersistemas.estagio_back_end.exceptions.InvalidCepException;
 import triersistemas.estagio_back_end.services.EnderecoService;
 
-@Service
+@Component
 public class EnderecoServiceImpl implements EnderecoService {
-
-    private static final String VIA_CEP_URL = "https://viacep.com.br/ws/{cep}/json/";
 
     public Enderecos validateEndereco(EnderecosDto enderecoDto) {
 

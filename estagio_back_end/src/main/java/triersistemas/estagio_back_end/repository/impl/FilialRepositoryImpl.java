@@ -9,7 +9,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import triersistemas.estagio_back_end.dto.response.FilialResponseDto;
-import triersistemas.estagio_back_end.entity.Filial;
 import triersistemas.estagio_back_end.entity.QFilial;
 import triersistemas.estagio_back_end.repository.FilialRepositoryCustom;
 
@@ -35,9 +34,11 @@ public class FilialRepositoryImpl implements FilialRepositoryCustom {
         }
 
         JPAQuery<FilialResponseDto> query = new JPAQuery<>(em);
+
         List<FilialResponseDto> filiais = query.select(Projections.constructor(FilialResponseDto.class, filial))
                 .from(filial)
                 .where(builder)
+                .orderBy(filial.id.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
@@ -46,7 +47,6 @@ public class FilialRepositoryImpl implements FilialRepositoryCustom {
         long total = query.from(filial)
                 .where(builder)
                 .fetchCount();
-
         return new PageImpl<>(filiais, pageable, total);
     }
 }

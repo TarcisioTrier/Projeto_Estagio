@@ -23,7 +23,6 @@ public record FornecedorRequestDto(
         @NotBlank(message = "Email é obrigatório")
         String email,
 
-        @NotNull(message = "Situação do Cadastro é obrigatória")
         SituacaoCadastro situacaoCadastro,
 
         @NotNull(message = "ID da Filial é obrigatório")
