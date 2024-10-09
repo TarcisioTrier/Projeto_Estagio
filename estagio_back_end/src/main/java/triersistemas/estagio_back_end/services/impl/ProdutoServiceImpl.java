@@ -64,7 +64,7 @@ public class ProdutoServiceImpl implements ProdutoService {
         var produto = produtoById(id);
         if (ativar) {
             produto.setSituacaoCadastro(SituacaoCadastro.ATIVO);
-        }else{
+        } else {
             produto.setSituacaoCadastro(SituacaoCadastro.INATIVO);
         }
         var saved = produtoRepository.save(produto);
@@ -76,7 +76,7 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     Produto produtoById(Long id) {
-        return buscarProdutoPorId(id).orElseThrow(()-> new NotFoundException("Produto não encontrado"));
+        return buscarProdutoPorId(id).orElseThrow(() -> new NotFoundException("Produto não encontrado"));
     }
 
 }

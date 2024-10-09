@@ -4,7 +4,6 @@ export enum SituacaoContrato {
   RESCINDIDO,
   EM_IMPLEMENTACAO
 }
-
 export enum Apresentacao {
   CAPS_COMP_DRAG,
     GOTAS,
@@ -25,7 +24,6 @@ export enum TipoGrupoProduto {
   OUTROS
 }
 export enum TipoProduto {
-
   ANTICONCEPCIONAIS,
   FITOTERAPICO,
   FRALDAS,

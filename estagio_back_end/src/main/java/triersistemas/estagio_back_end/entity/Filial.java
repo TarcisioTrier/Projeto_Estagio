@@ -73,6 +73,7 @@ public class Filial {
             );
         }
     }
+
     public void alterarDados(FilialRequestDto dto) {
 
         Optional.ofNullable(dto.nomeFantasia()).ifPresent(this::setNomeFantasia);
