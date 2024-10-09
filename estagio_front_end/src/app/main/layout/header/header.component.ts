@@ -1,6 +1,7 @@
+import { style } from '@angular/animations';
+import { StylesService } from './../../../services/styles.service';
 import { MenuItem, PrimeNGConfig } from 'primeng/api';
-import { Component } from '@angular/core';
-import { ToggleServiceService } from '../../../services/toggle-service.service';
+import { Component, OnInit } from '@angular/core';
 
 
 
@@ -9,7 +10,18 @@ import { ToggleServiceService } from '../../../services/toggle-service.service';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss',
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
+  darkMode!: boolean;
+
+toggleMode() {
+  this.styleService.toggleLightDark();
+  this.darkMode = this.styleService.isDarkMode
+  if(this.darkMode){
+    document.body.classList.add('dark')
+  }else{
+    document.body.classList.remove('dark')
+  }
+}
 items: MenuItem[] = [
   {label:"Home", routerLink:"inicial"},{
     label:"Telas", items:[
@@ -34,9 +46,11 @@ items: MenuItem[] = [
 
 ];
 
-  constructor(private toggleService: ToggleServiceService, private primengconfig: PrimeNGConfig) {}
-  toggleMenu() {
-    this.toggleService.menuHidden = !this.toggleService.menuHidden;
+  constructor(private styleService: StylesService) {}
+  ngOnInit(): void {
+    this.darkMode = this.styleService.isDarkMode
   }
+
+
   imagem = 'https://www.triersistemas.com.br/imagens/logo_topo.png';
 }

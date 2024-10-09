@@ -1,8 +1,0 @@
-<div [class.hidden]="menuHidden" class="menu">
-  <div class="button" *ngFor="let item of menu">
-    <button [routerLink]="item.id" routerLinkActive="active">{{item.nome}}</button>
-<li class="main" *ngIf="isCurrentRoute(item.id)">
-  <button *ngFor="let page of item.paginas" class="internal" routerLink={{page.url}} (click)="hideMenu()" routerLinkActive="active">{{page.info | titlecase}}</button>
-</li>
-  </div>
-</div>

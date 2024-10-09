@@ -1,6 +1,12 @@
-
-div{
+div {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+:host {
+  body.dark & {
+    img {
+      filter: invert(100%);
+    }
+  }
 }

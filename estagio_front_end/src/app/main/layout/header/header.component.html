@@ -1,6 +1,10 @@
   <p-menubar [model]="items">
     <ng-template pTemplate="start">
-      <img src="../../../../favicon.ico" height="40" class="mr-2">
+      <div>
+        <i *ngIf="darkMode" class="pi pi-moon" style="font-size: 2rem; color:var(--cyan-50)" (click)="toggleMode()"></i>
+        <i *ngIf="!darkMode" class="pi pi-sun" style="font-size: 2rem; color:var(--yellow-400)" (click)="toggleMode()"></i>
+        <img src="../../../../favicon.ico" height="40" class="mr-2">
+      </div>
   </ng-template>
   <ng-template pTemplate="end">
     <div>
