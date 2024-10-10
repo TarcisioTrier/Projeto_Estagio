@@ -1,8 +1,8 @@
 export enum SituacaoContrato {
-  ATIVO,
-  INATIVO,
-  RESCINDIDO,
-  EM_IMPLEMENTACAO
+  ATIVO = 0,
+  INATIVO = 1,
+  RESCINDIDO = 2,
+  EM_IMPLEMENTACAO = 3
 }
 export enum Apresentacao {
   CAPS_COMP_DRAG,

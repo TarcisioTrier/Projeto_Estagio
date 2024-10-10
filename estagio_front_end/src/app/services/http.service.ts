@@ -9,11 +9,11 @@ import { FilialPage } from '../models/filial-page';
   providedIn: 'root',
 })
 export class HttpService {
-  // buscarPorQueryParam(id: Number){
-  //   return this.http.get(`comments`, {params : {postId: id.toString()}}).pipe(take(1));
-  // }
-  constructor(private http: HttpClient) {}
 
+  constructor(private http: HttpClient) {}
+  viaCep(cep: string){
+    return this.http.get(`https://viacep.com.br/ws/${cep}/json/`).pipe(take(1));
+  }
   postFilial(filial: Filial) {
     return this.http.post('filiais/post', filial).pipe(take(1));
   }

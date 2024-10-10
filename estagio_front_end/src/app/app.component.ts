@@ -11,18 +11,11 @@ import { FilialPage } from './models/filial-page';
     templateUrl: './app.component.html'
 })
 export class AppComponent implements OnInit {
-    filialPage: FilialPage = {
-      size: 3,
-      page: 0,
-      cnpj: '12.345.678/0002-'
-    }
-    constructor(private styleService: StylesService,private primengConfig: PrimeNGConfig, private http: HttpService) {}
+
+    constructor(private styleService: StylesService,private primengConfig: PrimeNGConfig) {}
     ngOnInit() {
         this.primengConfig.ripple = true;
         this.styleService.toggleLightDark();
-        this.http.getFilialPaged(this.filialPage).subscribe(filiais => {
-          console.log(filiais);
-        })
     }
 
   title = 'estagio_front_end';

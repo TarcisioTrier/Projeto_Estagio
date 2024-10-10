@@ -1,1 +1,84 @@
-<p>filial-cadastro works!</p>
+<div class="card flex align-items-center justify-content-center flex-column">
+  <p-floatLabel>
+    <input
+      pInputText
+      id="nomeFantasia"
+      type="text"
+      [ngModel]="cadastroFilial.nomeFantasia"
+    />
+    <label for="nomeFantasia">Nome Fantasia</label>
+  </p-floatLabel>
+  <p-floatLabel>
+    <input
+      pInputText
+      id="razaoSocial"
+      type="text"
+      [ngModel]="cadastroFilial.razaoSocial"
+    />
+    <label for="razaoSocial">Razão Social</label>
+  </p-floatLabel>
+  <p-floatLabel>
+    <p-inputMask
+      mask="99.999.999/9999-99"
+      id="cnpj"
+      [(ngModel)]="cadastroFilial.cnpj"
+    />
+    <label for="cnpj">CNPJ</label>
+  </p-floatLabel>
+  <p-floatLabel>
+    <p-inputMask
+      mask="(99)99999-9999"
+      id="telefone"
+      [(ngModel)]="cadastroFilial.telefone"
+    />
+    <label for="telefone">Telefone</label>
+  </p-floatLabel>
+  <p-floatLabel>
+    <input pInputText id="email" [(ngModel)]="cadastroFilial.email" />
+    <label for="email">Email</label>
+  </p-floatLabel>
+  <p-dropdown
+    [options]="situacaoContrato"
+    [(ngModel)]="itemSelecionado"
+    (ngModelChange)="test($event)"
+    optionLabel="label"
+    [showClear]="true"
+    placeholder="Situação Contrato"
+  >
+    <ng-template pTemplate="selectedItem">
+      <div style="width: 125px; height: fit-content">
+        {{ itemSelecionado.label }}
+      </div>
+    </ng-template>
+    <ng-template let-item pTemplate="item">
+      <div style="width: fit-content; height: fit-content; float: left">
+        {{ item.label }}
+      </div>
+    </ng-template>
+  </p-dropdown>
+  <p-floatLabel>
+    <p-inputMask
+      mask="99999-999"
+      id="cep"
+      [(ngModel)]="endereco.cep"
+      (ngModelChange)="cep($event)"
+    />
+    <label for="cep">CEP</label>
+  </p-floatLabel>
+  <p-floatLabel>
+    <input pInputText id="logradouro" [(ngModel)]="endereco.logradouro" />
+    <label for="logradouro">Logradouro</label>
+  </p-floatLabel>
+  <p-floatLabel>
+    <p-inputNumber
+      id="numero"
+      inputId="integeronly"
+      [(ngModel)]="endereco.numero"
+    />
+    <label for="numero">Numero</label>
+  </p-floatLabel>
+  <p-floatLabel>
+    <input pInputText id="complemento" [(ngModel)]="endereco.complemento" />
+    <label for="complemento">Complemento</label>
+  </p-floatLabel>
+</div>

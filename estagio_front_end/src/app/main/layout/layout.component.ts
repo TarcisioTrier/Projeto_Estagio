@@ -51,7 +51,6 @@ filterItems(event: AutoCompleteCompleteEvent) {
     }else{
       document.body.classList.remove('dark')
     }
-    console.log(this.selectedItem);
   }
 
 
