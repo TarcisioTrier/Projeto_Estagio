@@ -30,7 +30,7 @@ public class FilialRepositoryImpl implements FilialRepositoryCustom {
         }
 
         if (cnpj != null && !cnpj.isEmpty()) {
-            builder.and(filial.cnpj.eq(cnpj));
+            builder.and(filial.cnpj.contains(cnpj));
         }
 
         JPAQuery<FilialResponseDto> query = new JPAQuery<>(em);
@@ -48,5 +48,20 @@ public class FilialRepositoryImpl implements FilialRepositoryCustom {
                 .where(builder)
                 .fetchCount();
         return new PageImpl<>(filiais, pageable, total);
+    }
+
+    @Override
+    public List<FilialResponseDto> buscarFiliais(String nome) {
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (nome != null && !nome.isEmpty()) {
+            builder.and(filial.nomeFantasia.containsIgnoreCase(nome));
+        }
+        JPAQuery<FilialResponseDto> query = new JPAQuery<>(em);
+        return query.select(Projections.constructor(FilialResponseDto.class, filial))
+                .from(filial)
+                .where(builder)
+                .orderBy(filial.id.asc())
+                .fetch();
     }
 }

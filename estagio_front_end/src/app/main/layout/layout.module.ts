@@ -12,6 +12,8 @@ import { PanelMenuModule } from 'primeng/panelmenu';
 import { SidebarModule } from 'primeng/sidebar';
 import { ToolbarModule } from 'primeng/toolbar';
 import { MenuModule } from 'primeng/menu';
+import { AutoCompleteModule } from 'primeng/autocomplete';
+import { FormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -29,7 +31,9 @@ import { MenuModule } from 'primeng/menu';
     InputTextModule,
     PanelMenuModule,
     SidebarModule,
-    ToolbarModule
+    ToolbarModule,
+    AutoCompleteModule,
+    FormsModule
 ],
 exports:[
   LayoutComponent

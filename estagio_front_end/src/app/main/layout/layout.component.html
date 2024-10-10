@@ -34,7 +34,13 @@
     </ng-template>
     <ng-template pTemplate="end">
       <div>
-        <input type="text" pInputText placeholder="Search" />
+         <p-autoComplete
+        [(ngModel)]="selectedItem"
+        [virtualScroll]="true"
+        [suggestions]="filiaisFilter"
+        [virtualScrollItemSize]="34"
+        (completeMethod)="filterItems($event)"
+        optionLabel="nomeFantasia"/>
         <img [src]="imagem" />
       </div>
     </ng-template>

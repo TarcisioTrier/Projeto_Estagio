@@ -26,4 +26,6 @@ public interface FilialService {
     Optional<Filial> buscaFilialPorId(Long id);
 
     Filial findById(Long id);
+
+    List<FilialResponseDto> getFilialFilter(String nome);
 }

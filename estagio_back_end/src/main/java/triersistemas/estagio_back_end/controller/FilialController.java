@@ -10,6 +10,8 @@ import triersistemas.estagio_back_end.dto.request.FilialRequestDto;
 import triersistemas.estagio_back_end.dto.response.FilialResponseDto;
 import triersistemas.estagio_back_end.services.FilialService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/filiais")
 public class FilialController {
@@ -30,7 +32,7 @@ public class FilialController {
         return ResponseEntity.ok(filialService.getFilialById(id));
     }
 
-    @GetMapping("/getAllFilter")
+    @GetMapping("/getAllPaged")
     public Page<FilialResponseDto> getFilialFilter(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -38,6 +40,10 @@ public class FilialController {
             @Valid @RequestParam(required = false) String cnpj) {
         Pageable pageable = PageRequest.of(page, size);
         return filialService.getFilialFilter(nome, cnpj, pageable);
+    }
+    @GetMapping("/getAllFilter")
+    public List<FilialResponseDto> getFilialFilter(@RequestParam(required = false) String nome) {
+        return filialService.getFilialFilter(nome);
     }
 
     @PutMapping("/update/{id}")

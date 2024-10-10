@@ -12,6 +12,8 @@ import triersistemas.estagio_back_end.dto.response.GrupoProdutoResponseDto;
 import triersistemas.estagio_back_end.enuns.TipoGrupoProduto;
 import triersistemas.estagio_back_end.services.GrupoProdutoService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/grupos-produtos")
 public class GrupoProdutoController {
@@ -35,6 +37,7 @@ public class GrupoProdutoController {
         Pageable pageable = PageRequest.of(page, size);
         return grupoProdutoService.getGrupoProdutoFilter(nomeGrupo, tipoGrupo, idFilial, pageable);
     }
+
 
     @PostMapping("/post")
     public ResponseEntity<GrupoProdutoResponseDto> postGrupoProduto(@Valid @RequestBody GrupoProdutoRequestDto grupoProdutoRequestDto) {

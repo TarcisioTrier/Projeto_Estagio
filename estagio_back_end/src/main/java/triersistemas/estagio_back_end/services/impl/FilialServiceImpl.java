@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import triersistemas.estagio_back_end.dto.request.FilialRequestDto;
 import triersistemas.estagio_back_end.dto.response.FilialResponseDto;
 import triersistemas.estagio_back_end.entity.Filial;
-import triersistemas.estagio_back_end.exceptions.InvalidCnpjException;
 import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.repository.FilialRepository;
 import triersistemas.estagio_back_end.services.EnderecoService;
@@ -104,6 +103,11 @@ public class FilialServiceImpl implements FilialService {
     @Override
     public Filial findById(Long id) {
         return buscaFilialPorId(id).orElseThrow(() -> new NotFoundException("Filial não Encontrada"));
+    }
+
+    @Override
+    public List<FilialResponseDto> getFilialFilter(String nome) {
+        return filialRepository.buscarFiliais(nome);
     }
 
 }

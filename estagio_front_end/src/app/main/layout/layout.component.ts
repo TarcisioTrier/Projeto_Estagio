@@ -1,7 +1,11 @@
+import { HttpService } from './../../services/http.service';
 import { style } from '@angular/animations';
 import { Component } from '@angular/core';
 import { MenuItem } from 'primeng/api';
 import { StylesService } from '../../services/styles.service';
+import { Filial } from '../../models/filial';
+import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
+
 
 @Component({
   selector: 'app-layout',
@@ -9,13 +13,23 @@ import { StylesService } from '../../services/styles.service';
   styleUrl: './layout.component.scss'
 })
 export class LayoutComponent {
-
+filterItems(event: AutoCompleteCompleteEvent) {
+  let query = event.query;
+  this.http.getFilialFiltered(query).subscribe(filial => {
+    this.filiaisFilter = Object.values(filial)
+    console.log(this.filiaisFilter);
+  })
+}
+  filiais!: Array<Filial>;
+  filiaisFilter: any[] = [];
+  selectedItem: any;
   darkMode!: boolean;
   expanded = false;
 
-  constructor(private styleService: StylesService) {}
+  constructor(private styleService: StylesService, private http: HttpService) {}
   ngOnInit(): void {
     this.darkMode = this.styleService.isDarkMode
+
   }
   hoverTest(event: Event, hover: boolean){
     var local =  (event.target as HTMLElement);
@@ -37,6 +51,7 @@ export class LayoutComponent {
     }else{
       document.body.classList.remove('dark')
     }
+    console.log(this.selectedItem);
   }
 
 
