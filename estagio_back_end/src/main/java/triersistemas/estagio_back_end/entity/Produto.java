@@ -1,6 +1,9 @@
 package triersistemas.estagio_back_end.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,9 +27,11 @@ public class Produto {
     @Column(name = "id")
     private Long id;
 
+    @NotBlank(message = "Código de Barras é obrigatório")
     @Column(name = "codigo_barras", nullable = false, unique = true)
     private String codigoBarras;
 
+    @NotBlank(message = "Nome é obrigatório")
     @Column(name = "nome", nullable = false)
     private String nome;
 
@@ -37,23 +42,30 @@ public class Produto {
     @JoinColumn(name = "grupo_produto_id", nullable = false)
     private GrupoProduto grupoProduto;
 
+    @NotNull(message = "Tipo de Produto é obrigatório")
     @Column(name = "tipo_produto", nullable = false)
     @Enumerated(EnumType.STRING)
     private TipoProduto tipoProduto;
 
+    @NotNull(message = "Apresentação é obrigatória")
     @Column(name = "apresentacao", nullable = false)
     @Enumerated(EnumType.STRING)
     private Apresentacao apresentacao;
 
+    @DecimalMin(value = "0.0", message = "Margem de Lucro não pode ser negativa")
     @Column(name = "margem_lucro")
     private BigDecimal margemLucro;
 
     @Column(name = "aceita_atualizacao_preco")
     private Boolean aceitaAtualizacaoPreco;
 
+    @NotNull(message = "Valor Produto é obrigatório")
+    @DecimalMin(value = "0.0", message = "Valor Produto não pode ser negativo")
     @Column(name = "valor_produto", nullable = false)
     private BigDecimal valorProduto;
 
+    @NotNull(message = "Valor Venda é obrigatório")
+    @DecimalMin(value = "0.0", message = "Valor Venda não pode ser negativo")
     @Column(name = "valor_venda", nullable = false)
     private BigDecimal valorVenda;
 

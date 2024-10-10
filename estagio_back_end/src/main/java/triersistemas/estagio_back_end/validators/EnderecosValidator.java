@@ -1,9 +1,9 @@
-package triersistemas.estagio_back_end.services;
+package triersistemas.estagio_back_end.validators;
 
 import triersistemas.estagio_back_end.dto.EnderecosDto;
 import triersistemas.estagio_back_end.entity.Enderecos;
 
-public interface EnderecoService {
+public interface EnderecosValidator {
 
     Enderecos validateEndereco(EnderecosDto enderecosDto);
 }

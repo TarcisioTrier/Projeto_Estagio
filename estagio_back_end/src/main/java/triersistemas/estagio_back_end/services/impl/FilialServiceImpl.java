@@ -8,23 +8,25 @@ import triersistemas.estagio_back_end.dto.response.FilialResponseDto;
 import triersistemas.estagio_back_end.entity.Filial;
 import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.repository.FilialRepository;
-import triersistemas.estagio_back_end.services.EnderecoService;
 import triersistemas.estagio_back_end.services.FilialService;
-import triersistemas.estagio_back_end.utils.CnpjValidator;
-import triersistemas.estagio_back_end.utils.Utils;
+import triersistemas.estagio_back_end.validators.CnpjValidator;
+import triersistemas.estagio_back_end.validators.EnderecosValidator;
+import triersistemas.estagio_back_end.validators.Utils;
 
-import static triersistemas.estagio_back_end.utils.Utils.validateFone;
+import java.util.Optional;
+
+import static triersistemas.estagio_back_end.validators.Utils.validateFone;
 
 @Service
 public class FilialServiceImpl implements FilialService {
 
     private final FilialRepository filialRepository;
-    private final EnderecoService enderecoService;
+    private final EnderecosValidator enderecosValidator;
     private final CnpjValidator cnpjValidator;
 
-    public FilialServiceImpl(FilialRepository filialRepository, EnderecoService enderecoService, CnpjValidator cnpjValidator) {
+    public FilialServiceImpl(FilialRepository filialRepository, EnderecosValidator enderecosValidator, CnpjValidator cnpjValidator) {
         this.filialRepository = filialRepository;
-        this.enderecoService = enderecoService;
+        this.enderecosValidator = enderecosValidator;
         this.cnpjValidator = cnpjValidator;
     }
 
@@ -33,10 +35,10 @@ public class FilialServiceImpl implements FilialService {
         validateFilial(requestDto);
         var filial = new Filial(requestDto);
         if (!Utils.isNull(requestDto.endereco())) {
-            var enderecoValido = enderecoService.validateEndereco(requestDto.endereco());
+            var enderecoValido = enderecosValidator.validateEndereco(requestDto.endereco());
             filial.setEndereco(enderecoValido);
         }
-        filialRepository.save(filial);
+        filial = filialRepository.save(filial);
         return new FilialResponseDto(filial);
     }
 
@@ -45,7 +47,7 @@ public class FilialServiceImpl implements FilialService {
         Filial filial = findById(id);
 
         if (requestDto.cnpj() != null && !requestDto.cnpj().equals(filial.getCnpj())) {
-           cnpjValidator.validateCnpjUpdateFilial(requestDto.cnpj(),id);
+            cnpjValidator.validateCnpjUpdateFilial(requestDto.cnpj(), id);
         }
 
         if (requestDto.telefone() != null) {
@@ -53,13 +55,13 @@ public class FilialServiceImpl implements FilialService {
         }
 
         if (requestDto.endereco() != null) {
-            var enderecoValido = enderecoService.validateEndereco(requestDto.endereco());
+            var enderecoValido = enderecosValidator.validateEndereco(requestDto.endereco());
             filial.setEndereco(enderecoValido);
         }
 
         filial.alterarDados(requestDto);
 
-        filialRepository.save(filial);
+        filial = filialRepository.save(filial);
 
         return new FilialResponseDto(filial);
     }
@@ -76,8 +78,13 @@ public class FilialServiceImpl implements FilialService {
         return new FilialResponseDto(filial);
     }
 
-    public Filial findById(Long id){
+    public Filial findById(Long id) {
         return filialRepository.findById(id).orElseThrow(() -> new NotFoundException("Filial não encontrada"));
+    }
+
+    @Override
+    public Optional<Filial> buscaFilialPorId(Long id) {
+        return filialRepository.findById(id);
     }
 
     @Override

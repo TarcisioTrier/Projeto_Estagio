@@ -1,4 +1,4 @@
-package triersistemas.estagio_back_end.utils;
+package triersistemas.estagio_back_end.validators.impl;
 
 import org.springframework.stereotype.Component;
 import triersistemas.estagio_back_end.entity.Filial;
@@ -6,6 +6,7 @@ import triersistemas.estagio_back_end.entity.Fornecedor;
 import triersistemas.estagio_back_end.exceptions.InvalidCnpjException;
 import triersistemas.estagio_back_end.repository.FilialRepository;
 import triersistemas.estagio_back_end.repository.FornecedorRepository;
+import triersistemas.estagio_back_end.validators.CnpjValidator;
 
 import java.util.Optional;
 

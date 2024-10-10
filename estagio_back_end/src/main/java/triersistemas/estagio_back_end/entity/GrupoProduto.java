@@ -3,6 +3,8 @@ package triersistemas.estagio_back_end.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,16 +28,20 @@ public class GrupoProduto {
     @Column(name = "id")
     private Long id;
 
+    @NotBlank(message = "Nome do grupo é obrigatório")
     @Column(name = "nome_grupo", nullable = false)
     private String nomeGrupo;
 
+    @NotNull(message = "Tipo de grupo é obrigatório")
     @Column(name = "tipo_grupo", nullable = false)
     @Enumerated(EnumType.STRING)
     private TipoGrupoProduto tipoGrupo;
 
+    @NotNull(message = "Margem de lucro é obrigatória")
     @Column(name = "margem_lucro", nullable = false)
     private BigDecimal margemLucro;
 
+    @NotNull(message = "Situação do cadastro é obrigatória")
     @Column(name = "atualiza_preco")
     private Boolean atualizaPreco;
 

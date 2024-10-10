@@ -1,6 +1,8 @@
 package triersistemas.estagio_back_end.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,18 +22,24 @@ public class Fornecedor {
     @Column(name = "id")
     private Long id;
 
+    @NotBlank(message = "Nome Fantasia é obrigatório")
     @Column(name = "nome_fantasia", nullable = false)
     private String nomeFantasia;
 
+    @NotBlank(message = "Razão Social é obrigatória")
     @Column(name = "razao_social", nullable = false)
     private String razaoSocial;
 
+    @NotBlank(message = "CNPJ é obrigatório")
     @Column(name = "cnpj", nullable = false, unique = true)
     private String cnpj;
 
+    @NotBlank(message = "Telefone é obrigatório")
     @Column(name = "telefone", nullable = false)
     private String telefone;
 
+    @Email(message = "Email inválido")
+    @NotBlank(message = "Email é obrigatório")
     @Column(name = "email", nullable = false)
     private String email;
 

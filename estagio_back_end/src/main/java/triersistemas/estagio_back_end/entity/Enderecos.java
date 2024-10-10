@@ -1,6 +1,7 @@
 package triersistemas.estagio_back_end.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,9 +20,11 @@ public class Enderecos {
     @Column(name = "id")
     private Long id;
 
+    @NotBlank(message = "CEP é obrigatório")
     @Column(name = "cep", length = 9, nullable = false)
     private String cep;
 
+    @NotBlank(message = "Logradouro é obrigatório")
     @Column(name = "logradouro", nullable = false)
     private String logradouro;
 
@@ -31,26 +34,29 @@ public class Enderecos {
     @Column(name = "complemento")
     private String complemento;
 
+    @NotBlank(message = "Bairro é obrigatório")
     @Column(name = "bairro", nullable = false)
     private String bairro;
 
+    @NotBlank(message = "Cidade é obrigatório")
     @Column(name = "cidade", nullable = false)
     private String cidade;
 
+    @NotBlank(message = "Estado é obrigatório")
     @Column(name = "estado", nullable = false)
     private String estado;
 
     @OneToOne(mappedBy = "endereco")
     private Filial filial;
 
-    public Enderecos(String logradouro, Integer numero, String complemento, String cidade, String estado, String cep, String bairro) {
-        this.logradouro = logradouro;
-        this.numero = numero;
-        this.complemento = complemento;
-        this.cidade = cidade;
-        this.estado = estado;
-        this.cep = cep;
-        this.bairro = bairro;
+    public Enderecos(EnderecosDto dto) {
+        this.logradouro = dto.logradouro();
+        this.numero = dto.numero();
+        this.complemento = dto.complemento();
+        this.cidade = dto.localidade();
+        this.estado = dto.estado();
+        this.cep = dto.cep();
+        this.bairro = dto.bairro();
     }
 
     public void alterarDados(EnderecosDto dto) {
