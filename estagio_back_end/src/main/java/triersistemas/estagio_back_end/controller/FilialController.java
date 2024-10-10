@@ -34,14 +34,14 @@ public class FilialController {
     public Page<FilialResponseDto> getFilialFilter(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) String nome,
+            @Valid @RequestParam(required = false) String nome,
             @Valid @RequestParam(required = false) String cnpj) {
         Pageable pageable = PageRequest.of(page, size);
         return filialService.getFilialFilter(nome, cnpj, pageable);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<FilialResponseDto> updateFilial(@PathVariable Long id, @RequestBody FilialRequestDto requestDto) {
+    public ResponseEntity<FilialResponseDto> updateFilial(@PathVariable Long id, @Valid @RequestBody FilialRequestDto requestDto) {
         return ResponseEntity.ok(filialService.updateFilial(id, requestDto));
     }
 
