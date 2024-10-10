@@ -1,6 +1,58 @@
 <div>
-  <app-header></app-header>
-  <div>
+  <p-toolbar>
+    <ng-template pTemplate="start">
+      <div>
+        <i
+          *ngIf="darkMode"
+          class="pi pi-bars"
+          style="font-size: 2rem; color: var(--cyan-50)"
+          (mouseenter)="hoverTest($event, true)"
+          (mouseleave)="hoverTest($event, false)"
+          (click)="toggleMenu()"
+        ></i>
+        <i
+          *ngIf="!darkMode"
+          class="pi pi-bars"
+          style="font-size: 2rem"
+          (mouseenter)="hoverTest($event, true)"
+          (mouseleave)="hoverTest($event, false)"
+          (click)="toggleMenu()"
+        ></i>
+        <i
+          *ngIf="darkMode"
+          class="pi pi-moon"
+          style="font-size: 2rem; color: var(--cyan-50)"
+          (click)="toggleMode()"
+        ></i>
+        <i
+          *ngIf="!darkMode"
+          class="pi pi-sun"
+          style="font-size: 2rem; color: var(--yellow-400)"
+          (click)="toggleMode()"
+        ></i>
+      </div>
+    </ng-template>
+    <ng-template pTemplate="end">
+      <div>
+        <input type="text" pInputText placeholder="Search" />
+        <img [src]="imagem" />
+      </div>
+    </ng-template>
+  </p-toolbar>
+
+  <div class="menu">
+    <p-sidebar #sidebarRef [(visible)]="expanded" [style]="{ width: '300px' }">
+      <ng-template pTemplate="header">
+        <img src="../../../../favicon.ico" height="40" class="mr-2" />
+      </ng-template>
+      <ng-template pTemplate="content">
+        <p-panelMenu
+        [model]="items"
+        [style]="{ width: 'fit-content' }"
+        class="overlay"
+      />
+      </ng-template>
+    </p-sidebar>
     <router-outlet></router-outlet>
   </div>
 </div>

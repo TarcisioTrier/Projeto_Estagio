@@ -11,3 +11,21 @@
 // app-header{
 //   height: fit-content;
 // }
+.header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+p-toolbar div{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+i{
+  margin-left: 10px;
+  margin-right: 10px;
+}
+div.p-sidebar-content{
+  overflow-y: visible;
+}
