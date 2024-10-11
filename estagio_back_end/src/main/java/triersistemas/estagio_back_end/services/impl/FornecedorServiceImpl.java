@@ -12,10 +12,10 @@ import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.repository.FornecedorRepository;
 import triersistemas.estagio_back_end.services.FilialService;
 import triersistemas.estagio_back_end.services.FornecedorService;
-import triersistemas.estagio_back_end.utils.CnpjValidator;
-import triersistemas.estagio_back_end.utils.Utils;
+import triersistemas.estagio_back_end.validators.CnpjValidator;
+import triersistemas.estagio_back_end.validators.Utils;
 
-import static triersistemas.estagio_back_end.utils.Utils.validateFone;
+import static triersistemas.estagio_back_end.validators.Utils.validateFone;
 
 @Service
 public class FornecedorServiceImpl implements FornecedorService {

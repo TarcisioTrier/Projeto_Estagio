@@ -1,13 +1,13 @@
-package triersistemas.estagio_back_end.services.impl;
+package triersistemas.estagio_back_end.validators.impl;
 
 import org.springframework.stereotype.Component;
 import triersistemas.estagio_back_end.dto.EnderecosDto;
 import triersistemas.estagio_back_end.entity.Enderecos;
 import triersistemas.estagio_back_end.exceptions.InvalidCepException;
-import triersistemas.estagio_back_end.services.EnderecoService;
+import triersistemas.estagio_back_end.validators.EnderecosValidator;
 
 @Component
-public class EnderecoServiceImpl implements EnderecoService {
+public class EnderecosValidatorImpl implements EnderecosValidator {
 
     public Enderecos validateEndereco(EnderecosDto enderecoDto) {
 
