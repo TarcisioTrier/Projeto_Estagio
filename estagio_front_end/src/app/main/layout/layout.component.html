@@ -18,6 +18,19 @@
           (mouseleave)="hoverTest($event, false)"
           (click)="toggleMenu()"
         ></i>
+        <img [src]="imagem" />
+
+      </div>
+    </ng-template>
+    <ng-template pTemplate="end">
+      <div>
+         <!-- <p-autoComplete
+        [(ngModel)]="selectedItem"
+        [virtualScroll]="true"
+        [suggestions]="filiaisFilter"
+        [virtualScrollItemSize]="34"
+        (completeMethod)="filterItems($event)"
+        optionLabel="nomeFantasia"/> -->
         <i
           *ngIf="darkMode"
           class="pi pi-moon"
@@ -30,18 +43,7 @@
           style="font-size: 2rem; color: var(--yellow-400)"
           (click)="toggleMode()"
         ></i>
-      </div>
-    </ng-template>
-    <ng-template pTemplate="end">
-      <div>
-         <p-autoComplete
-        [(ngModel)]="selectedItem"
-        [virtualScroll]="true"
-        [suggestions]="filiaisFilter"
-        [virtualScrollItemSize]="34"
-        (completeMethod)="filterItems($event)"
-        optionLabel="nomeFantasia"/>
-        <img [src]="imagem" />
+        <i class="pi pi-user" style="font-size: 2rem"></i>
       </div>
     </ng-template>
   </p-toolbar>

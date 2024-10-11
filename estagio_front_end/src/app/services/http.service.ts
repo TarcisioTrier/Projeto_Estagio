@@ -1,25 +1,35 @@
 import { Filial } from './../models/filial';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpParams,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, take } from 'rxjs';
+import { Observable, take, throwError } from 'rxjs';
 import { Fornecedor } from '../models/fornecedor';
 import { FilialPage } from '../models/filial-page';
-import { Cep, Cnpj } from '../models/cepapi';
+import { catchError } from 'rxjs/operators';
+import { Cep, Cnpj } from '../models/externalapi';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HttpService {
-
   constructor(private http: HttpClient) {}
-  viaCep(cep: string): Observable<Cep>{
-    return this.http.get<Cep>(`https://viacep.com.br/ws/${cep}/json/`).pipe(take(1));
+  viaCep(cep: string): Observable<Cep> {
+    return this.http
+      .get<Cep>(`https://viacep.com.br/ws/${cep}/json/`)
+      .pipe(take(1));
   }
-  buscaCNPJ(cnpj: string): Observable<Cnpj>{
-    return this.http.get<Cnpj>(`https://api-publica.speedio.com.br/buscarcnpj?cnpj=${cnpj}`).pipe(take(1));
+  buscaCNPJ(cnpj: string): Observable<Cnpj> {
+    return this.http
+      .get<Cnpj>(`https://api-publica.speedio.com.br/buscarcnpj?cnpj=${cnpj}`)
+      .pipe(take(1), catchError(this.handleError));
   }
   postFilial(filial: Filial) {
-    return this.http.post('filiais/post', filial).pipe(take(1));
+    return this.http
+      .post('filiais/post', filial)
+      .pipe(take(1), catchError(this.handleError));
   }
   getFilialbyId(id: number) {
     return this.http.get(`filiais/get/${id}`).pipe(take(1));
@@ -27,25 +37,29 @@ export class HttpService {
   getFilialPaged(filialPage?: FilialPage) {
     if (filialPage) {
       let par = new HttpParams();
-      if(filialPage.size){
-        par = par.set('size', filialPage.size)
+      if (filialPage.size) {
+        par = par.set('size', filialPage.size);
       }
-      if(filialPage.page){
-        par = par.set('page', filialPage.page)
+      if (filialPage.page) {
+        par = par.set('page', filialPage.page);
       }
-      if(filialPage.nome){
-        par = par.set('nome', filialPage.nome)
+      if (filialPage.nome) {
+        par = par.set('nome', filialPage.nome);
       }
-      if(filialPage.cnpj){
-        par = par.set('cnpj', filialPage.cnpj)
+      if (filialPage.cnpj) {
+        par = par.set('cnpj', filialPage.cnpj);
       }
-      return this.http.get('filiais/getAllPaged', {params: par}).pipe(take(1));
+      return this.http
+        .get('filiais/getAllPaged', { params: par })
+        .pipe(take(1));
     } else {
       return this.http.get('filiais/getAllPaged').pipe(take(1));
     }
   }
-  getFilialFiltered(nome:string){
-    return this.http.get(`filiais/getAllFilter`, {params: {nome: nome}}).pipe(take(1));
+  getFilialFiltered(nome: string) {
+    return this.http
+      .get(`filiais/getAllFilter`, { params: { nome: nome } })
+      .pipe(take(1));
   }
 
   putFilial(filial: Filial) {
@@ -56,5 +70,11 @@ export class HttpService {
   }
   postFornecedores(fornecedor: Fornecedor) {
     return this.http.post('fornecedores/post', fornecedor).pipe(take(1));
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    return throwError(
+      () => error
+    );
   }
 }
