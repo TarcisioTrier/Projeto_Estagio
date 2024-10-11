@@ -21,8 +21,7 @@ export interface Filial{
     numero: number;
     complemento?: string,
     bairro: string,
-    cidade: string,
-    estado: string,
-    rua: string
+    localidade: string,
+    estado: string
 
     }

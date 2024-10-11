@@ -34,6 +34,7 @@ public class FilialServiceImpl implements FilialService {
     @Override
     public FilialResponseDto addFilial(FilialRequestDto requestDto) {
         validateFilial(requestDto);
+        cnpjValidator.validateCnpjPostFilial(requestDto.cnpj());
         var filial = new Filial(requestDto);
         if (!Utils.isNull(requestDto.endereco())) {
             var enderecoValido = enderecoService.validateEndereco(requestDto.endereco());

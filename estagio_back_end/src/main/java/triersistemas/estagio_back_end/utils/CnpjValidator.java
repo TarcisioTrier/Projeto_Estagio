@@ -7,4 +7,7 @@ public interface CnpjValidator {
     void validateCnpjUpdateFornecedor(String cnpj, Long id);
 
     void validateCnpjUpdateFilial(String cnpj, Long id);
+
+    void validateCnpjPostFilial(String cnpj);
+
 }

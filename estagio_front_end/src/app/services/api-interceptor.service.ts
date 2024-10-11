@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/internal/Observable';
 })
 export class ApiIterceptor implements HttpInterceptor{
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (!req.url.includes('https://viacep.com.br/')){
+    if (!req.url.includes('https://')){
       req = req.clone({ url: `http://localhost:8080/${req.url}`});
     }
     return next.handle(req);

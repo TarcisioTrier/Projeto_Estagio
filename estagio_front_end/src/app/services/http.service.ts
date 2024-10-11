@@ -1,9 +1,10 @@
 import { Filial } from './../models/filial';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { take } from 'rxjs';
+import { Observable, take } from 'rxjs';
 import { Fornecedor } from '../models/fornecedor';
 import { FilialPage } from '../models/filial-page';
+import { Cep, Cnpj } from '../models/cepapi';
 
 @Injectable({
   providedIn: 'root',
@@ -11,8 +12,11 @@ import { FilialPage } from '../models/filial-page';
 export class HttpService {
 
   constructor(private http: HttpClient) {}
-  viaCep(cep: string){
-    return this.http.get(`https://viacep.com.br/ws/${cep}/json/`).pipe(take(1));
+  viaCep(cep: string): Observable<Cep>{
+    return this.http.get<Cep>(`https://viacep.com.br/ws/${cep}/json/`).pipe(take(1));
+  }
+  buscaCNPJ(cnpj: string): Observable<Cnpj>{
+    return this.http.get<Cnpj>(`https://api-publica.speedio.com.br/buscarcnpj?cnpj=${cnpj}`).pipe(take(1));
   }
   postFilial(filial: Filial) {
     return this.http.post('filiais/post', filial).pipe(take(1));

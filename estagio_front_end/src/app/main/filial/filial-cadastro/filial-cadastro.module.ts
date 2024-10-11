@@ -7,6 +7,8 @@ import { FormsModule } from '@angular/forms';
 import { InputMaskModule } from 'primeng/inputmask';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { ButtonModule } from 'primeng/button';
+import { ToastModule } from 'primeng/toast';
 @NgModule({
   declarations: [
     FilialCadastroComponent
@@ -18,7 +20,9 @@ import { InputNumberModule } from 'primeng/inputnumber';
     FloatLabelModule,
     InputMaskModule,
     DropdownModule,
-    InputNumberModule
+    InputNumberModule,
+    ButtonModule,
+    ToastModule
   ],
   exports:[
     FilialCadastroComponent

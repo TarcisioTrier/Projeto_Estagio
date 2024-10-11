@@ -41,6 +41,13 @@ public class CnpjValidatorImpl implements CnpjValidator {
         }
     }
 
+    public void validateCnpjPostFilial(String cnpj) {
+        Optional<Filial> filialExistente = filialRepository.findByCnpj(cnpj);
+        if (filialExistente.isPresent()) {
+            throw new InvalidCnpjException("CNPJ já cadastrado em outra empresa.");
+        }
+    }
+
     private static boolean isCNPJ(String CNPJ) {
 
         if (CNPJ.length() != 14) {
