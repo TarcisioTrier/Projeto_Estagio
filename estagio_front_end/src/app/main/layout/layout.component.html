@@ -19,31 +19,30 @@
           (click)="toggleMenu()"
         ></i>
         <img [src]="imagem" />
-
       </div>
+
     </ng-template>
+
     <ng-template pTemplate="end">
       <div>
-         <!-- <p-autoComplete
-        [(ngModel)]="selectedItem"
-        [virtualScroll]="true"
-        [suggestions]="filiaisFilter"
-        [virtualScrollItemSize]="34"
-        (completeMethod)="filterItems($event)"
-        optionLabel="nomeFantasia"/> -->
         <i
-          *ngIf="darkMode"
-          class="pi pi-moon"
-          style="font-size: 2rem; color: var(--cyan-50)"
-          (click)="toggleMode()"
-        ></i>
-        <i
-          *ngIf="!darkMode"
-          class="pi pi-sun"
-          style="font-size: 2rem; color: var(--yellow-400)"
-          (click)="toggleMode()"
-        ></i>
-        <i class="pi pi-user" style="font-size: 2rem"></i>
+        *ngIf="darkMode"
+        class="pi pi-moon"
+        style="font-size: 2rem; color: var(--cyan-50)"
+        (click)="toggleMode()"
+      ></i>
+      <i
+        *ngIf="!darkMode"
+        class="pi pi-sun"
+        style="font-size: 2rem; color: var(--yellow-400)"
+        (click)="toggleMode()"
+      ></i>
+        <i class="pi pi-user" style="font-size: 2rem" #test (click)="op.toggle($event)"></i>
+        <p-overlayPanel #op>
+          <div class="filial">
+          </div>
+        </p-overlayPanel>
+
       </div>
     </ng-template>
   </p-toolbar>
@@ -55,10 +54,10 @@
       </ng-template>
       <ng-template pTemplate="content">
         <p-panelMenu
-        [model]="items"
-        [style]="{ width: 'fit-content' }"
-        class="overlay"
-      />
+          [model]="items"
+          [style]="{ width: 'fit-content' }"
+          class="overlay"
+        />
       </ng-template>
     </p-sidebar>
     <div class="router">

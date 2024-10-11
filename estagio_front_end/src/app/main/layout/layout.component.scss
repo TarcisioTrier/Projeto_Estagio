@@ -38,3 +38,13 @@ div.body{
 div.menu{
   height: 100%;
 }
+.filial{
+  height: 200px;
+  width: 500px;
+}
+div.p-overlaypanel ::after {
+  display: none; /* Caso haja uma seta padrão, remova-a */
+}
+div.p-overlaypanel ::before {
+  display: none; /* Caso haja uma seta padrão, remova-a */
+}
