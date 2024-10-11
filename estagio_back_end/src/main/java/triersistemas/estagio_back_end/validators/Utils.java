@@ -1,4 +1,4 @@
-package triersistemas.estagio_back_end.utils;
+package triersistemas.estagio_back_end.validators;
 
 import triersistemas.estagio_back_end.exceptions.InvalidFoneException;
 
