@@ -22,6 +22,7 @@ import triersistemas.estagio_back_end.exceptions.InvalidCnpjException;
 import triersistemas.estagio_back_end.exceptions.InvalidFoneException;
 import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.services.FilialService;
+import triersistemas.estagio_back_end.validators.CnpjValidator;
 
 import java.util.Collections;
 
@@ -29,6 +30,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 @WebMvcTest(FilialController.class)
 public class FilialControllerTest {
 
@@ -37,6 +39,9 @@ public class FilialControllerTest {
 
     @MockBean
     private FilialService filialService;
+
+    @MockBean
+    private CnpjValidator cnpjValidator;
 
     private ObjectMapper objectMapper;
 
@@ -195,22 +200,22 @@ public class FilialControllerTest {
     @Test
     @DisplayName("Teste getFilialFilter - Retorna ResponseOk")
     public void getFilialFilter_ReturnOk() throws Exception {
-        String nome = "Test";
+        String nome = "Nome Fantasia";
         String cnpj = "12345678901234";
         Pageable pageable = PageRequest.of(0, 10);
         Page<FilialResponseDto> responsePage = new PageImpl<>(Collections.singletonList(
-                new FilialResponseDto(1L, "Nome Fantasia", "Razão Social", cnpj, "8888888888", "teste@example.com", SituacaoContrato.ATIVO, null)
+                new FilialResponseDto(1L, nome, "Razão Social", cnpj, "8888888888", "teste@example.com", SituacaoContrato.ATIVO, null)
         ));
 
         when(filialService.getFilialFilter(nome, cnpj, pageable)).thenReturn(responsePage);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/filiais/getAllFilter")
+        mockMvc.perform(MockMvcRequestBuilders.get("/filiais//getAllPaged")
                         .param("nome", nome)
                         .param("cnpj", cnpj)
                         .param("page", "0")
                         .param("size", "10"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].nomeFantasia").value("Nome Fantasia"))
+                .andExpect(jsonPath("$.content[0].nomeFantasia").value(nome))
                 .andExpect(jsonPath("$.content[0].cnpj").value(cnpj));
 
         verify(filialService).getFilialFilter(nome, cnpj, pageable);
@@ -226,7 +231,7 @@ public class FilialControllerTest {
 
         when(filialService.getFilialFilter(nome, cnpj, pageable)).thenReturn(emptyPage);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/filiais/getAllFilter")
+        mockMvc.perform(MockMvcRequestBuilders.get("/filiais//getAllPaged")
                         .param("nome", nome)
                         .param("cnpj", cnpj)
                         .param("page", "0")
@@ -249,7 +254,7 @@ public class FilialControllerTest {
         when(filialService.getFilialFilter(nome, invalidCnpj, pageable))
                 .thenThrow(new InvalidCnpjException("CNPJ inválido"));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/filiais/getAllFilter")
+        mockMvc.perform(MockMvcRequestBuilders.get("/filiais//getAllPaged")
                         .param("nome", nome)
                         .param("cnpj", invalidCnpj)
                         .param("page", "0")
@@ -309,21 +314,56 @@ public class FilialControllerTest {
                 .andExpect(jsonPath("$.razaoSocial").value("Razão Social é obrigatória"))
                 .andExpect(jsonPath("$.cnpj").value("CNPJ é obrigatório"))
                 .andExpect(jsonPath("$.telefone").value("Telefone é obrigatório"))
-                .andExpect(jsonPath("$.email").value("Email é obrigatório"));}
+                .andExpect(jsonPath("$.email").value("Email é obrigatório"));
+    }
 
     @Test
-    @DisplayName("Teste updateFilial - Retorna BadRequest com cnpj inválido")
-    public void updateFilial_InvalidCnpj_ReturnBadRequest() throws Exception {
+    @DisplayName("Teste updateFilial - Lança exceção com CNPJ inválido")
+    public void updateFilial_InvalidCnpj_ThrowInvalidCnpjException() throws Exception {
         Long filialId = 1L;
-        FilialRequestDto requestDto = new FilialRequestDto("Nome Fantasia Updated", "Razão Social Updated", "Cnpj inválido", "8888888888", "teste@example.com", SituacaoContrato.ATIVO, null);
+        FilialRequestDto requestDto = new FilialRequestDto(
+                "Nome Fantasia Updated",
+                "Razão Social Updated",
+                "CNPJ_INVALIDO",  // CNPJ inválido propositalmente
+                "8888888888",
+                "teste@example.com",
+                SituacaoContrato.ATIVO,
+                null
+        );
 
-        when(filialService.updateFilial(eq(filialId), any(FilialRequestDto.class))).thenThrow(new InvalidCnpjException("CNPJ inválido"));
+        when(filialService.updateFilial(eq(filialId), any(FilialRequestDto.class)))
+                .thenThrow(new InvalidCnpjException("CNPJ inválido"));
 
         mockMvc.perform(MockMvcRequestBuilders.put("/filiais/update/{id}", filialId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(requestDto)))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("CNPJ inválido"));
+    }
+
+    @Test
+    @DisplayName("Teste updateFilial - Lança exceção com CNPJ já existente")
+    public void updateFilial_ExistingCnpj_ThrowInvalidCnpjException() throws Exception {
+        Long filialId = 1L;
+        String existingCnpj = "12345678901234";
+        FilialRequestDto requestDto = new FilialRequestDto(
+                "Nome Fantasia Updated",
+                "Razão Social Updated",
+                existingCnpj,
+                "8888888888",
+                "teste@example.com",
+                SituacaoContrato.ATIVO,
+                null
+        );
+
+        when(filialService.updateFilial(eq(filialId), any(FilialRequestDto.class)))
+                .thenThrow(new InvalidCnpjException("CNPJ já cadastrado para outra filial"));
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/filiais/update/{id}", filialId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("CNPJ já cadastrado para outra filial"));
 
         verify(filialService).updateFilial(eq(filialId), any(FilialRequestDto.class));
     }

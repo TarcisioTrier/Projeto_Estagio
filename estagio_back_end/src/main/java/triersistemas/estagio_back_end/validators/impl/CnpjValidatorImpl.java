@@ -55,7 +55,6 @@ public class CnpjValidatorImpl implements CnpjValidator {
             return false;
         }
 
-
         char dig13, dig14;
         int sm, i, r, num, peso;
         sm = 0;
@@ -74,7 +73,6 @@ public class CnpjValidatorImpl implements CnpjValidator {
             dig13 = (char) ((11 - r) + 48);
         }
 
-        // Cálculo do segundo dígito verificador
         sm = 0;
         peso = 2;
         for (i = 12; i >= 0; i--) {
@@ -92,13 +90,10 @@ public class CnpjValidatorImpl implements CnpjValidator {
             dig14 = (char) ((11 - r) + 48);
         }
 
-
-        // Verifica se os dígitos calculados conferem com os dígitos informados
         if ((dig13 == CNPJ.charAt(12)) && (dig14 == CNPJ.charAt(13))) {
             return true;
         } else {
             return false;
         }
     }
-
 }

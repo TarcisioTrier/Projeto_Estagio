@@ -85,9 +85,6 @@ public class Filial {
         Optional.ofNullable(dto.situacaoContrato()).ifPresent(this::setSituacaoContrato);
 
         Optional.ofNullable(dto.endereco()).ifPresent(enderecoDto -> {
-            if (this.endereco == null) {
-                this.endereco = new Enderecos();
-            }
             this.endereco.alterarDados(enderecoDto);
         });
     }

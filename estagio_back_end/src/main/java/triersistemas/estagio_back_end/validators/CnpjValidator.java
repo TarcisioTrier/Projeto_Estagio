@@ -13,4 +13,6 @@ public interface CnpjValidator {
 
     void validateCnpjUpdateFilial(String cnpj, Long id);
 
+    void validateCnpjPostFilial(String cnpj);
+
 }
