@@ -1,7 +1,6 @@
-<div class="flex justify-content-center flex-column">
-  <div class="formgrid grid">
-    <div class="formgrid p-fluid grid">
-      <div class="col">
+<div class="flex justify-content-center h-full flex-column">
+  <div class="formgrid p-fluid grid mx-5 my-2">
+      <div class=" col-12 my-3">
         <p-floatLabel>
           <input
             pInputText
@@ -13,9 +12,7 @@
           <label for="nomeFantasia">Nome Fantasia</label>
         </p-floatLabel>
       </div>
-    </div>
-    <div class="formgrid p-fluid grid">
-      <div class="col">
+      <div class="col-12 my-3 md:col-6">
         <p-floatLabel>
           <input
             pInputText
@@ -27,7 +24,7 @@
           <label for="razaoSocial">Razão Social</label>
         </p-floatLabel>
       </div>
-      <div class="col">
+      <div class="col-12 my-3 md:col-6">
         <p-floatLabel>
           <p-inputMask
             mask="99.999.999/9999-99"
@@ -38,9 +35,7 @@
           <label for="cnpj">CNPJ</label>
         </p-floatLabel>
       </div>
-    </div>
-    <div class="formgrid p-fluid grid">
-      <div class="col">
+      <div class="col-12 my-3 md:col-6">
         <p-floatLabel>
           <p-inputMask
             mask="(99)99999-9999"
@@ -51,7 +46,7 @@
           <label for="telefone">Telefone</label>
         </p-floatLabel>
       </div>
-      <div class="col">
+      <div class="col-12 my-3 md:col-6">
         <p-floatLabel>
           <input
             pInputText
@@ -62,9 +57,7 @@
           <label for="email">Email</label>
         </p-floatLabel>
       </div>
-    </div>
-    <div class="formgrid p-fluid grid">
-      <div class="col">
+      <div class="col-12 my-3 md:col-6">
         <p-dropdown
           [options]="situacaoContrato"
           [(ngModel)]="itemSelecionado"
@@ -72,6 +65,7 @@
           optionLabel="label"
           [showClear]="true"
           placeholder="Situação do Contrato"
+
         >
           <ng-template pTemplate="selectedItem">
             <div style="width: 125px; height: fit-content">
@@ -85,7 +79,7 @@
           </ng-template>
         </p-dropdown>
       </div>
-      <div class="col">
+      <div class="col-12 my-3 md:col-6">
         <p-floatLabel>
           <p-inputMask
             mask="99999-999"
@@ -96,9 +90,7 @@
           <label for="cep">CEP</label>
         </p-floatLabel>
       </div>
-    </div>
-    <div class="formgrid p-fluid grid">
-      <div class="col">
+      <div class="col-12 my-3 md:col-6">
         <p-floatLabel>
           <input
             pInputText
@@ -109,7 +101,7 @@
           <label for="logradouro">Logradouro</label>
         </p-floatLabel>
       </div>
-      <div class="col">
+      <div class="col-12 my-3 md:col-6">
         <p-floatLabel>
           <p-inputNumber
             id="numero"
@@ -121,9 +113,7 @@
           <label for="numero">Numero</label>
         </p-floatLabel>
       </div>
-    </div>
-    <div class="formgrid p-fluid grid">
-      <div class="col">
+      <div class="col-12 my-3 md:col-6">
         <p-floatLabel>
           <input
             pInputText
@@ -134,7 +124,7 @@
           <label for="complemento">Complemento</label>
         </p-floatLabel>
       </div>
-      <div class="col">
+      <div class="col-12 my-3 md:col-6">
         <p-floatLabel>
           <input
             pInputText
@@ -145,9 +135,7 @@
           <label for="bairro">Bairro</label>
         </p-floatLabel>
       </div>
-    </div>
-    <div class="formgrid p-fluid grid">
-      <div class="col">
+      <div class="col-12 my-3 md:col-6">
         <p-floatLabel>
           <input
             pInputText
@@ -158,7 +146,7 @@
           <label for="estado">Estado</label>
         </p-floatLabel>
       </div>
-      <div class="col">
+      <div class="col-12 my-3 md:col-6">
         <p-floatLabel>
           <input
             pInputText
@@ -169,14 +157,15 @@
           <label for="cidade">Cidade</label>
         </p-floatLabel>
       </div>
-    </div>
 
     <p-toast></p-toast>
-    <p-button
-      label="Cadastrar"
-      icon="pi pi-check"
-      [loading]="loading"
-      (onClick)="load()"
-    />
-  </div>
+      <div class=" col my-3 sm:col md:col-7 lg:col-5 xl:col-3 ">
+        <p-button
+          label="Cadastrar"
+          icon="pi pi-check"
+          [loading]="loading"
+          (onClick)="load()"
+        />
+      </div>
+    </div>
 </div>

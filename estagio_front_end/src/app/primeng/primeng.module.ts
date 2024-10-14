@@ -16,6 +16,7 @@ import { InputMaskModule } from 'primeng/inputmask';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { ToastModule } from 'primeng/toast';
+import { DialogModule } from 'primeng/dialog';
 
 @NgModule({
   declarations: [],
@@ -37,7 +38,8 @@ import { ToastModule } from 'primeng/toast';
     InputMaskModule,
     DropdownModule,
     InputNumberModule,
-    ToastModule
+    ToastModule,
+    DialogModule
   ],
   exports:[
     MenuModule,
@@ -56,7 +58,8 @@ import { ToastModule } from 'primeng/toast';
     InputMaskModule,
     DropdownModule,
     InputNumberModule,
-    ToastModule
+    ToastModule,
+    DialogModule
   ]
 })
 export class PrimengModule { }

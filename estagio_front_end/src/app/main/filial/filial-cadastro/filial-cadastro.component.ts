@@ -108,7 +108,6 @@ export class FilialCadastroComponent {
       });
     }
   }
-
   situacaoContrato = Object.keys(SituacaoContrato)
     .filter((key) => isNaN(Number(key)))
     .map((status, index) => ({

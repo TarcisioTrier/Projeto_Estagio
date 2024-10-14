@@ -3,10 +3,10 @@ import { Produto } from "./produto";
 
 export interface GrupoProduto{
   id?: number,
-  nomeGrupo: string,
-  tipoGrupo: TipoGrupoProduto,
-  margemLucro: number,
-  atualizaPreco: boolean,
-  situacaoCadastro: SituacaoCadastro,
+  nomeGrupo?: string,
+  tipoGrupo?: TipoGrupoProduto,
+  margemLucro?: number,
+  atualizaPreco?: boolean,
+  situacaoCadastro?: SituacaoCadastro,
   produtos?: Array<Produto>
   }

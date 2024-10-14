@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { GrupoProdutoCadastroComponent } from './grupo-produto-cadastro.component';
+import { PrimengModule } from '../../../primeng/primeng.module';
 
 
 
@@ -9,7 +10,8 @@ import { GrupoProdutoCadastroComponent } from './grupo-produto-cadastro.componen
     GrupoProdutoCadastroComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    PrimengModule
   ],
   exports:[
     GrupoProdutoCadastroComponent
