@@ -1,6 +1,6 @@
 <div class="flex justify-content-center h-full flex-column">
   <div class="formgrid p-fluid grid mx-5 my-2">
-      <div class=" col-12 my-3">
+    <div class="col-12 my-3">
       <p-floatLabel>
         <input
           pInputText
@@ -15,8 +15,10 @@
       <p-floatLabel>
         <p-inputNumber
           id="margemLucro"
-          inputId="percent"
-          type="number"
+          inputId="minmaxfraction"
+          mode="decimal"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="5"
           suffix="%"
           [(ngModel)]="grupoProduto.margemLucro"
         />
@@ -31,7 +33,6 @@
         optionLabel="label"
         [showClear]="true"
         placeholder="Situação do Contrato"
-
       >
         <ng-template pTemplate="selectedItem">
           <div style="width: 125px; height: fit-content">
@@ -45,4 +46,5 @@
         </ng-template>
       </p-dropdown>
     </div>
+  </div>
 </div>
