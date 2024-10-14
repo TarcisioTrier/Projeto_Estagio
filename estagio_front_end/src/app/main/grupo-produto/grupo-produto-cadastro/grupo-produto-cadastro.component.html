@@ -46,5 +46,20 @@
         </ng-template>
       </p-dropdown>
     </div>
+    <div class="col-12 my-3 sm:col-6">
+      <p-checkbox
+      [(ngModel)]="grupoProduto.atualizaPreco"
+      [binary]="true"
+      inputId="atualizaPreco" />
+      <label for="atualizaPreco">Aceita Atualização de Preço?</label>
+    </div>
+    <div class="col-12 my-3 sm:col-6">
+      <p-button
+      label="Cadastrar"
+      icon="pi pi-check"
+      [loading]="loading"
+      (onClick)="load()"
+    />
+    </div>
   </div>
 </div>

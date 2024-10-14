@@ -8,6 +8,10 @@ import { SituacaoCadastro, TipoGrupoProduto } from '../../../models/app-enums';
   styleUrl: './grupo-produto-cadastro.component.scss'
 })
 export class GrupoProdutoCadastroComponent {
+load() {
+throw new Error('Method not implemented.');
+}
+  loading = false;
 cadastroTipoGrupo(event: any) {
   this.grupoProduto.tipoGrupo = event.value;
 }
