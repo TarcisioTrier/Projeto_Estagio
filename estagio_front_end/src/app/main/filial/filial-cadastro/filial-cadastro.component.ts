@@ -5,105 +5,130 @@ import { Component, OnInit } from '@angular/core';
 import { Filial } from '../../../models/filial';
 import { SituacaoContrato } from '../../../models/app-enums';
 import { HttpService } from '../../../services/http.service';
-import { Cep, Cnpj } from '../../../models/cepapi';
+import {
+  Cep,
+  cepToEndereco,
+  Cnpj,
+  cnpjToEndereco,
+  cnpjToFilial,
+  cpnjEnderecoDisabler,
+} from '../../../models/externalapi';
 import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-filial-cadastro',
   templateUrl: './filial-cadastro.component.html',
   styleUrl: './filial-cadastro.component.scss',
-  providers: [MessageService]
+  providers: [MessageService],
 })
-export class FilialCadastroComponent{
-loading = false;
-load() {
-  this.loading = true;
-  console.log(this.cadastroFilial)
-  let filial: Filial = this.cadastroFilial;
-  if(this.endereco.cep !== ''){
-    filial.endereco = this.endereco;
-    console.log(filial.endereco)
-  }
-  console.log(filial)
-  this.http.postFilial(filial).subscribe(retorno => {
-    console.log(retorno);
-    this.messageService.add({ severity: 'success', summary: 'Success', detail: 'Cadastrado com Sucesso' });
-  })
-  this.loading = false;
-}
-print(arg0: string) {
-  console.log(arg0)
-}
-cnpj() {
-  const cnpj = this.cadastroFilial.cnpj.replace(/[_./-]/g, '');
-  console.log(cnpj)
-  if(cnpj.length == 14){
-    this.http.buscaCNPJ(cnpj).subscribe({
-      next: (obj: Cnpj) => {
-        this.cadastroFilial.nomeFantasia = obj['NOME FANTASIA'].toLowerCase();;
-        this.disabled.nomeFantasia = (obj['NOME FANTASIA'] !== '');
-        this.cadastroFilial.razaoSocial = obj['RAZAO SOCIAL'].toLowerCase();;
-        this.disabled.razaoSocial = (obj['RAZAO SOCIAL'] !== '');
-        this.cadastroFilial.telefone = obj.DDD + obj.TELEFONE;
-        this.disabled.telefone = ((obj.DDD + obj.TELEFONE) !== '');
-        this.cadastroFilial.email = obj.EMAIL.toLowerCase();;
-        this.disabled.email = (obj.EMAIL !== '');
-        this.endereco.cep = obj.CEP;
-        this.endereco.numero = obj.NUMERO;
-        this.endereco.complemento = obj.COMPLEMENTO.toLowerCase();;
-        this.endereco.localidade = obj.MUNICIPIO;
-        this.endereco.bairro = obj.BAIRRO.toLowerCase();;
-        this.endereco.logradouro = obj.LOGRADOURO.toLowerCase();;
-        if(obj.CEP !== ''){
-          this.cep()
-        }
+export class FilialCadastroComponent {
+  loading = false;
+  load() {
+    this.loading = true;
+    let filial = this.cadastroFilial;
+    if (this.endereco.cep !== '') {
+      filial.endereco = this.endereco;
     }
+    this.http.postFilial(filial).subscribe({
+      next: (retorno) => {
+        console.log(retorno);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successo',
+          detail: 'Cadastrado com Sucesso',
+        });
+      },
+      error: (erro) => {
+        let error = erro.error;
+        if (typeof error === 'string') {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: error,
+          });
+        } else {
+          let erros = Object.values(error);
+          for (let erro of erros) {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Erro',
+              detail: String(erro),
+            });
+          }
+        }
+      },
     });
+    this.loading = false;
   }
-}
+  cnpj() {
+    const cnpj = this.cadastroFilial.cnpj.replace(/[_./-]/g, '');
+    console.log(cnpj);
+    if (cnpj.length == 14) {
+      this.http.buscaCNPJ(cnpj).subscribe({
+        next: (obj: Cnpj) => {
+          this.cadastroFilial = cnpjToFilial(obj);
+          if (obj.CEP !== '') {
+            this.cep(obj);
+          }
+        },
+        error: (error) => {
+          console.log(error);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Erro',
+              detail: error.message,
+            });
+
+        }
+      });
+    }
+  }
   cadastroSituacao(event: any) {
     this.cadastroFilial.situacaoContrato = event.value;
   }
-  constructor(private http: HttpService, private messageService: MessageService) {}
-  cep() {
+  constructor(
+    private http: HttpService,
+    private messageService: MessageService
+  ) {}
+  cep(cnpj?: Cnpj) {
     const cep = this.endereco.cep.replace(/[_-]/g, '');
-    console.log(cep);
-    if (cep.length == 8) {
+    if (cnpj) {
+      this.endereco = cnpjToEndereco(cnpj);
       this.http.viaCep(cep).subscribe({
         next: (obj: Cep) => {
-          if (obj.bairro !== ''){
-            this.endereco.bairro = obj.bairro;
-          }
-          this.disabled.bairro = (obj.bairro !== '')
-          this.endereco.localidade = obj.localidade;
-          this.disabled.cidade = (obj.localidade !== '')
-          this.disabled.logradouro = (obj.logradouro !== '')
-          if(obj.logradouro !== ''){
-            this.endereco.logradouro = obj.logradouro;
-          }
-
-
-          this.endereco.estado = obj.estado;
-          this.disabled.estado = (obj.estado !== '')
-          console.log(this.endereco)
+          cepToEndereco(obj, this.endereco);
+        },
+      });
+      cpnjEnderecoDisabler(cnpj, this.endereco);
+    } else if (cep.length == 8) {
+      this.http.viaCep(cep).subscribe({
+        next: (obj: Cep) => {
+          cepToEndereco(obj, this.endereco);
         },
       });
     }
   }
-
   situacaoContrato = Object.keys(SituacaoContrato)
     .filter((key) => isNaN(Number(key)))
-    .map((status, index) => ({ label: status, value: index }));
+    .map((status, index) => ({
+      label: status.replace(/_/g, ' '),
+      value: index,
+    }));
   itemSelecionado: any;
-  cadastroFilial = {
+  cadastroFilial: Filial = {
     nomeFantasia: '',
     razaoSocial: '',
     cnpj: '',
     telefone: '',
     email: '',
     situacaoContrato: SituacaoContrato.ATIVO,
+    disabled: {
+      nomeFantasia: false,
+      razaoSocial: false,
+      email: false,
+    },
   };
-  endereco = {
+  endereco: Endereco = {
     cep: '',
     logradouro: '',
     numero: 0,
@@ -111,15 +136,13 @@ cnpj() {
     bairro: '',
     localidade: '',
     estado: '',
-  };
-  disabled = {
-    nomeFantasia: false,
-    razaoSocial: false,
-    telefone: false,
-    email: false,
-    logradouro: false,
-    bairro: false,
-    cidade: false,
-    estado: false
+    disabled: {
+      logradouro: false,
+      numero: false,
+      complemento: false,
+      bairro: false,
+      localidade: false,
+      estado: false,
+    },
   };
 }

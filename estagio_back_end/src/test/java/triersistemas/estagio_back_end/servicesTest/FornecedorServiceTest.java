@@ -19,11 +19,14 @@ import triersistemas.estagio_back_end.dto.response.FornecedorResponseDto;
 import triersistemas.estagio_back_end.entity.Filial;
 import triersistemas.estagio_back_end.entity.Fornecedor;
 import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
+import triersistemas.estagio_back_end.exceptions.InvalidCnpjException;
+import triersistemas.estagio_back_end.exceptions.InvalidFoneException;
 import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.repository.FornecedorRepository;
 import triersistemas.estagio_back_end.services.FilialService;
 import triersistemas.estagio_back_end.services.impl.FornecedorServiceImpl;
 import triersistemas.estagio_back_end.validators.CnpjValidator;
+import triersistemas.estagio_back_end.validators.FoneValidator;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -45,6 +48,9 @@ public class FornecedorServiceTest {
 
     @Mock
     private CnpjValidator cnpjValidator;
+
+    @Mock
+    private FoneValidator foneValidator;
 
     @InjectMocks
     private FornecedorServiceImpl service;
@@ -105,7 +111,7 @@ public class FornecedorServiceTest {
         fornecedorDto = new FornecedorRequestDto(
                 "Nome Fantasia Teste",
                 "Razão Social Teste",
-                "12345678901234",
+                "12.345.678/0001-95",
                 "9999999999",
                 "teste@teste.com",
                 SituacaoCadastro.ATIVO,
@@ -113,6 +119,7 @@ public class FornecedorServiceTest {
 
         fornecedor = new Fornecedor(fornecedorDto, filial);
 
+        doNothing().when(cnpjValidator).validateCnpj(fornecedorDto.cnpj());
         when(filialService.findById(1L)).thenReturn(filial);
         when(fornecedorRepository.save(any(Fornecedor.class))).thenReturn(fornecedor);
 
@@ -126,8 +133,14 @@ public class FornecedorServiceTest {
         assertEquals(fornecedorDto.email(), responseDto.email());
         assertEquals(fornecedorDto.situacaoCadastro(), responseDto.situacaoCadastro());
         assertEquals(fornecedorDto.filialId(), responseDto.filialId());
+        assertDoesNotThrow(() -> {
+            cnpjValidator.validateCnpj(fornecedorDto.cnpj());
+        });
+        assertDoesNotThrow(() -> {
+            foneValidator.validateFone(fornecedorDto.telefone());
+        });
 
-        verify(cnpjValidator).validateCnpj(fornecedorDto.cnpj());
+
         verify(filialService).findById(1L);
         verify(fornecedorRepository).save(any(Fornecedor.class));
     }
@@ -139,15 +152,48 @@ public class FornecedorServiceTest {
         fornecedorDto = new FornecedorRequestDto(
                 "Nome Fantasia Teste",
                 "Razão Social Teste",
-                "12345678901234",
-                "9999999999",
+                "12.345.678/0001-95",
+                "(11) 91234-5678",
                 "teste@teste.com",
                 SituacaoCadastro.ATIVO,
                 2L);
         fornecedor = new Fornecedor(fornecedorDto, filial);;
 
         assertThrows(NotFoundException.class, () -> service.addFornecedor(fornecedorDto));
+    }
 
+    @Test
+    @DisplayName("Teste addFornecedor - Retorna BadRequest com cnpj inválido")
+    public void addFornecedor_InvalidCnpj_ReturnBadRequest() {
+        fornecedorDto = new FornecedorRequestDto(
+                "Nome Fantasia Teste",
+                "Razão Social Teste",
+                "cnpj inválido",
+                "(11) 91234-5678",
+                "teste@teste.com",
+                SituacaoCadastro.ATIVO,
+                1L);
+
+        doThrow(InvalidCnpjException.class).when(cnpjValidator).validateCnpj(fornecedorDto.cnpj());
+
+        assertThrows(InvalidCnpjException.class, () -> service.addFornecedor(fornecedorDto));
+    }
+
+    @Test
+    @DisplayName("Teste addFornecedor - Retorna BadRequest com telefone inválido")
+    public void addFornecedor_InvalidFone_ReturnBadRequest() {
+        fornecedorDto = new FornecedorRequestDto(
+                "Nome Fantasia Teste",
+                "Razão Social Teste",
+                "12.345.678/0001-95",
+                "(1) 91234-5678",
+                "teste@teste.com",
+                SituacaoCadastro.ATIVO,
+                1L);
+
+        doThrow(InvalidFoneException.class).when(foneValidator).validateFone(fornecedorDto.telefone());
+
+        assertThrows(InvalidFoneException.class, () -> service.addFornecedor(fornecedorDto));
     }
 
     @Test
@@ -158,8 +204,8 @@ public class FornecedorServiceTest {
         fornecedorDto = new FornecedorRequestDto(
                 "Nome Fantasia Teste",
                 "Razão Social Teste",
-                "12345678901234",
-                "9999999999",
+                "12.345.678/0001-95",
+                "(11) 91234-5678",
                 "teste@teste.com",
                 SituacaoCadastro.ATIVO,
                 1L);
@@ -200,8 +246,8 @@ public class FornecedorServiceTest {
         fornecedorDto = new FornecedorRequestDto(
                 "Nome Fantasia Alterado",
                 "Razão Social Alterada",
-                "12345678901234",
-                "9999999999",
+                "12.345.678/0001-95",
+                "(11) 91234-5678",
                 "teste@teste.com",
                 SituacaoCadastro.ATIVO,
                 2L);
@@ -220,6 +266,12 @@ public class FornecedorServiceTest {
         assertEquals(fornecedorDto.email(), responseDto.email());
         assertEquals(fornecedorDto.situacaoCadastro(), responseDto.situacaoCadastro());
         assertEquals(fornecedorDto.filialId(), responseDto.filialId());
+        assertDoesNotThrow(() -> {
+            cnpjValidator.validateCnpjUpdateFornecedor(fornecedorDto.cnpj(),2L);
+        });
+        assertDoesNotThrow(() -> {
+            foneValidator.validateFone(fornecedorDto.telefone());
+        });
 
         verify(fornecedorRepository).findById(1L);
         verify(filialService).findById(2L);
@@ -241,13 +293,13 @@ public class FornecedorServiceTest {
     @DisplayName("Teste getFornecedorFilter - retorna lista de fornecedorResponseDto paginada")
     public void getFornecedorFilter_ReturnFornecedor() {
         String nomeFiltro = "Nome Teste";
-        String cnpjFiltro = "12345678901234";
+        String cnpjFiltro = "12.345.678/0001-91";
         SituacaoCadastro situacaoCadastro = SituacaoCadastro.ATIVO;
 
         PageRequest pageable = PageRequest.of(0, 10);
 
-        FornecedorResponseDto dto1 = new FornecedorResponseDto(1L, "Fornecedor 1", "Razao1", cnpjFiltro, "12345678910", "fornecedor1@fornecedor1.com", SituacaoCadastro.ATIVO, 1L);
-        FornecedorResponseDto dto2 = new FornecedorResponseDto(2L, "Fornecedor 2", "Razao2", "09876543211234", "0987654321", "fornecedor2@fornecedor2.com", SituacaoCadastro.ATIVO, 2L);
+        FornecedorResponseDto dto1 = new FornecedorResponseDto(1L, "Fornecedor 1", "Razao1", cnpjFiltro, "(11) 91234-5678", "fornecedor1@fornecedor1.com", SituacaoCadastro.ATIVO, 1L);
+        FornecedorResponseDto dto2 = new FornecedorResponseDto(2L, "Fornecedor 2", "Razao2", "12.345.678/0001-95", "(11) 91234-5677", "fornecedor2@fornecedor2.com", SituacaoCadastro.ATIVO, 2L);
 
         Page<FornecedorResponseDto> page = new PageImpl<>(Arrays.asList(dto1, dto2), pageable, 2);
 
@@ -269,7 +321,7 @@ public class FornecedorServiceTest {
     @DisplayName("Teste getFornecedorFilter - Retorna lista vazia")
     public void getFornecedorFilter_ReturnEmpty() {
         String nomeFiltro = "Nome Inexistente";
-        String cnpjFiltro = "99999999999999";
+        String cnpjFiltro = "12.345.678/0001-95";
         SituacaoCadastro situacaoCadastro = SituacaoCadastro.INATIVO;
 
         PageRequest pageable = PageRequest.of(0, 10);
@@ -289,8 +341,8 @@ public class FornecedorServiceTest {
     }
 
     @Test
-    @DisplayName("Teste alteraSituacao - altera a situação do fornecedor cadastrado")
-    public void alteraSituacao_ChangeSituacaoCadastro() {
+    @DisplayName("Teste alteraSituacao - altera a situação do fornecedor cadastrado para inativo")
+    public void alteraSituacao_ChangeSituacaoCadastroInativo() {
         Fornecedor fornecedor = new Fornecedor();
         fornecedor.setId(1L);
         fornecedor.setSituacaoCadastro(SituacaoCadastro.ATIVO);
@@ -301,6 +353,24 @@ public class FornecedorServiceTest {
         service.alteraSituacao(1L);
 
         assertEquals(SituacaoCadastro.INATIVO, fornecedor.getSituacaoCadastro());
+
+        verify(fornecedorRepository).findById(1L);
+        verify(fornecedorRepository).save(any(Fornecedor.class));
+    }
+
+    @Test
+    @DisplayName("Teste alteraSituacao - altera a situação do fornecedor cadastrado para ativo")
+    public void alteraSituacao_ChangeSituacaoCadastroAtivo() {
+        Fornecedor fornecedor = new Fornecedor();
+        fornecedor.setId(1L);
+        fornecedor.setSituacaoCadastro(SituacaoCadastro.INATIVO);
+
+        when(fornecedorRepository.findById(1L)).thenReturn(Optional.of(fornecedor));
+        when(fornecedorRepository.save(any(Fornecedor.class))).thenReturn(fornecedor);
+
+        service.alteraSituacao(1L);
+
+        assertEquals(SituacaoCadastro.ATIVO, fornecedor.getSituacaoCadastro());
 
         verify(fornecedorRepository).findById(1L);
         verify(fornecedorRepository).save(any(Fornecedor.class));

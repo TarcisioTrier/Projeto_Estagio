@@ -21,12 +21,14 @@ import triersistemas.estagio_back_end.dto.response.FilialResponseDto;
 import triersistemas.estagio_back_end.entity.Enderecos;
 import triersistemas.estagio_back_end.entity.Filial;
 import triersistemas.estagio_back_end.enuns.SituacaoContrato;
+import triersistemas.estagio_back_end.exceptions.InvalidCnpjException;
+import triersistemas.estagio_back_end.exceptions.InvalidFoneException;
 import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.repository.FilialRepository;
 import triersistemas.estagio_back_end.services.impl.FilialServiceImpl;
 import triersistemas.estagio_back_end.validators.CnpjValidator;
 import triersistemas.estagio_back_end.validators.EnderecosValidator;
-
+import triersistemas.estagio_back_end.validators.FoneValidator;
 
 import java.util.*;
 
@@ -45,6 +47,9 @@ public class FilialServiceTest {
 
     @Mock
     private CnpjValidator cnpjValidator;
+
+    @Mock
+    private FoneValidator foneValidator;
 
     @InjectMocks
     private FilialServiceImpl service;
@@ -151,12 +156,14 @@ public class FilialServiceTest {
         filialDto = new FilialRequestDto(
                 "Nome Fantasia Teste",
                 "Razão Social Teste",
-                "12345678901234",
-                "9999999999",
+                "12.345.678/0001-95",
+                "(11) 91234-5678",
                 "teste@Teste.com",
                 SituacaoContrato.ATIVO,
                 enderecosDto);
 
+        doNothing().when(foneValidator).validateFone(filialDto.telefone());
+        doNothing().when(cnpjValidator).validateCnpj(filialDto.cnpj());
         when(enderecosValidator.validateEndereco(filialDto.endereco())).thenReturn(enderecos);
 
         filial = new Filial(filialDto);
@@ -181,10 +188,17 @@ public class FilialServiceTest {
         assertEquals(enderecosDto.estado(), responseDto.endereco().estado());
         assertEquals(enderecosDto.cep(), responseDto.endereco().cep());
         assertEquals(enderecosDto.bairro(), responseDto.endereco().bairro());
+        assertDoesNotThrow(() -> {
+            cnpjValidator.validateCnpj(filialDto.cnpj());
+        });
+        assertDoesNotThrow(() -> {
+            foneValidator.validateFone(filialDto.telefone());
+        });
+        assertDoesNotThrow(() -> {
+            enderecosValidator.validateEndereco(filialDto.endereco());
+        });
 
-        verify(cnpjValidator).validateCnpj(filialDto.cnpj());
-        verify(enderecosValidator).validateEndereco(filialDto.endereco());
-        verify(filialRepository).save(filial);
+        verify(filialRepository, times(1)).save(filial);
     }
 
     @Test
@@ -193,16 +207,18 @@ public class FilialServiceTest {
         filialDto = new FilialRequestDto(
                 "Nome Fantasia Teste",
                 "Razão Social Teste",
-                "12345678901235",
-                "8888888888",
+                "12.345.678/0001-95",
+                "(11) 91234-5678",
                 "teste2@Teste.com",
                 SituacaoContrato.ATIVO,
                 null);
-        filial = new Filial(filialDto);
-        filial.setEndereco(null);
-        filial.setId(1L);
 
-        when(filialRepository.save(any(Filial.class))).thenReturn(filial);
+        Filial savedFilial = new Filial(filialDto);
+        savedFilial.setId(1L);
+
+        doNothing().when(foneValidator).validateFone(filialDto.telefone());
+        doNothing().when(cnpjValidator).validateCnpj(filialDto.cnpj());
+        when(filialRepository.save(any(Filial.class))).thenReturn(savedFilial);
 
         FilialResponseDto responseDto = service.addFilial(filialDto);
 
@@ -214,6 +230,48 @@ public class FilialServiceTest {
         assertEquals(filialDto.telefone(), responseDto.telefone());
         assertEquals(filialDto.email(), responseDto.email());
         assertEquals(filialDto.situacaoContrato(), responseDto.situacaoContrato());
+        assertNull(responseDto.endereco());
+        assertDoesNotThrow(() -> {
+            cnpjValidator.validateCnpj(filialDto.cnpj());
+        });
+        assertDoesNotThrow(() -> {
+            foneValidator.validateFone(filialDto.telefone());
+        });
+
+        verify(filialRepository).save(any(Filial.class));
+    }
+
+    @Test
+    @DisplayName("Teste addFilial - Retorna BadRequest cnpj inválido")
+    public void addFilial_InvalidCnpj_ReturnBadRequest() {
+        FilialRequestDto requestDto = new FilialRequestDto(
+                "Nome Fantasia",
+                "Razão Social",
+                "cnpj inválido",
+                "(11) 91234-5678",
+                "teste@example.com",
+                SituacaoContrato.ATIVO,
+                null);
+
+        doThrow(new InvalidCnpjException("CNPJ inválido.")).when(cnpjValidator).validateCnpj(requestDto.cnpj());
+
+        assertThrows(InvalidCnpjException.class, () -> service.addFilial(requestDto));
+    }
+    @Test
+    @DisplayName("Teste addFilial - Retorna BadRequest telefone inválido")
+    public void addFilial_InvalidFone_ReturnBadRequest() {
+        FilialRequestDto requestDto = new FilialRequestDto(
+                "Nome Fantasia",
+                "Razão Social",
+                "12.345.678/0001-95",
+                "Telefone inválido",
+                "teste@example.com",
+                SituacaoContrato.ATIVO,
+                null);
+
+        doThrow(new InvalidFoneException("Telefone inválido.")).when(foneValidator).validateFone(requestDto.telefone());
+
+        assertThrows(InvalidFoneException.class, () -> service.addFilial(requestDto));
     }
 
     @Test
@@ -222,8 +280,8 @@ public class FilialServiceTest {
         filialDto = new FilialRequestDto(
                 "Nome Fantasia Teste",
                 "Razão Social Teste",
-                "12345678901235",
-                "8888888888",
+                "12.345.678/0001-95",
+                "(11) 91234-5678",
                 "teste2@Teste.com",
                 SituacaoContrato.ATIVO,
                 null);
@@ -233,7 +291,6 @@ public class FilialServiceTest {
 
         filialRepository.save(filial);
 
-        lenient().when(filialRepository.save(any(Filial.class))).thenReturn(filial);
         when(filialRepository.findById(1L)).thenReturn(Optional.of(filial));
 
         Filial filialEncontrada = service.findById(1L);
@@ -250,7 +307,7 @@ public class FilialServiceTest {
             service.findById(1L);
         });
 
-        assertEquals("Filial não encontrada", exception.getMessage());
+        assertEquals("Filial não Encontrada", exception.getMessage());
 
         verify(filialRepository).findById(1L);
     }
@@ -261,8 +318,8 @@ public class FilialServiceTest {
         filialDto = new FilialRequestDto(
                 "Nome Fantasia Teste",
                 "Razão Social Teste",
-                "12345678901235",
-                "8888888888",
+                "12.345.678/0001-95",
+                "(11) 91234-5678",
                 "teste2@Teste.com",
                 SituacaoContrato.ATIVO,
                 null);
@@ -272,13 +329,9 @@ public class FilialServiceTest {
 
         when(filialRepository.findById(1L)).thenReturn(Optional.of(filial));
 
-
         service.deleteFilial(1L);
 
-
         verify(filialRepository).delete(filial);
-
-
         verify(filialRepository).findById(1L);
     }
 
@@ -291,7 +344,7 @@ public class FilialServiceTest {
             service.deleteFilial(1L);
         });
 
-        assertEquals("Filial não encontrada", exception.getMessage());
+        assertEquals("Filial não Encontrada", exception.getMessage());
 
         verify(filialRepository, never()).delete(any(Filial.class));
         verify(filialRepository).findById(1L);
@@ -312,8 +365,8 @@ public class FilialServiceTest {
         filialDto = new FilialRequestDto(
                 "Nome Fantasia ",
                 "Razão Social ",
-                "12345678901236",
-                "9999999999",
+                "12.345.678/0001-95",
+                "(11) 91234-5678",
                 "teste3@Teste.com",
                 SituacaoContrato.ATIVO,
                 null);
@@ -325,8 +378,8 @@ public class FilialServiceTest {
         FilialRequestDto filialDtoAlterada = new FilialRequestDto(
                 "Nome Fantasia Alterado",
                 "Razão Social Alterada",
-                "12345678901237",
-                "9999999999",
+                "12.345.678/0001-95",
+                "(11) 91234-5678",
                 "teste3@Teste.com",
                 SituacaoContrato.ATIVO,
                 enderecosDto);
@@ -349,6 +402,9 @@ public class FilialServiceTest {
         assertDoesNotThrow(() -> {
             cnpjValidator.validateCnpjUpdateFilial(filialDtoAlterada.cnpj(), 1L);
         });
+        assertDoesNotThrow(() -> {
+            foneValidator.validateFone(filialDto.telefone());
+        });
 
         verify(filialRepository).findById(1L);
         verify(enderecosValidator).validateEndereco(filialDtoAlterada.endereco());
@@ -363,11 +419,33 @@ public class FilialServiceTest {
             service.updateFilial(1L, filialDto);
         });
 
-        assertEquals("Filial não encontrada", exception.getMessage());
+        assertEquals("Filial não Encontrada", exception.getMessage());
 
         verify(filialRepository, never()).save(any(Filial.class));
         verify(filialRepository).findById(1L);
     }
+
+    @Test
+@DisplayName("Teste updateFilial - Retorna BadRequest cnpj")
+public void updateFilial_InvalidCnpj_ReturnBadRequest() {
+
+    filial = new Filial();
+    filial.setId(1L);
+
+    filialDto = new FilialRequestDto(
+            "Filial 1",
+            "Razao1",
+            "12.345.678/0001-91",
+            "(11) 91234-5678",
+            "filial1@filial1",
+            SituacaoContrato.ATIVO,
+            null);
+
+    when(filialRepository.findById(1L)).thenReturn(Optional.of(filial));
+    doThrow(new InvalidCnpjException("CNPJ já cadastrado em outra empresa.")).when(cnpjValidator).validateCnpjUpdateFilial(filialDto.cnpj(),1L);
+
+    assertThrows(InvalidCnpjException.class, () -> service.updateFilial(1L, filialDto));
+}
 
     @Test
     @DisplayName("Teste getFilialById - retorna filial cadastrada em ResponseDto")
@@ -384,8 +462,8 @@ public class FilialServiceTest {
         filialDto = new FilialRequestDto(
                 "Nome Fantasia ",
                 "Razão Social ",
-                "12345678901236",
-                "9999999999",
+                "12.345.678/0001-95",
+                "(11) 91234-5678",
                 "teste3@Teste.com",
                 SituacaoContrato.ATIVO,
                 null);
@@ -418,7 +496,7 @@ public class FilialServiceTest {
             service.getFilialById(1L);
         });
 
-        assertEquals("Filial não encontrada", exception.getMessage());
+        assertEquals("Filial não Encontrada", exception.getMessage());
 
         verify(filialRepository).findById(1L);
     }
@@ -427,7 +505,7 @@ public class FilialServiceTest {
     @DisplayName("Teste getFilialFilter - retorna lista de filialReponseDto paginada")
     public void getFilialFilter_ReturnFilial() {
         String nomeFiltro = "Nome Teste";
-        String cnpjFiltro = "12345678901234";
+        String cnpjFiltro = "12.345.678/0001-95";
 
         Pageable pageable = PageRequest.of(0, 10);
 
@@ -437,7 +515,7 @@ public class FilialServiceTest {
                         "Filial 1",
                         "Razao1",
                         cnpjFiltro,
-                        "12345678910",
+                        "(11) 91234-5678",
                         "filial1@filial1",
                         SituacaoContrato.ATIVO,
                         null),
@@ -445,8 +523,8 @@ public class FilialServiceTest {
                         2L,
                         "Filial 2",
                         "Razao2",
-                        "09876543211234",
-                        "0987654321",
+                        "12.345.678/0001-91",
+                        "(11) 91234-5671",
                         "filial2@filial2",
                         SituacaoContrato.ATIVO,
                         null));
@@ -470,7 +548,7 @@ public class FilialServiceTest {
     @DisplayName("Teste getFilialFilter - Blank")
     public void getFilialFilter_ReturnBlank() {
         String nomeFiltro = "Nome Teste";
-        String cnpjFiltro = "12345678901234";
+        String cnpjFiltro = "12.345.678/0001-95";
 
         Pageable pageable = PageRequest.of(0, 10);
 
@@ -502,8 +580,8 @@ public class FilialServiceTest {
         filialDto = new FilialRequestDto(
                 "Nome Fantasia ",
                 "Razão Social ",
-                "12345678901236",
-                "9999999999",
+                "12.345.678/0001-95",
+                "(11) 91234-5678",
                 "teste3@teste.com",
                 SituacaoContrato.ATIVO,
                 null);

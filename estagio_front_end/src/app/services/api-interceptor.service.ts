@@ -5,9 +5,9 @@ import { Observable } from 'rxjs/internal/Observable';
 @Injectable({
   providedIn: 'root'
 })
-export class ApiIterceptor implements HttpInterceptor{
+export class ApiInterceptor implements HttpInterceptor{
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    if (!req.url.includes('https://')){
+    if (!(req.url.includes('https://') || req.url.includes('/cnpj'))){
       req = req.clone({ url: `http://localhost:8080/${req.url}`});
     }
     return next.handle(req);

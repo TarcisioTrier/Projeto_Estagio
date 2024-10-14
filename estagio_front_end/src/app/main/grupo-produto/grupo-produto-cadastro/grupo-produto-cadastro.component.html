@@ -1,1 +1,50 @@
-<p>grupo-produto-cadastro works!</p>
+<div class="flex justify-content-center h-full flex-column">
+  <div class="formgrid p-fluid grid mx-5 my-2">
+    <div class="col-12 my-3">
+      <p-floatLabel>
+        <input
+          pInputText
+          id="nomeGrupo"
+          type="text"
+          [(ngModel)]="grupoProduto.nomeGrupo"
+        />
+        <label for="nomeGrupo">Nome do Grupo</label>
+      </p-floatLabel>
+    </div>
+    <div class="col-12 my-3 md:col-6">
+      <p-floatLabel>
+        <p-inputNumber
+          id="margemLucro"
+          inputId="minmaxfraction"
+          mode="decimal"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="5"
+          suffix="%"
+          [(ngModel)]="grupoProduto.margemLucro"
+        />
+        <label for="margemLucro">Margem de Lucro</label>
+      </p-floatLabel>
+    </div>
+    <div class="col-12 my-3 md:col-6">
+      <p-dropdown
+        [options]="tipoGrupoProduto"
+        [(ngModel)]="tipoGrupoProdutoSelecionado"
+        (ngModelChange)="cadastroTipoGrupo($event)"
+        optionLabel="label"
+        [showClear]="true"
+        placeholder="Situação do Contrato"
+      >
+        <ng-template pTemplate="selectedItem">
+          <div style="width: 125px; height: fit-content">
+            {{ tipoGrupoProdutoSelecionado.label | titlecase }}
+          </div>
+        </ng-template>
+        <ng-template let-item pTemplate="item">
+          <div style="width: fit-content; height: fit-content; float: left">
+            {{ item.label | titlecase }}
+          </div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+  </div>
+</div>

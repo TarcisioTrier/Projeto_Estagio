@@ -13,9 +13,8 @@ import triersistemas.estagio_back_end.repository.FornecedorRepository;
 import triersistemas.estagio_back_end.services.FilialService;
 import triersistemas.estagio_back_end.services.FornecedorService;
 import triersistemas.estagio_back_end.validators.CnpjValidator;
+import triersistemas.estagio_back_end.validators.FoneValidator;
 import triersistemas.estagio_back_end.validators.Utils;
-
-import static triersistemas.estagio_back_end.validators.Utils.validateFone;
 
 @Service
 public class FornecedorServiceImpl implements FornecedorService {
@@ -23,11 +22,13 @@ public class FornecedorServiceImpl implements FornecedorService {
     private final FornecedorRepository fornecedorRepository;
     private final FilialService filialService;
     private final CnpjValidator cnpjValidator;
+    private final FoneValidator foneValidator;
 
-    public FornecedorServiceImpl(FornecedorRepository fornecedorRepository, FilialService filialService, CnpjValidator cnpjValidator) {
+    public FornecedorServiceImpl(FornecedorRepository fornecedorRepository, FilialService filialService, CnpjValidator cnpjValidator, FoneValidator foneValidator) {
         this.fornecedorRepository = fornecedorRepository;
         this.filialService = filialService;
         this.cnpjValidator = cnpjValidator;
+        this.foneValidator = foneValidator;
     }
     @Override
     public FornecedorResponseDto addFornecedor(FornecedorRequestDto requestDto) {
@@ -64,14 +65,13 @@ public class FornecedorServiceImpl implements FornecedorService {
         }
 
         if (requestDto.telefone() != null) {
-            validateFone(requestDto.telefone());
+            foneValidator.validateFone(requestDto.telefone());
         }
 
         fornecedor.alterarDados(requestDto, filial);
         fornecedorRepository.save(fornecedor);
         return new FornecedorResponseDto(fornecedor);
     }
-
 
     @Override
     public void alteraSituacao(Long id) {
@@ -82,7 +82,7 @@ public class FornecedorServiceImpl implements FornecedorService {
 
     private void validateFornecedor(FornecedorRequestDto requestDto) {
         cnpjValidator.validateCnpj(requestDto.cnpj());
-        validateFone(requestDto.telefone());
+        foneValidator.validateFone(requestDto.telefone());
     }
 
     private Fornecedor findById(Long id) {

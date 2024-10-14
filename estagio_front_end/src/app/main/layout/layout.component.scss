@@ -1,40 +1,4 @@
-// div{
-//   display: flex;
-//   flex-direction: row;
-//   width: 100%;
-// }
-// body{
-//   display: flex;
-//   flex-direction: column;
-//   height: 100%;
-// }
-// app-header{
-//   height: fit-content;
-// }
-.header{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-p-toolbar div{
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-i{
-  margin-left: 10px;
-  margin-right: 10px;
-}
-div.p-sidebar-content{
-  overflow-y: visible;
-}
-div.router{
-  height: 100%;
-}
-div.body{
-  height: 100%;
-}
-div.menu{
-  height: 100%;
+.p-autocomplete-panel {
+  position: fixed;
+  z-index: 500;
 }

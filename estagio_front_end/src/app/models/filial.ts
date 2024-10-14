@@ -12,16 +12,28 @@ export interface Filial{
   situacaoContrato: SituacaoContrato,
   endereco?: Endereco,
   fornecedores?: Array<Fornecedor>,
-  grupoProdutos?: Array<GrupoProduto>
+  grupoProdutos?: Array<GrupoProduto>,
+  disabled:{
+    nomeFantasia: boolean,
+    razaoSocial: boolean,
+    email: boolean
+  }
   }
   export interface Endereco{
     id?: number,
     cep: string,
-    logradouro: string;
-    numero: number;
+    logradouro: string,
+    numero?: number,
     complemento?: string,
     bairro: string,
     localidade: string,
     estado: string
-
+    disabled:{
+      logradouro:boolean,
+      numero:boolean,
+      complemento:boolean,
+      bairro:boolean,
+      localidade:boolean,
+      estado:boolean
+    }
     }
