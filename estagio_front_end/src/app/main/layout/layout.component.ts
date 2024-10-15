@@ -42,7 +42,7 @@ export class LayoutComponent implements OnInit {
     sessionStorage.removeItem('filial');
     this.localFilial = undefined;
     this.menuItem();
-    this.router.navigate(['']);
+    this.router.navigate(['/filial/cadastro']);
   }
 
   showDialog() {

@@ -4,6 +4,7 @@ import { Produto } from "./produto";
 export interface GrupoProduto{
   id?: number,
   nomeGrupo?: string,
+  filialId?: number,
   tipoGrupo?: TipoGrupoProduto,
   margemLucro?: number,
   atualizaPreco?: boolean,
