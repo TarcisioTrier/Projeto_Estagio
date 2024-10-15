@@ -30,17 +30,23 @@
             mask="99.999.999/9999-99"
             id="cnpj"
             [(ngModel)]="cadastroFilial.cnpj"
-            (onComplete)="cnpj()"
+            (ngModelChange)="cnpj()"
           />
           <label for="cnpj">CNPJ</label>
         </p-floatLabel>
       </div>
       <div class="col-12 my-3 md:col-6">
         <p-floatLabel>
-          <p-inputMask
-            mask="(99)99999-9999"
+          <p-inputMask *ngIf="telefone()"
+            mask="(99) 9999-99999"
             id="telefone"
-            autoClear="false"
+            [autoClear]="false"
+            [(ngModel)]="cadastroFilial.telefone"
+          />
+          <p-inputMask *ngIf="!telefone()"
+            mask="(99) 99999-9999"
+            id="telefone"
+            [autoClear]="false"
             [(ngModel)]="cadastroFilial.telefone"
           />
           <label for="telefone">Telefone</label>
@@ -164,6 +170,7 @@
           label="Cadastrar"
           icon="pi pi-check"
           [loading]="loading"
+          [disabled]="!((cadastroFilial.nomeFantasia && cadastroFilial.razaoSocial && cadastroFilial.cnpj && cadastroFilial.telefone && cadastroFilial.email && itemSelecionado) && !(endereco.cep && !(endereco.bairro && endereco.estado && endereco.localidade && endereco.logradouro))) "
           (onClick)="load()"
         />
       </div>

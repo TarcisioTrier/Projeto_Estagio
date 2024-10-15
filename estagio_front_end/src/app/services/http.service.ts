@@ -1,3 +1,4 @@
+import { GrupoProduto } from './../models/grupo-produto';
 import { Filial } from './../models/filial';
 import {
   HttpClient,
@@ -29,6 +30,11 @@ export class HttpService {
   postFilial(filial: Filial) {
     return this.http
       .post('filiais/post', filial)
+      .pipe(take(1), catchError(this.handleError));
+  }
+  postGrupoProduto(grupoProduto: GrupoProduto) {
+    return this.http
+      .post('grupos-produtos/post', grupoProduto)
       .pipe(take(1), catchError(this.handleError));
   }
   getFilialbyId(id: number) {

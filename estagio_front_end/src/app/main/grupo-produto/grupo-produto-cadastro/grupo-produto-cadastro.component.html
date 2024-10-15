@@ -19,10 +19,18 @@
           mode="decimal"
           [minFractionDigits]="2"
           [maxFractionDigits]="5"
+          [showButtons]="true"
+          buttonLayout="horizontal"
+          [min]="0"
+          [max]="100"
           suffix="%"
+          decrementButtonClass="p-button-danger"
+          incrementButtonClass="p-button-success"
+          incrementButtonIcon="pi pi-plus"
+          decrementButtonIcon="pi pi-minus"
           [(ngModel)]="grupoProduto.margemLucro"
         />
-        <label for="margemLucro">Margem de Lucro</label>
+        <label class="px-6" for="margemLucro">Margem de Lucro</label>
       </p-floatLabel>
     </div>
     <div class="col-12 my-3 md:col-6">
@@ -48,18 +56,21 @@
     </div>
     <div class="col-12 my-3 sm:col-6">
       <p-checkbox
-      [(ngModel)]="grupoProduto.atualizaPreco"
-      [binary]="true"
-      inputId="atualizaPreco" />
+        [(ngModel)]="grupoProduto.atualizaPreco"
+        [binary]="true"
+        inputId="atualizaPreco"
+      />
       <label for="atualizaPreco">Aceita Atualização de Preço?</label>
     </div>
+    <p-toast></p-toast>
     <div class="col-12 my-3 sm:col-6">
       <p-button
-      label="Cadastrar"
-      icon="pi pi-check"
-      [loading]="loading"
-      (onClick)="load()"
-    />
+        label="Cadastrar"
+        icon="pi pi-check"
+        [loading]="loading"
+        [disabled]="!grupoProduto.nomeGrupo || !grupoProduto.margemLucro || !tipoGrupoProdutoSelecionado"
+        (onClick)="load()"
+      />
     </div>
   </div>
 </div>

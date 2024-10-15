@@ -12,6 +12,7 @@ import {
   cnpjToEndereco,
   cnpjToFilial,
   cpnjEnderecoDisabler,
+  validateCnpj,
 } from '../../../models/externalapi';
 import { MessageService } from 'primeng/api';
 
@@ -22,6 +23,11 @@ import { MessageService } from 'primeng/api';
   providers: [MessageService],
 })
 export class FilialCadastroComponent {
+telefone(): boolean {
+  if(this.cadastroFilial.telefone.replace(/[_]/g, '').length < 15)
+  return true;
+  return false;
+}
   loading = false;
   load() {
     this.loading = true;
@@ -63,9 +69,19 @@ export class FilialCadastroComponent {
   cnpj() {
     const cnpj = this.cadastroFilial.cnpj.replace(/[_./-]/g, '');
     console.log(cnpj);
-    if (cnpj.length == 14) {
+    if (validateCnpj(cnpj)) {
       this.http.buscaCNPJ(cnpj).subscribe({
         next: (obj: Cnpj) => {
+          console.log(obj);
+          if (obj.error) {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Erro',
+              detail: obj.error,
+            });
+            return;
+          }
+
           this.cadastroFilial = cnpjToFilial(obj);
           if (obj.CEP !== '') {
             this.cep(obj);
@@ -81,6 +97,18 @@ export class FilialCadastroComponent {
 
         }
       });
+    }else{
+      const cnpjElement = document.getElementById('cnpj');
+      if(cnpjElement){
+        if (cnpj.length > 0) {
+          cnpjElement.classList.add('ng-invalid');
+          cnpjElement.classList.add('ng-dirty');
+        }else{
+          cnpjElement.classList.remove('ng-invalid');
+          cnpjElement.classList.remove('ng-dirty');
+        }
+      }
+
     }
   }
   cadastroSituacao(event: any) {
@@ -96,6 +124,7 @@ export class FilialCadastroComponent {
       this.endereco = cnpjToEndereco(cnpj);
       this.http.viaCep(cep).subscribe({
         next: (obj: Cep) => {
+          console.log(obj);
           cepToEndereco(obj, this.endereco);
         },
       });
@@ -103,6 +132,7 @@ export class FilialCadastroComponent {
     } else if (cep.length == 8) {
       this.http.viaCep(cep).subscribe({
         next: (obj: Cep) => {
+          console.log(obj);
           cepToEndereco(obj, this.endereco);
         },
       });
@@ -131,7 +161,7 @@ export class FilialCadastroComponent {
   endereco: Endereco = {
     cep: '',
     logradouro: '',
-    numero: 0,
+    numero: undefined,
     complemento: '',
     bairro: '',
     localidade: '',
@@ -146,3 +176,4 @@ export class FilialCadastroComponent {
     },
   };
 }
+
