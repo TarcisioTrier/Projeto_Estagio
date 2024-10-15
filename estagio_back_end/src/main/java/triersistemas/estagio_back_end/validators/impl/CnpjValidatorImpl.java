@@ -49,6 +49,13 @@ public class CnpjValidatorImpl implements CnpjValidator {
         }
     }
 
+    public void validateCnpjPostFornecedor(String cnpj){
+        Optional<Fornecedor> fornecedorExistente = fornecedorRepository.findByCnpj(cnpj);
+        if (fornecedorExistente.isPresent()) {
+            throw new InvalidCnpjException("CNPJ já cadastrado em outra empresa.");
+        }
+    }
+
     private static boolean isCNPJ(String CNPJ) {
 
         if (CNPJ.length() != 14) {

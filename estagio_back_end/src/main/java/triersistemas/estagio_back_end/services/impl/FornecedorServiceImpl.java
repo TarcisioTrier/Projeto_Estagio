@@ -16,6 +16,8 @@ import triersistemas.estagio_back_end.validators.CnpjValidator;
 import triersistemas.estagio_back_end.validators.FoneValidator;
 import triersistemas.estagio_back_end.validators.Utils;
 
+import java.util.List;
+
 @Service
 public class FornecedorServiceImpl implements FornecedorService {
 
@@ -33,7 +35,7 @@ public class FornecedorServiceImpl implements FornecedorService {
     @Override
     public FornecedorResponseDto addFornecedor(FornecedorRequestDto requestDto) {
         Filial filial = filialService.findById(requestDto.filialId());
-        validateFornecedor(requestDto);
+        cnpjValidator.validateCnpjPostFornecedor(requestDto.cnpj());
         if(Utils.isNull(filial)){
             throw new NotFoundException("Filial não encontrada.");
         }
@@ -46,9 +48,13 @@ public class FornecedorServiceImpl implements FornecedorService {
         var fornecedor = findById(id);
         return new FornecedorResponseDto(fornecedor);
     }
+    @Override
+    public List<FornecedorResponseDto> getFornecedorFilter(String nome, Long filialId) {
+        return fornecedorRepository.buscarFornecedores(nome, filialId);
+    }
 
     @Override
-    public Page<FornecedorResponseDto> getFornecedorFilter(String nome, String cnpj, SituacaoCadastro situacaoCadastro, PageRequest of) {
+    public Page<FornecedorResponseDto> getFornecedorPaged(String nome, String cnpj, SituacaoCadastro situacaoCadastro, PageRequest of) {
         return fornecedorRepository.buscarFornecedores(nome,cnpj,situacaoCadastro,of);
     }
 
@@ -72,6 +78,8 @@ public class FornecedorServiceImpl implements FornecedorService {
         fornecedorRepository.save(fornecedor);
         return new FornecedorResponseDto(fornecedor);
     }
+
+
 
     @Override
     public void alteraSituacao(Long id) {

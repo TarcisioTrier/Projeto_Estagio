@@ -200,7 +200,7 @@ public class FornecedorControllerTest {
                 new FornecedorResponseDto(2L, "Nome Fantasia2", "Razão Social2", "123456789101112", "999999999", "teste2@example.com", situacaoCadastro, 1L)
         ));
 
-        when(fornecedorService.getFornecedorFilter(nome, cnpj, situacaoCadastro, pageable)).thenReturn(responsePage);
+        when(fornecedorService.getFornecedorPaged(nome, cnpj, situacaoCadastro, pageable)).thenReturn(responsePage);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/fornecedores/getAllFilter")
                         .param("nome", nome)
@@ -212,7 +212,7 @@ public class FornecedorControllerTest {
                 .andExpect(jsonPath("$.content[0].nomeFantasia").value("Nome Fantasia"))
                 .andExpect(jsonPath("$.content[0].cnpj").value(cnpj));
 
-        verify(fornecedorService).getFornecedorFilter(nome, cnpj, situacaoCadastro, pageable);
+        verify(fornecedorService).getFornecedorPaged(nome, cnpj, situacaoCadastro, pageable);
     }
 
     @Test
@@ -224,7 +224,7 @@ public class FornecedorControllerTest {
         PageRequest pageable = PageRequest.of(0, 10);
         Page<FornecedorResponseDto> emptyPage = new PageImpl<>(Collections.emptyList());
 
-        when(fornecedorService.getFornecedorFilter(nome, cnpj, situacaoCadastro, pageable)).thenReturn(emptyPage);
+        when(fornecedorService.getFornecedorPaged(nome, cnpj, situacaoCadastro, pageable)).thenReturn(emptyPage);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/fornecedores/getAllFilter")
                         .param("nome", nome)
@@ -237,7 +237,7 @@ public class FornecedorControllerTest {
                 .andExpect(jsonPath("$.content").isEmpty())
                 .andExpect(jsonPath("$.totalElements").value(0));
 
-        verify(fornecedorService).getFornecedorFilter(nome, cnpj, situacaoCadastro, pageable);
+        verify(fornecedorService).getFornecedorPaged(nome, cnpj, situacaoCadastro, pageable);
     }
 
     @Test
@@ -248,7 +248,7 @@ public class FornecedorControllerTest {
         SituacaoCadastro situacaoCadastro = SituacaoCadastro.ATIVO;
         PageRequest pageable = PageRequest.of(0, 10);
 
-        when(fornecedorService.getFornecedorFilter(nome, invalidCnpj, situacaoCadastro, pageable))
+        when(fornecedorService.getFornecedorPaged(nome, invalidCnpj, situacaoCadastro, pageable))
                 .thenThrow(new InvalidCnpjException("CNPJ inválido"));
 
         mockMvc.perform(MockMvcRequestBuilders.get("/fornecedores/getAllFilter")
@@ -260,7 +260,7 @@ public class FornecedorControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("CNPJ inválido"));
 
-        verify(fornecedorService).getFornecedorFilter(nome, invalidCnpj, situacaoCadastro, pageable);
+        verify(fornecedorService).getFornecedorPaged(nome, invalidCnpj, situacaoCadastro, pageable);
     }
 
     @Test

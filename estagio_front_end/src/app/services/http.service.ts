@@ -34,7 +34,7 @@ export class HttpService {
   }
   postFornecedor(fornecedor: Fornecedor) {
     return this.http
-      .post('fornecedor/post', fornecedor)
+      .post('fornecedores/post', fornecedor)
       .pipe(take(1), catchError(this.handleError));
   }
   postGrupoProduto(grupoProduto: GrupoProduto) {
