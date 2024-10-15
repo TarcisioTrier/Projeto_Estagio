@@ -56,7 +56,7 @@ export function cnpjToFilial(cnpj:Cnpj){
   }
   return filial;
 }
-export function cnpjtoFornecedor(cnpj:Cnpj, id: number){
+export function cnpjtoFornecedor(cnpj:Cnpj){
   let fornecedor:Fornecedor ={
     nomeFantasia: toTitleCase(cnpj['NOME FANTASIA']),
     razaoSocial: toTitleCase(cnpj['RAZAO SOCIAL']),
@@ -64,8 +64,13 @@ export function cnpjtoFornecedor(cnpj:Cnpj, id: number){
     telefone: cnpj.DDD + cnpj.TELEFONE,
     email: cnpj.EMAIL,
     situacaoContrato: SituacaoContrato.ATIVO,
-    filialId: id
+    disabled: {
+      nomeFantasia: cnpj['NOME FANTASIA'] !== '',
+      razaoSocial: cnpj['RAZAO SOCIAL'] !== '',
+      email: cnpj.EMAIL !== ''
+    }
   }
+  return fornecedor;
 }
 export function cnpjToEndereco(cnpj:Cnpj){
   let endereco:Endereco = {

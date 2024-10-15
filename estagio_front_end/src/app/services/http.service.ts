@@ -32,6 +32,11 @@ export class HttpService {
       .post('filiais/post', filial)
       .pipe(take(1), catchError(this.handleError));
   }
+  postFornecedor(fornecedor: Fornecedor) {
+    return this.http
+      .post('fornecedor/post', fornecedor)
+      .pipe(take(1), catchError(this.handleError));
+  }
   postGrupoProduto(grupoProduto: GrupoProduto) {
     return this.http
       .post('grupos-produtos/post', grupoProduto)

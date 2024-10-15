@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FornecedorCadastroComponent } from './fornecedor-cadastro.component';
+import { PrimengModule } from '../../../primeng/primeng.module';
 
 
 
@@ -9,7 +10,8 @@ import { FornecedorCadastroComponent } from './fornecedor-cadastro.component';
     FornecedorCadastroComponent
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    PrimengModule
   ],
   exports:[
     FornecedorCadastroComponent

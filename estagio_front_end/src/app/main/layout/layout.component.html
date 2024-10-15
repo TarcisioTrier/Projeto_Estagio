@@ -43,8 +43,8 @@
         <i class="pi pi-user mx-1" style="font-size: 2rem" #test (click)="op.toggle($event)"></i>
         <p-overlayPanel #op>
           <div class="flex flex-column">
-            <p-button (onClick)="showDialog()" label="Selecionar Filial" />
-            <p-button *ngIf="localFilial" (click)="quit(); op.toggle($event)" label="Sair" />
+            <p-button class="m-1" (onClick)="showDialog()" label="Selecionar Filial" />
+            <p-button *ngIf="localFilial" class="m-1" (click)="quit(); op.toggle($event)" label="Sair" />
           </div>
         </p-overlayPanel>
 
@@ -66,6 +66,7 @@
       </ng-template>
     </p-sidebar>
     <div>
+      <p-toast></p-toast>
       <router-outlet></router-outlet>
     </div>
   </div>
