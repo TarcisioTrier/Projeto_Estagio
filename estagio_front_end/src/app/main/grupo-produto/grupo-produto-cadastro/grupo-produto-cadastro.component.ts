@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { GrupoProduto } from '../../../models/grupo-produto';
 import { SituacaoCadastro, TipoGrupoProduto } from '../../../models/app-enums';
-import { HttpService } from '../../../services/http.service';
+import { HttpService } from '../../../services/http/http.service';
 import { MessageService } from 'primeng/api';
 
 @Component({

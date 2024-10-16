@@ -11,9 +11,13 @@ export interface Produto{
   tipoProduto?: TipoProduto,
   apresentacao?: Apresentacao,
   margemLucro?: number,
-  aceitaAtualizacaoPreco: boolean,
+  atualizaPreco: boolean,
   valorProduto?: number,
   valorVenda?: number,
   dataUltimaAtualizacao?: Date,
-  situacaoCadastro?: SituacaoCadastro
+  situacaoCadastro: SituacaoCadastro
+  disabled: {
+    nome: boolean,
+    descricao : boolean
+  }
   }

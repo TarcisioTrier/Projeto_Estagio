@@ -30,7 +30,7 @@ public record ProdutoRequestDto(
         @DecimalMin(value = "0.0", message = "Margem de Lucro não pode ser negativa")
         BigDecimal margemLucro,
 
-        Boolean aceitaAtualizacaoPreco,
+        Boolean atualizaPreco,
 
         @NotNull(message = "Valor Produto é obrigatório")
         @DecimalMin(value = "0.0", message = "Valor Produto não pode ser negativo")

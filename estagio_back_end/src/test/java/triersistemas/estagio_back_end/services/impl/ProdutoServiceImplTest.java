@@ -82,7 +82,7 @@ class ProdutoServiceImplTest {
             produto.setTipoProduto(input.tipoProduto());
             produto.setApresentacao(input.apresentacao());
             produto.setMargemLucro(input.margemLucro());
-            produto.setAceitaAtualizacaoPreco(input.aceitaAtualizacaoPreco());
+            produto.setAceitaAtualizacaoPreco(input.atualizaPreco());
             produto.setValorProduto(input.valorProduto());
             produto.setValorVenda(input.valorVenda());
             produto.setSituacaoCadastro(input.situacaoCadastro());
@@ -104,7 +104,7 @@ class ProdutoServiceImplTest {
             assertEquals(input.tipoProduto(), result.tipoProduto());
             assertEquals(input.apresentacao(), result.apresentacao());
             assertEquals(input.margemLucro(), result.margemLucro());
-            assertEquals(input.aceitaAtualizacaoPreco(), result.aceitaAtualizacaoPreco());
+            assertEquals(input.atualizaPreco(), result.aceitaAtualizacaoPreco());
             assertEquals(input.valorProduto(), result.valorProduto());
             assertEquals(input.valorVenda(), result.valorVenda());
             assertEquals(input.situacaoCadastro(), result.situacaoCadastro());
@@ -198,7 +198,7 @@ class ProdutoServiceImplTest {
             assertEquals(inputDto.tipoProduto(), result.tipoProduto());
             assertEquals(inputDto.apresentacao(), result.apresentacao());
             assertEquals(inputDto.margemLucro(), result.margemLucro());
-            assertEquals(inputDto.aceitaAtualizacaoPreco(), result.aceitaAtualizacaoPreco());
+            assertEquals(inputDto.atualizaPreco(), result.aceitaAtualizacaoPreco());
             assertEquals(inputDto.valorProduto(), result.valorProduto());
             assertEquals(inputDto.valorVenda(), result.valorVenda());
             assertEquals(inputDto.situacaoCadastro(), result.situacaoCadastro());

@@ -13,6 +13,7 @@ import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
 import triersistemas.estagio_back_end.enuns.TipoProduto;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
@@ -85,7 +86,7 @@ public class Produto {
         this.tipoProduto = dto.tipoProduto();
         this.apresentacao = dto.apresentacao();
         this.margemLucro = dto.margemLucro();
-        this.aceitaAtualizacaoPreco = dto.aceitaAtualizacaoPreco();
+        this.aceitaAtualizacaoPreco = dto.atualizaPreco();
         this.valorProduto = dto.valorProduto();
         this.situacaoCadastro = Objects.nonNull(dto.situacaoCadastro()) ? dto.situacaoCadastro() : SituacaoCadastro.ATIVO;;
     }
@@ -97,7 +98,7 @@ public class Produto {
         this.tipoProduto = Optional.ofNullable(dto.tipoProduto()).orElse(this.tipoProduto);
         this.apresentacao = Optional.ofNullable(dto.apresentacao()).orElse(this.apresentacao);
         this.margemLucro = Optional.ofNullable(dto.margemLucro()).orElse(this.margemLucro);
-        this.aceitaAtualizacaoPreco = Optional.ofNullable(dto.aceitaAtualizacaoPreco()).orElse(this.aceitaAtualizacaoPreco);
+        this.aceitaAtualizacaoPreco = Optional.ofNullable(dto.atualizaPreco()).orElse(this.aceitaAtualizacaoPreco);
         this.valorProduto = Optional.ofNullable(dto.valorProduto()).orElse(this.valorProduto);
         this.situacaoCadastro = Optional.ofNullable(dto.situacaoCadastro()).orElse(this.situacaoCadastro);
 
@@ -107,9 +108,9 @@ public class Produto {
     @PrePersist
     @PreUpdate
     private void calculateValorVenda() {
-        if (this.margemLucro != null) {
-            this.valorVenda = this.valorProduto.add(this.margemLucro);
-        }
+        var margemLucro = Optional.ofNullable(this.margemLucro).orElse(this.grupoProduto.getMargemLucro());
+        this.valorVenda = this.valorProduto.divide((new BigDecimal(1)).subtract(margemLucro.divide(new BigDecimal(100), RoundingMode.HALF_EVEN)), RoundingMode.HALF_EVEN);
+        
     }
 
 }

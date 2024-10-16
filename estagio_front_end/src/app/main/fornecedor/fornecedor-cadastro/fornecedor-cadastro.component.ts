@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Fornecedor } from '../../../models/fornecedor';
 import { MessageService } from 'primeng/api';
-import { HttpService } from '../../../services/http.service';
+import { HttpService } from '../../../services/http/http.service';
 import { SituacaoContrato } from '../../../models/app-enums';
 import { Cnpj, cnpjtoFornecedor, validateCnpj } from '../../../models/externalapi';
 
