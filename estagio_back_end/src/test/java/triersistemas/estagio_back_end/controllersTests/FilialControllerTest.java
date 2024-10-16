@@ -1,4 +1,4 @@
-package triersistemas.estagio_back_end.controllerTest;
+package triersistemas.estagio_back_end.controllersTests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,8 +24,11 @@ import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.services.FilialService;
 import triersistemas.estagio_back_end.validators.CnpjValidator;
 
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.*;
@@ -423,5 +426,110 @@ public class FilialControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.delete("/filiais/delete/{id}", nonExistentId))
                 .andExpect(status().isNotFound())
                 .andExpect(content().string("Filial not found"));
+    }
+
+    @Test
+    @DisplayName("Teste getAllFiliais - Retorna ResponseOk")
+    public void getAllFiliais_ReturnOk() throws Exception {
+        List<FilialResponseDto> filialList = Arrays.asList(
+                new FilialResponseDto(1L, "Nome Fantasia 1", "Razão Social 1", "12345678901234", "1111111111", "teste1@example.com", SituacaoContrato.ATIVO, null),
+                new FilialResponseDto(2L, "Nome Fantasia 2", "Razão Social 2", "56789012345678", "2222222222", "teste2@example.com", SituacaoContrato.ATIVO, null)
+        );
+
+        when(filialService.getFilialFilter(null)).thenReturn(filialList);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/filiais/getAllFilter"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(2)))
+                .andExpect(jsonPath("$[0].id").value(1L))
+                .andExpect(jsonPath("$[0].nomeFantasia").value("Nome Fantasia 1"))
+                .andExpect(jsonPath("$[1].id").value(2L))
+                .andExpect(jsonPath("$[1].nomeFantasia").value("Nome Fantasia 2"));
+
+        verify(filialService).getFilialFilter(null);
+    }
+
+    @Test
+    @DisplayName("Teste getAllFiliais com filtro - Retorna ResponseOk")
+    public void getAllFiliaisWithFilter_ReturnOk() throws Exception {
+        String nomeFilter = "Nome";
+        List<FilialResponseDto> filialList = Collections.singletonList(
+                new FilialResponseDto(1L, "Nome Fantasia 1", "Razão Social 1", "12345678901234", "1111111111", "teste1@example.com", SituacaoContrato.ATIVO, null)
+        );
+
+        when(filialService.getFilialFilter(nomeFilter)).thenReturn(filialList);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/filiais/getAllFilter")
+                        .param("nome", nomeFilter))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)))
+                .andExpect(jsonPath("$[0].id").value(1L))
+                .andExpect(jsonPath("$[0].nomeFantasia").value("Nome Fantasia 1"));
+
+        verify(filialService).getFilialFilter(nomeFilter);
+    }
+
+    @Test
+    @DisplayName("Teste getAllFiliais com filtro - Retorna lista vazia")
+    public void getAllFiliaisWithFilter_ReturnEmptyList() throws Exception {
+        String nomeFilter = "NonexistentName";
+        List<FilialResponseDto> emptyList = Collections.emptyList();
+
+        when(filialService.getFilialFilter(nomeFilter)).thenReturn(emptyList);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/filiais/getAllFilter")
+                        .param("nome", nomeFilter))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(0)));
+
+        verify(filialService).getFilialFilter(nomeFilter);
+    }
+
+    @Test
+    @DisplayName("Teste getAllFiliais paginado - Retorna ResponseOk")
+    public void getAllFilialsPaged_ReturnOk() throws Exception {
+        Page<FilialResponseDto> pagedResponse = new PageImpl<>(Arrays.asList(
+                new FilialResponseDto(1L, "Nome Fantasia 1", "Razão Social 1", "12345678901234", "1111111111", "teste1@example.com", SituacaoContrato.ATIVO, null),
+                new FilialResponseDto(2L, "Nome Fantasia 2", "Razão Social 2", "56789012345678", "2222222222", "teste2@example.com", SituacaoContrato.ATIVO, null)
+        ));
+
+        when(filialService.getFilialFilter(null, null, PageRequest.of(0, 10))).thenReturn(pagedResponse);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/filiais/getAllPaged")
+                        .param("page", "0")
+                        .param("size", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(2)))
+                .andExpect(jsonPath("$.content[0].id").value(1L))
+                .andExpect(jsonPath("$.content[0].nomeFantasia").value("Nome Fantasia 1"))
+                .andExpect(jsonPath("$.content[1].id").value(2L))
+                .andExpect(jsonPath("$.content[1].nomeFantasia").value("Nome Fantasia 2"));
+
+        verify(filialService).getFilialFilter(null, null, PageRequest.of(0, 10));
+    }
+
+    @Test
+    @DisplayName("Teste getAllFiliais paginado com filtros - Retorna ResponseOk")
+    public void getAllFilialsPagedWithFilters_ReturnOk() throws Exception {
+        String nomeFilter = "Nome";
+        String cnpjFilter = "12345678901234";
+        Page<FilialResponseDto> pagedResponse = new PageImpl<>(Collections.singletonList(
+                new FilialResponseDto(1L, "Nome Fantasia 1", "Razão Social 1", "12345678901234", "1111111111", "teste1@example.com", SituacaoContrato.ATIVO, null)
+        ));
+
+        when(filialService.getFilialFilter(nomeFilter, cnpjFilter, PageRequest.of(0, 10))).thenReturn(pagedResponse);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/filiais/getAllPaged")
+                        .param("page", "0")
+                        .param("size", "10")
+                        .param("nome", nomeFilter)
+                        .param("cnpj", cnpjFilter))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", hasSize(1)))
+                .andExpect(jsonPath("$.content[0].id").value(1L))
+                .andExpect(jsonPath("$.content[0].nomeFantasia").value("Nome Fantasia 1"))
+                .andExpect(jsonPath("$.content[0].cnpj").value("12345678901234"));
+
+        verify(filialService).getFilialFilter(nomeFilter, cnpjFilter, PageRequest.of(0, 10));
     }
 }

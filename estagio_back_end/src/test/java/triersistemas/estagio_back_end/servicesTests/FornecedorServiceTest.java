@@ -1,4 +1,4 @@
-package triersistemas.estagio_back_end.servicesTest;
+package triersistemas.estagio_back_end.servicesTests;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
