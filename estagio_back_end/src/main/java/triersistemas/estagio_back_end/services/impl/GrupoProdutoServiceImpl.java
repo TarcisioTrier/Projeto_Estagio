@@ -42,7 +42,7 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
     @Override
     public GrupoProdutoResponseDto updateGrupoProduto(Long id, GrupoProdutoRequestDto grupoProdutoRequestDto) {
         var grupoProduto = grupoProdutoById(id);
-        var filial = filialService.buscaFilialPorId(id);
+        var filial = filialService.buscaFilialPorId(grupoProdutoRequestDto.filialId());
         grupoProduto.alteraGrupoProduto(grupoProdutoRequestDto, filial);
         var saved = this.grupoProdutoRepository.save(grupoProduto);
         return new GrupoProdutoResponseDto(saved);
