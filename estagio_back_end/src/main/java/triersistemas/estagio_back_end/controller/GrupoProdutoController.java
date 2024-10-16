@@ -31,11 +31,11 @@ public class GrupoProdutoController {
     public Page<GrupoProdutoResponseDto> getGrupoProdutoPaged(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) Long idFilial,
+            @RequestParam(required = false) Long filialId,
             @RequestParam(required = false) String nomeGrupo,
             @RequestParam(required = false) TipoGrupoProduto tipoGrupo) {
         Pageable pageable = PageRequest.of(page, size);
-        return grupoProdutoService.getGrupoProdutoFilter(nomeGrupo, tipoGrupo, idFilial, pageable);
+        return grupoProdutoService.getGrupoProdutoFilter(nomeGrupo, tipoGrupo, filialId, pageable);
     }
 
     @GetMapping("/getAllFilter")
