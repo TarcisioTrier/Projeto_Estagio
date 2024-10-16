@@ -85,7 +85,7 @@ public class Produto {
         this.tipoProduto = dto.tipoProduto();
         this.apresentacao = dto.apresentacao();
         this.margemLucro = dto.margemLucro();
-        this.aceitaAtualizacaoPreco = dto.aceitaAtualizacaoPreco();
+        this.aceitaAtualizacaoPreco = dto.atualizaPreco();
         this.valorProduto = dto.valorProduto();
         this.situacaoCadastro = Objects.nonNull(dto.situacaoCadastro()) ? dto.situacaoCadastro() : SituacaoCadastro.ATIVO;;
     }
@@ -97,7 +97,7 @@ public class Produto {
         this.tipoProduto = Optional.ofNullable(dto.tipoProduto()).orElse(this.tipoProduto);
         this.apresentacao = Optional.ofNullable(dto.apresentacao()).orElse(this.apresentacao);
         this.margemLucro = Optional.ofNullable(dto.margemLucro()).orElse(this.margemLucro);
-        this.aceitaAtualizacaoPreco = Optional.ofNullable(dto.aceitaAtualizacaoPreco()).orElse(this.aceitaAtualizacaoPreco);
+        this.aceitaAtualizacaoPreco = Optional.ofNullable(dto.atualizaPreco()).orElse(this.aceitaAtualizacaoPreco);
         this.valorProduto = Optional.ofNullable(dto.valorProduto()).orElse(this.valorProduto);
         this.situacaoCadastro = Optional.ofNullable(dto.situacaoCadastro()).orElse(this.situacaoCadastro);
 

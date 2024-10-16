@@ -1,4 +1,4 @@
-import { HttpService } from './../../services/http.service';
+import { HttpService } from '../../services/http/http.service';
 import { style } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
 import { MenuItem } from 'primeng/api';
@@ -54,6 +54,7 @@ export class LayoutComponent implements OnInit {
     const data = sessionStorage.getItem('filial');
     this.localFilial = data ? JSON.parse(data) : undefined;
     this.menuItem();
+
   }
   hoverTest(event: Event, hover: boolean) {
     var local = event.target as HTMLElement;

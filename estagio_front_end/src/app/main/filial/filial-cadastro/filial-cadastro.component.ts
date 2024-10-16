@@ -4,7 +4,7 @@ import { Endereco } from './../../../models/filial';
 import { Component, OnInit } from '@angular/core';
 import { Filial } from '../../../models/filial';
 import { SituacaoContrato } from '../../../models/app-enums';
-import { HttpService } from '../../../services/http.service';
+import { HttpService } from '../../../services/http/http.service';
 import {
   Cep,
   cepToEndereco,

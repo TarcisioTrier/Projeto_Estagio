@@ -6,7 +6,7 @@ import { LayoutModule } from "./main/layout/layout.module";
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { PrimengModule } from './primeng/primeng.module';
-import { ApiInterceptor } from './services/api-interceptor.service';
+import { ApiInterceptor } from './services/http/api-interceptor.service';
 import { MessageService } from 'primeng/api';
 
 @NgModule({

@@ -1,5 +1,5 @@
-import { GrupoProduto } from './../models/grupo-produto';
-import { Filial } from './../models/filial';
+import { GrupoProduto } from '../../models/grupo-produto';
+import { Filial } from '../../models/filial';
 import {
   HttpClient,
   HttpErrorResponse,
@@ -7,16 +7,22 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, take, throwError } from 'rxjs';
-import { Fornecedor } from '../models/fornecedor';
-import { FilialPage } from '../models/filial-page';
+import { Fornecedor } from '../../models/fornecedor';
+import { FilialPage } from '../../models/filial-page';
 import { catchError } from 'rxjs/operators';
-import { Cep, Cnpj } from '../models/externalapi';
+import { Cep, Cnpj } from '../../models/externalapi';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HttpService {
   constructor(private http: HttpClient) {}
+
+  barcode(barcode: string): Observable<any> {
+    return this.http
+      .get(`/gtins/${barcode}.json`)
+      .pipe(take(1));
+  }
   viaCep(cep: string): Observable<Cep> {
     return this.http
       .get<Cep>(`https://viacep.com.br/ws/${cep}/json/`)
