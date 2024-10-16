@@ -1,4 +1,4 @@
-package triersistemas.estagio_back_end.servicesTest;
+package triersistemas.estagio_back_end.servicesTests;
 
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.Validation;
@@ -257,6 +257,7 @@ public class FilialServiceTest {
 
         assertThrows(InvalidCnpjException.class, () -> service.addFilial(requestDto));
     }
+
     @Test
     @DisplayName("Teste addFilial - Retorna BadRequest telefone inválido")
     public void addFilial_InvalidFone_ReturnBadRequest() {
@@ -291,7 +292,7 @@ public class FilialServiceTest {
 
         filialRepository.save(filial);
 
-        when(filialRepository.findById(1L)).thenReturn(Optional.of(filial));
+        when(filialRepository.findById(filial.getId())).thenReturn(Optional.of(filial));
 
         Filial filialEncontrada = service.findById(1L);
 
@@ -426,26 +427,44 @@ public class FilialServiceTest {
     }
 
     @Test
-@DisplayName("Teste updateFilial - Retorna BadRequest cnpj")
-public void updateFilial_InvalidCnpj_ReturnBadRequest() {
+    @DisplayName("Teste updateFilial - Retorna BadRequest cnpj")
+    public void updateFilial_InvalidCnpj_ReturnBadRequest() {
 
-    filial = new Filial();
-    filial.setId(1L);
+        filial = new Filial();
+        filial.setId(1L);
 
-    filialDto = new FilialRequestDto(
-            "Filial 1",
-            "Razao1",
-            "12.345.678/0001-91",
-            "(11) 91234-5678",
-            "filial1@filial1",
-            SituacaoContrato.ATIVO,
-            null);
+        filialDto = new FilialRequestDto(
+                "Filial 1",
+                "Razao1",
+                "12.345.678/0001-91",
+                "(11) 91234-5678",
+                "filial1@filial1",
+                SituacaoContrato.ATIVO,
+                null);
 
-    when(filialRepository.findById(1L)).thenReturn(Optional.of(filial));
-    doThrow(new InvalidCnpjException("CNPJ já cadastrado em outra empresa.")).when(cnpjValidator).validateCnpjUpdateFilial(filialDto.cnpj(),1L);
+        when(filialRepository.findById(1L)).thenReturn(Optional.of(filial));
+        doThrow(new InvalidCnpjException("CNPJ já cadastrado em outra empresa.")).when(cnpjValidator).validateCnpjUpdateFilial(filialDto.cnpj(), 1L);
 
-    assertThrows(InvalidCnpjException.class, () -> service.updateFilial(1L, filialDto));
-}
+        assertThrows(InvalidCnpjException.class, () -> service.updateFilial(1L, filialDto));
+    }
+
+    @Test
+    @DisplayName("Teste updateFilial - Retorna BadRequest telefone inválido")
+    public void updateFilial_InvalidFone_ReturnBadRequest() {
+        Long id = 1L;
+        Filial existingFilial = new Filial(new FilialRequestDto("Filial 1", "Razao1", "12.345.678/0001-91", "(11) 91234-5678", "filial1@filial1", SituacaoContrato.ATIVO, null));
+        existingFilial.setId(id);
+
+        FilialRequestDto updatedDto = new FilialRequestDto("Filial 1", "Razao1", "12.345.678/0001-91", "telefone inválido", "filial1@filial1", SituacaoContrato.ATIVO, null);
+
+        when(filialRepository.findById(id)).thenReturn(Optional.of(existingFilial));
+        doThrow(new InvalidFoneException("Telefone inválido")).when(foneValidator).validateFone(updatedDto.telefone());
+
+        assertThrows(InvalidFoneException.class, () -> service.updateFilial(id, updatedDto));
+
+        verify(filialRepository).findById(id);
+        verify(foneValidator).validateFone(updatedDto.telefone());
+    }
 
     @Test
     @DisplayName("Teste getFilialById - retorna filial cadastrada em ResponseDto")
@@ -566,52 +585,63 @@ public void updateFilial_InvalidCnpj_ReturnBadRequest() {
     }
 
     @Test
-    @DisplayName("buscaFilialPorId - retorna Optional<Filial>")
-    public void buscaFilialPorId_ReturnFilial() {
-        enderecosDto = new EnderecosDto(
-                "Rua teste",
-                123,
-                "Complemento",
-                "Cidade Teste",
-                "UF Teste",
-                "00000-000",
-                "Bairro Teste");
-        enderecos = new Enderecos(enderecosDto);
-        filialDto = new FilialRequestDto(
-                "Nome Fantasia ",
-                "Razão Social ",
-                "12.345.678/0001-95",
-                "(11) 91234-5678",
-                "teste3@teste.com",
-                SituacaoContrato.ATIVO,
-                null);
-        filial = new Filial(filialDto);
-        filial.setId(1L);
-        filial.setEndereco(enderecos);
+    @DisplayName("Teste getAllFiliais - retorna lista de todas as filiais")
+    public void getAllFiliais_ReturnAllFilials() {
+        List<Filial> filials = Arrays.asList(
+                new Filial(new FilialRequestDto("Filial 1", "Razao1", "12.345.678/0001-91", "(11) 91234-5678", "filial1@filial1", SituacaoContrato.ATIVO, null)),
+                new Filial(new FilialRequestDto("Filial 2", "Razao2", "12.345.678/0001-92", "(11) 91234-5679", "filial2@filial2", SituacaoContrato.ATIVO, null))
+        );
 
-        when(filialRepository.findById(1L)).thenReturn(Optional.of(filial));
+        when(filialRepository.findAll()).thenReturn(filials);
 
-        Optional<Filial> result = service.buscaFilialPorId(1L);
+        List<FilialResponseDto> result = service.getAllFiliais();
 
-        assertTrue(result.isPresent());
-        assertEquals(filial, result.get());
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("Filial 1", result.get(0).nomeFantasia());
+        assertEquals("Filial 2", result.get(1).nomeFantasia());
 
-        verify(filialRepository).findById(1L);
-        verifyNoMoreInteractions(filialRepository);
-        verifyNoMoreInteractions(enderecosValidator);
+        verify(filialRepository).findAll();
     }
 
     @Test
-    @DisplayName("buscaFilialPorId - retorna Optional.empty")
-    public void buscaFilialPorId_ReturnNotFound() {
-        when(filialRepository.findById(1L)).thenReturn(Optional.empty());
+    @DisplayName("Teste getFilialFilter - retorna lista de filiais filtradas por nome")
+    public void getFilialFilter_ReturnFilteredFilials() {
+        String nome = "Filial";
+        List<FilialResponseDto> expectedResult = Arrays.asList(
+                new FilialResponseDto(1L, "Filial 1", "Razao1", "12.345.678/0001-91", "(11) 91234-5678", "filial1@filial1", SituacaoContrato.ATIVO, null),
+                new FilialResponseDto(2L, "Filial 2", "Razao2", "12.345.678/0001-92", "(11) 91234-5679", "filial2@filial2", SituacaoContrato.ATIVO, null)
+        );
 
-        Optional<Filial> result = service.buscaFilialPorId(1L);
+        when(filialRepository.buscarFiliais(nome)).thenReturn(expectedResult);
 
-        assertFalse(result.isPresent());
+        List<FilialResponseDto> result = service.getFilialFilter(nome);
 
-        verify(filialRepository).findById(1L);
-        verifyNoMoreInteractions(filialRepository);
-        verifyNoMoreInteractions(enderecosValidator);
+        assertNotNull(result);
+        assertEquals(2, result.size());
+        assertEquals("Filial 1", result.get(0).nomeFantasia());
+        assertEquals("Filial 2", result.get(1).nomeFantasia());
+
+        verify(filialRepository).buscarFiliais(nome);
     }
+
+    @Test
+    @DisplayName("Teste buscaFilialPorId - retorna Optional<Filial>")
+    public void buscaFilialPorId_ReturnOptionalFilial() {
+        Long id = 1L;
+        Filial filial = new Filial(new FilialRequestDto("Filial 1", "Razao1", "12.345.678/0001-91", "(11) 91234-5678", "filial1@filial1", SituacaoContrato.ATIVO, null));
+        filial.setId(id);
+
+        when(filialRepository.findById(id)).thenReturn(Optional.of(filial));
+
+        Optional<Filial> result = service.buscaFilialPorId(id);
+
+        assertTrue(result.isPresent());
+        assertEquals(id, result.get().getId());
+        assertEquals("Filial 1", result.get().getNomeFantasia());
+
+        verify(filialRepository).findById(id);
+    }
+
+
 }

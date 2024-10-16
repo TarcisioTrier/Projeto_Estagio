@@ -1,6 +1,5 @@
-package triersistemas.estagio_back_end.controllerTest;
+package triersistemas.estagio_back_end.controllersTests;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -11,17 +10,16 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.web.JsonPath;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import triersistemas.estagio_back_end.controller.FornecedorController;
-import triersistemas.estagio_back_end.dto.request.FilialRequestDto;
 import triersistemas.estagio_back_end.dto.request.FornecedorRequestDto;
 import triersistemas.estagio_back_end.dto.response.FornecedorResponseDto;
 import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
 import triersistemas.estagio_back_end.exceptions.InvalidCnpjException;
 import triersistemas.estagio_back_end.exceptions.InvalidFoneException;
+import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.services.FornecedorService;
 
 import java.util.Collections;
@@ -129,7 +127,7 @@ public class FornecedorControllerTest {
     }
 
     @Test
-    @DisplayName("Teste post - Retorna BadRequest com telefone inválido")
+    @DisplayName("Teste postFornecedor - Retorna BadRequest com telefone inválido")
     public void postFornecedor_InvalidFone_ReturnBadRequest() throws Exception {
         FornecedorRequestDto requestDto = new FornecedorRequestDto(
                 "Nome Fantasia",
@@ -151,7 +149,7 @@ public class FornecedorControllerTest {
     }
 
     @Test
-    @DisplayName("Teste post - Retorna BadRequest com email inválido")
+    @DisplayName("Teste postFornecedor - Retorna BadRequest com email inválido")
     public void postFornecedor_InvalidMail_ReturnBadRequest() throws Exception {
         FornecedorRequestDto requestDto = new FornecedorRequestDto(
                 "Nome Fantasia",
@@ -182,6 +180,20 @@ public class FornecedorControllerTest {
                 .andExpect(jsonPath("$.id").value(fornecedorId))
                 .andExpect(jsonPath("$.nomeFantasia").value("Nome Fantasia"))
                 .andExpect(jsonPath("$.razaoSocial").value("Razão Social"));
+
+        verify(fornecedorService).getFornecedorById(fornecedorId);
+    }
+
+    @Test
+    @DisplayName("Teste getFornecedorById - Retorna NotFound")
+    public void getFornecedorById_NotFound() throws Exception {
+        Long fornecedorId = 999L;
+
+        when(fornecedorService.getFornecedorById(fornecedorId)).thenThrow(new NotFoundException("Fornecedor não encontrado"));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/fornecedores/get/{id}", fornecedorId))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Fornecedor não encontrado"));
 
         verify(fornecedorService).getFornecedorById(fornecedorId);
     }
@@ -284,6 +296,42 @@ public class FornecedorControllerTest {
     }
 
     @Test
+    @DisplayName("Teste updateFornecedor - Retorna NotFound")
+    public void updateFornecedor_NotFound() throws Exception {
+        Long fornecedorId = 999L;
+        FornecedorRequestDto requestDto = new FornecedorRequestDto("Nome Fantasia", "Razão Social", "12345678901234", "8888888888", "teste@example.com", SituacaoCadastro.ATIVO, 1L);
+
+        when(fornecedorService.updateFornecedor(eq(fornecedorId), any(FornecedorRequestDto.class)))
+                .thenThrow(new NotFoundException("Fornecedor não encontrado"));
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/fornecedores/update/{id}", fornecedorId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Fornecedor não encontrado"));
+
+        verify(fornecedorService).updateFornecedor(eq(fornecedorId), any(FornecedorRequestDto.class));
+    }
+
+    @Test
+    @DisplayName("Teste updateFornecedor - Retorna BadRequest com dados inválidos")
+    public void updateFornecedor_InvalidData_ReturnBadRequest() throws Exception {
+        Long fornecedorId = 1L;
+        FornecedorRequestDto requestDto = new FornecedorRequestDto("", "", "", "", "", null, null);
+
+        mockMvc.perform(MockMvcRequestBuilders.put("/fornecedores/update/{id}", fornecedorId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.nomeFantasia").value("Nome Fantasia é obrigatório"))
+                .andExpect(jsonPath("$.razaoSocial").value("Razão Social é obrigatória"))
+                .andExpect(jsonPath("$.cnpj").value("CNPJ é obrigatório"))
+                .andExpect(jsonPath("$.telefone").value("Telefone é obrigatório"))
+                .andExpect(jsonPath("$.email").value("Email é obrigatório"))
+                .andExpect(jsonPath("$.filialId").value("ID da Filial é obrigatório"));
+    }
+
+    @Test
     @DisplayName("Teste deleteFornecedor - Retorna ResponseOk")
     public void deleteFornecedor_ReturnOk() throws Exception {
         Long fornecedorId = 1L;
@@ -293,6 +341,21 @@ public class FornecedorControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.delete("/fornecedores/situacao/{id}", fornecedorId))
                 .andExpect(status().isOk())
                 .andExpect(content().string("situação alterada"));
+
+        verify(fornecedorService).alteraSituacao(fornecedorId);
+    }
+
+    @Test
+    @DisplayName("Teste deleteFornecedor - Retorna NotFound")
+    public void deleteFornecedor_NotFound() throws Exception {
+        Long fornecedorId = 999L;
+
+        doThrow(new NotFoundException("Fornecedor não encontrado"))
+                .when(fornecedorService).alteraSituacao(fornecedorId);
+
+        mockMvc.perform(MockMvcRequestBuilders.delete("/fornecedores/situacao/{id}", fornecedorId))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("Fornecedor não encontrado"));
 
         verify(fornecedorService).alteraSituacao(fornecedorId);
     }

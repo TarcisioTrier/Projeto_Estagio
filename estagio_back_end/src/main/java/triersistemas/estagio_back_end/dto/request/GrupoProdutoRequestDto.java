@@ -19,7 +19,6 @@ public record GrupoProdutoRequestDto(
 
         Boolean atualizaPreco,
 
-        @NotNull(message = "Situação do cadastro é obrigatória")
         SituacaoCadastro situacaoCadastro,
 
         @NotNull(message = "ID da Filial é obrigatório")

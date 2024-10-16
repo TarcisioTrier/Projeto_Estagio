@@ -55,12 +55,12 @@ public class FilialServiceImpl implements FilialService {
     public FilialResponseDto updateFilial(Long id, FilialRequestDto requestDto) {
         Filial filial = findById(id);
 
-        if (requestDto.cnpj() != null && !requestDto.cnpj().equals(filial.getCnpj())) {
-            cnpjValidator.validateCnpjUpdateFilial(requestDto.cnpj(), id);
-        }
-
         if (!Utils.isNull(requestDto)) {
             validateFilial(requestDto);
+        }
+
+        if (requestDto.cnpj() != null && !requestDto.cnpj().equals(filial.getCnpj())) {
+            cnpjValidator.validateCnpjUpdateFilial(requestDto.cnpj(), id);
         }
 
         if (requestDto.endereco() != null) {
@@ -98,11 +98,6 @@ public class FilialServiceImpl implements FilialService {
         return filialRepository.buscarFiliais(nome, cnpj, pageable);
     }
 
-    private void validateFilial(FilialRequestDto requestDto) {
-        cnpjValidator.validateCnpj(requestDto.cnpj());
-        foneValidator.validateFone(requestDto.telefone());
-    }
-
     @Override
     public Optional<Filial> buscaFilialPorId(Long id) {
         return filialRepository.findById(id);
@@ -116,6 +111,11 @@ public class FilialServiceImpl implements FilialService {
     @Override
     public List<FilialResponseDto> getFilialFilter(String nome) {
         return filialRepository.buscarFiliais(nome);
+    }
+
+    private void validateFilial(FilialRequestDto requestDto) {
+        cnpjValidator.validateCnpj(requestDto.cnpj());
+        foneValidator.validateFone(requestDto.telefone());
     }
 
 }
