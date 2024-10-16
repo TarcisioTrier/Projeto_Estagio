@@ -13,6 +13,7 @@ import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
 import triersistemas.estagio_back_end.enuns.TipoProduto;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
@@ -107,9 +108,9 @@ public class Produto {
     @PrePersist
     @PreUpdate
     private void calculateValorVenda() {
-        if (this.margemLucro != null) {
-            this.valorVenda = this.valorProduto.add(this.margemLucro);
-        }
+        var margemLucro = Optional.ofNullable(this.margemLucro).orElse(this.grupoProduto.getMargemLucro());
+        this.valorVenda = this.valorProduto.divide((new BigDecimal(1)).subtract(margemLucro.divide(new BigDecimal(100), RoundingMode.HALF_EVEN)), RoundingMode.HALF_EVEN);
+        
     }
 
 }

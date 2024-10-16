@@ -17,7 +17,9 @@
         <p-inputMask
           id="codigoBarras"
           mask="9999999999999"
+          [autoClear]="false"
           [(ngModel)]="produto.codigoBarras"
+          (onComplete)="apiBarcode()"
         />
         <label for="codigoBarras">Codigo de Barras</label>
       </p-floatLabel>
@@ -38,12 +40,14 @@
     <div class="col-12 my-3 md:col-6">
       <p-floatLabel>
     <p-autoComplete
+      id="grupoProduto"
       [(ngModel)]="produto.grupoProduto"
       [dropdown]="true"
       [suggestions]="grupoProdutoFilter"
       (completeMethod)="filterItems($event)"
       optionLabel="nomeGrupo"
       />
+      <label for="grupoProduto">Grupo de Produto</label>
     </p-floatLabel>
   </div>
   <div class="col-12 my-3 md:col-6">
@@ -138,7 +142,7 @@
         label="Cadastrar"
         icon="pi pi-check"
         [loading]="loading"
-        [disabled]="!(produto.codigoBarras && produto.nome && produto.grupoProdutoId && produto.tipoProduto && produto.apresentacao && produto.valorProduto && produto.situacaoCadastro) "
+        [disabled]="!produto.codigoBarras || !produto.nome || !produto.grupoProduto || !tipoProdutoSelecionado || !apresentacaoSelecionado || !produto.valorProduto"
         (onClick)="load()"
       />
     </div>

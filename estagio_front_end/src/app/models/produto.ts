@@ -15,7 +15,7 @@ export interface Produto{
   valorProduto?: number,
   valorVenda?: number,
   dataUltimaAtualizacao?: Date,
-  situacaoCadastro?: SituacaoCadastro
+  situacaoCadastro: SituacaoCadastro
   disabled: {
     nome: boolean,
     descricao : boolean

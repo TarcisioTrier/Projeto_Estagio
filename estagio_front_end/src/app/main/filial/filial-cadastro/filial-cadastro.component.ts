@@ -120,6 +120,7 @@ telefone(): boolean {
   ) {}
   cep(cnpj?: Cnpj) {
     const cep = this.endereco.cep.replace(/[_-]/g, '');
+    console.log(cep);
     if (cnpj) {
       this.endereco = cnpjToEndereco(cnpj);
       this.http.viaCep(cep).subscribe({

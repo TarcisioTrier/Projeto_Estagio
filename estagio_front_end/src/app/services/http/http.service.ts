@@ -11,17 +11,21 @@ import { Fornecedor } from '../../models/fornecedor';
 import { FilialPage } from '../../models/filial-page';
 import { catchError } from 'rxjs/operators';
 import { Cep, Cnpj } from '../../models/externalapi';
+import { Produto } from '../../models/produto';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HttpService {
+  postProduto(produto: Produto) {
+    return this.http.post('produto/post', produto).pipe(take(1),
+      catchError(this.handleError));
+  }
   constructor(private http: HttpClient) {}
 
   barcode(barcode: string): Observable<any> {
-    return this.http
-      .get(`/gtins/${barcode}.json`)
-      .pipe(take(1));
+    return this.http.get(`/gtins/${barcode}.json`).pipe(take(1),
+    catchError(this.handleError));
   }
   viaCep(cep: string): Observable<Cep> {
     return this.http
@@ -59,7 +63,6 @@ export class HttpService {
     return this.http
       .get('grupos-produtos/getAllFilter', { params: par })
       .pipe(take(1), catchError(this.handleError));
-
   }
   getFilialbyId(id: number) {
     return this.http.get(`filiais/get/${id}`).pipe(take(1));

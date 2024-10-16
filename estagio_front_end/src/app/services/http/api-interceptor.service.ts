@@ -12,7 +12,6 @@ export class ApiInterceptor implements HttpInterceptor{
       req = req.clone({
         url: `https://api.cosmos.bluesoft.com.br${req.url}`,
         setHeaders: {
-          'User-Agent': 'Cosmos-API-Request',
           'Content-Type': 'application/json',
           'X-Cosmos-Token': '5sR0AZm9kguOH2Z0IDv3pQ'
         }
