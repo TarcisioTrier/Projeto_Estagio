@@ -42,6 +42,19 @@ export class HttpService {
       .post('grupos-produtos/post', grupoProduto)
       .pipe(take(1), catchError(this.handleError));
   }
+  getGrupoProdutoAllFilter(filialId?: number, nomeGrupo?: string) {
+    let par = new HttpParams();
+    if (filialId) {
+      par = par.set('filialId', filialId);
+    }
+    if (nomeGrupo) {
+      par = par.set('nomeGrupo', nomeGrupo);
+    }
+    return this.http
+      .get('grupos-produtos/getAllFilter', { params: par })
+      .pipe(take(1), catchError(this.handleError));
+
+  }
   getFilialbyId(id: number) {
     return this.http.get(`filiais/get/${id}`).pipe(take(1));
   }
@@ -84,8 +97,6 @@ export class HttpService {
   }
 
   private handleError(error: HttpErrorResponse) {
-    return throwError(
-      () => error
-    );
+    return throwError(() => error);
   }
 }
