@@ -6,14 +6,14 @@ export interface Produto{
   codigoBarras: string,
   nome: string,
   descricao: string,
-  grupoProdutoId: number,
+  grupoProdutoId?: number,
   grupoProduto?: GrupoProduto,
-  tipoProduto: TipoProduto,
-  apresentacao: Apresentacao,
-  margemLucro: number,
+  tipoProduto?: TipoProduto,
+  apresentacao?: Apresentacao,
+  margemLucro?: number,
   aceitaAtualizacaoPreco: boolean,
-  valorProduto: number,
-  valorVenda: number,
+  valorProduto?: number,
+  valorVenda?: number,
   dataUltimaAtualizacao?: Date,
-  situacaoCadastro: SituacaoCadastro
+  situacaoCadastro?: SituacaoCadastro
   }

@@ -11,6 +11,8 @@ import triersistemas.estagio_back_end.dto.response.ProdutoResponseDto;
 import triersistemas.estagio_back_end.enuns.TipoProduto;
 import triersistemas.estagio_back_end.services.ProdutoService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/produto")
 public class ProdutoController {
@@ -24,8 +26,8 @@ public class ProdutoController {
         return ResponseEntity.ok(ProdutoService.getProdutoById(id));
     }
 
-    @GetMapping("/getAllFilter")
-    public Page<ProdutoResponseDto> getProdutoFilter(
+    @GetMapping("/getAllPaged")
+    public Page<ProdutoResponseDto> getProdutoPaged(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) Long grupoProdutoId,
@@ -33,6 +35,12 @@ public class ProdutoController {
             @RequestParam(required = false) TipoProduto tipo) {
         Pageable pageable = PageRequest.of(page, size);
         return ProdutoService.getProdutoFilter(nome, tipo, grupoProdutoId, pageable);
+    }
+    @GetMapping("/getAllFilter")
+    public List<ProdutoResponseDto> getProdutoFilter(
+            @RequestParam(required = false) Long grupoProdutoId,
+            @RequestParam(required = false) String nome) {
+        return ProdutoService.getProdutoFilter(nome, grupoProdutoId);
     }
 
     @PostMapping("/post")

@@ -10,6 +10,8 @@ import triersistemas.estagio_back_end.dto.response.FornecedorResponseDto;
 import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
 import triersistemas.estagio_back_end.services.FornecedorService;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("fornecedores")
 public class FornecedorController {
@@ -30,14 +32,21 @@ public class FornecedorController {
         return ResponseEntity.ok(fornecedorService.getFornecedorById(id));
     }
 
-    @GetMapping("/getAllFilter")
-    public Page<FornecedorResponseDto> getFilialFilter(
+    @GetMapping("/getAllPaged")
+    public Page<FornecedorResponseDto> getFornecedorPaged(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @Valid @RequestParam(required = false) String nome,
             @Valid @RequestParam(required = false) String cnpj,
             @RequestParam(required = false) SituacaoCadastro situacaoCadastro) {
-        return fornecedorService.getFornecedorFilter(nome, cnpj, situacaoCadastro, PageRequest.of(page, size));
+        return fornecedorService.getFornecedorPaged(nome, cnpj, situacaoCadastro, PageRequest.of(page, size));
+    }
+
+    @GetMapping("/getAllFilter")
+    public List<FornecedorResponseDto> getFornecedorFilter(
+            @RequestParam(required = false) Long filialId,
+            @Valid @RequestParam(required = false) String nome) {
+        return fornecedorService.getFornecedorFilter(nome, filialId);
     }
 
     @PutMapping("/update/{id}")

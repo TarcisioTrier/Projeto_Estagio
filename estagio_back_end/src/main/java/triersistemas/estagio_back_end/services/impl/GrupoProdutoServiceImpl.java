@@ -14,6 +14,7 @@ import triersistemas.estagio_back_end.repository.GrupoProdutoRepository;
 import triersistemas.estagio_back_end.services.FilialService;
 import triersistemas.estagio_back_end.services.GrupoProdutoService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -81,6 +82,10 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
        return this.buscaGrupoProdutoPorId(id).orElseThrow(() -> new NotFoundException("Grupo de Produto não encontrado"));
     }
 
+    @Override
+    public List<GrupoProdutoResponseDto> getGrupoProdutoFilter(String nomeGrupo, Long idFilial) {
+        return grupoProdutoRepository.buscarGrupoProduto(idFilial,nomeGrupo);
+    }
 
 
 }

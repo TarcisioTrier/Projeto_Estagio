@@ -8,7 +8,9 @@ import jakarta.persistence.PersistenceContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import triersistemas.estagio_back_end.dto.response.GrupoProdutoResponseDto;
 import triersistemas.estagio_back_end.dto.response.ProdutoResponseDto;
+import triersistemas.estagio_back_end.entity.Fornecedor;
 import triersistemas.estagio_back_end.entity.QProduto;
 import triersistemas.estagio_back_end.enuns.TipoProduto;
 import triersistemas.estagio_back_end.repository.ProdutoRepositoryCustom;
@@ -43,5 +45,21 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
                 .where(builder)
                 .fetchCount();
         return new PageImpl<>(produtos, pageable, total);
+    }
+
+    @Override
+    public List<ProdutoResponseDto> buscarProduto(String nome, Long grupoProdutoId) {
+        JPAQuery<Fornecedor> query = new JPAQuery<>(em);
+
+        BooleanBuilder builder = new BooleanBuilder();
+
+        if (nome != null && !nome.isEmpty()) {
+            builder.and(produto.nome.containsIgnoreCase(nome));
+        }
+        if (grupoProdutoId != null) {
+            builder.and(produto.grupoProduto.id.eq(grupoProdutoId));
+        }
+        return query.select(Projections.constructor(ProdutoResponseDto.class, produto)).from(produto)
+                .where(builder).fetch();
     }
 }

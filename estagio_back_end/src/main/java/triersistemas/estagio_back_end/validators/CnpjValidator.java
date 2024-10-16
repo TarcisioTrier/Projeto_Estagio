@@ -10,4 +10,5 @@ public interface CnpjValidator {
 
     void validateCnpjPostFilial(String cnpj);
 
+    void validateCnpjPostFornecedor(String cnpj);
 }

@@ -14,6 +14,7 @@ import triersistemas.estagio_back_end.repository.ProdutoRepository;
 import triersistemas.estagio_back_end.services.GrupoProdutoService;
 import triersistemas.estagio_back_end.services.ProdutoService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -69,6 +70,11 @@ public class ProdutoServiceImpl implements ProdutoService {
         }
         var saved = produtoRepository.save(produto);
         return new ProdutoResponseDto(saved);
+    }
+
+    @Override
+    public List<ProdutoResponseDto> getProdutoFilter(String nome, Long grupoProdutoId) {
+        return produtoRepository.buscarProduto(nome, grupoProdutoId);
     }
 
     Optional<Produto> buscarProdutoPorId(Long id) {
