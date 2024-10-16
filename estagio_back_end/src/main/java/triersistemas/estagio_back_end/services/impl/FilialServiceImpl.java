@@ -1,5 +1,6 @@
 package triersistemas.estagio_back_end.services.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -8,27 +9,33 @@ import triersistemas.estagio_back_end.dto.response.FilialResponseDto;
 import triersistemas.estagio_back_end.entity.Filial;
 import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.repository.FilialRepository;
-import triersistemas.estagio_back_end.services.EnderecoService;
 import triersistemas.estagio_back_end.services.FilialService;
-import triersistemas.estagio_back_end.utils.CnpjValidator;
-import triersistemas.estagio_back_end.utils.Utils;
+import triersistemas.estagio_back_end.validators.CnpjValidator;
+import triersistemas.estagio_back_end.validators.EnderecosValidator;
+import triersistemas.estagio_back_end.validators.FoneValidator;
+import triersistemas.estagio_back_end.validators.Utils;
 
 import java.util.List;
 import java.util.Optional;
 
-import static triersistemas.estagio_back_end.utils.Utils.validateFone;
 
 @Service
 public class FilialServiceImpl implements FilialService {
 
     private final FilialRepository filialRepository;
-    private final EnderecoService enderecoService;
+    private final EnderecosValidator enderecosValidator;
     private final CnpjValidator cnpjValidator;
+    private final FoneValidator foneValidator;
 
-    public FilialServiceImpl(FilialRepository filialRepository, EnderecoService enderecoService, CnpjValidator cnpjValidator) {
+    @Autowired
+    public FilialServiceImpl(FilialRepository filialRepository,
+                             EnderecosValidator enderecosValidator,
+                             CnpjValidator cnpjValidator,
+                             FoneValidator foneValidator) {
         this.filialRepository = filialRepository;
-        this.enderecoService = enderecoService;
+        this.enderecosValidator = enderecosValidator;
         this.cnpjValidator = cnpjValidator;
+        this.foneValidator = foneValidator;
     }
 
     @Override
@@ -37,10 +44,10 @@ public class FilialServiceImpl implements FilialService {
         cnpjValidator.validateCnpjPostFilial(requestDto.cnpj());
         var filial = new Filial(requestDto);
         if (!Utils.isNull(requestDto.endereco())) {
-            var enderecoValido = enderecoService.validateEndereco(requestDto.endereco());
+            var enderecoValido = enderecosValidator.validateEndereco(requestDto.endereco());
             filial.setEndereco(enderecoValido);
         }
-        filialRepository.save(filial);
+        filial = filialRepository.save(filial);
         return new FilialResponseDto(filial);
     }
 
@@ -48,22 +55,22 @@ public class FilialServiceImpl implements FilialService {
     public FilialResponseDto updateFilial(Long id, FilialRequestDto requestDto) {
         Filial filial = findById(id);
 
+        if (!Utils.isNull(requestDto)) {
+            validateFilial(requestDto);
+        }
+
         if (requestDto.cnpj() != null && !requestDto.cnpj().equals(filial.getCnpj())) {
             cnpjValidator.validateCnpjUpdateFilial(requestDto.cnpj(), id);
         }
 
-        if (requestDto.telefone() != null) {
-            validateFone(requestDto.telefone());
-        }
-
         if (requestDto.endereco() != null) {
-            var enderecoValido = enderecoService.validateEndereco(requestDto.endereco());
+            var enderecoValido = enderecosValidator.validateEndereco(requestDto.endereco());
             filial.setEndereco(enderecoValido);
         }
 
         filial.alterarDados(requestDto);
 
-        filialRepository.save(filial);
+        filial = filialRepository.save(filial);
 
         return new FilialResponseDto(filial);
     }
@@ -91,11 +98,6 @@ public class FilialServiceImpl implements FilialService {
         return filialRepository.buscarFiliais(nome, cnpj, pageable);
     }
 
-    private void validateFilial(FilialRequestDto requestDto) {
-        cnpjValidator.validateCnpj(requestDto.cnpj());
-        validateFone(requestDto.telefone());
-    }
-
     @Override
     public Optional<Filial> buscaFilialPorId(Long id) {
         return filialRepository.findById(id);
@@ -109,6 +111,11 @@ public class FilialServiceImpl implements FilialService {
     @Override
     public List<FilialResponseDto> getFilialFilter(String nome) {
         return filialRepository.buscarFiliais(nome);
+    }
+
+    private void validateFilial(FilialRequestDto requestDto) {
+        cnpjValidator.validateCnpj(requestDto.cnpj());
+        foneValidator.validateFone(requestDto.telefone());
     }
 
 }

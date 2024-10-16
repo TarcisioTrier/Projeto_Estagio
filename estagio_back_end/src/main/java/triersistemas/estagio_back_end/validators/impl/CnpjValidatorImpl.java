@@ -7,6 +7,7 @@ import triersistemas.estagio_back_end.exceptions.InvalidCnpjException;
 import triersistemas.estagio_back_end.repository.FilialRepository;
 import triersistemas.estagio_back_end.repository.FornecedorRepository;
 import triersistemas.estagio_back_end.validators.CnpjValidator;
+import triersistemas.estagio_back_end.validators.Utils;
 
 import java.util.Optional;
 
@@ -22,7 +23,7 @@ public class CnpjValidatorImpl implements CnpjValidator {
     }
 
     public void validateCnpj(String cnpj) {
-        cnpj = cnpj.replaceAll("[^0-9]", "");
+        cnpj = limpaCnpj(cnpj);
         if (!isCNPJ(cnpj)) {
             throw new InvalidCnpjException("CNPJ inválido");
         }
@@ -30,38 +31,57 @@ public class CnpjValidatorImpl implements CnpjValidator {
 
     public void validateCnpjUpdateFornecedor(String cnpj, Long id) {
         Optional<Fornecedor> fornecedorExistente = fornecedorRepository.findByCnpj(cnpj);
-        if (fornecedorExistente.isPresent() && !fornecedorExistente.get().getId().equals(id)) {
-            throw new InvalidCnpjException("CNPJ já cadastrado em outra empresa.");
+        //validateCnpjEntityUnque(fornecedorExistente, id, "CNPJ de fornecedor já cadastrado ");
+        if (fornecedorExistente.isPresent() && !fornecedorExistente.equals(id)) {
+            throw new InvalidCnpjException("CNPJ de fornecedor já cadastrado");
         }
     }
 
-    public void validateCnpjUpdateFilial(String cnpj, Long id) {
-        Optional<Filial> filialExistente = filialRepository.findByCnpj(cnpj);
-        if (filialExistente.isPresent() && !filialExistente.get().getId().equals(id)) {
-            throw new InvalidCnpjException("CNPJ já cadastrado em outra empresa.");
-        }
-    }
+  public void validateCnpjUpdateFilial(String cnpj, Long id) {
+    Optional<Filial> filialExistente = filialRepository.findByCnpj(cnpj);
+    //validateCnpjEntityUnque(filialExistente, id, "CNPJ já cadastrado em outra filial.");
+      if (filialExistente.isPresent() && !filialExistente.equals(id)) {
+          throw new InvalidCnpjException("CNPJ de filial já cadastrado");
+      }
+}
 
     public void validateCnpjPostFilial(String cnpj) {
         Optional<Filial> filialExistente = filialRepository.findByCnpj(cnpj);
         if (filialExistente.isPresent()) {
-            throw new InvalidCnpjException("CNPJ já cadastrado em outra empresa.");
+            throw new InvalidCnpjException("CNPJ já cadastrado em outra filial.");
         }
     }
 
-    private static boolean isCNPJ(String CNPJ) {
+//    private void validateCnpjEntityUnque(Optional<?> entidade, Long id, String msg) {
+//        if (entidade.isPresent()) {
+//            Object obj = entidade.get();
+//            Long entityId = null;
+//            if (obj instanceof Fornecedor) {
+//                entityId = ((Fornecedor) obj).getId();
+//            } else if (obj instanceof Filial) {
+//                entityId = ((Filial) obj).getId();
+//            }
+//            if (!Utils.isNull(entityId) && !entityId.equals(id)) {
+//                throw new InvalidCnpjException(msg);
+//            }
+//        }
+//    }
 
-        if (CNPJ.length() != 14) {
+    private String limpaCnpj(String cnpj) {
+        return cnpj.replaceAll("[^0-9]", "");
+    }
+
+    private static boolean isCNPJ(String cnpj) {
+        if (cnpj.length() != 14) {
             return false;
         }
-
 
         char dig13, dig14;
         int sm, i, r, num, peso;
         sm = 0;
         peso = 2;
         for (i = 11; i >= 0; i--) {
-            num = (int) (CNPJ.charAt(i) - 48);
+            num = (int) (cnpj.charAt(i) - 48);
             sm = sm + (num * peso);
             peso = peso + 1;
             if (peso == 10)
@@ -74,11 +94,10 @@ public class CnpjValidatorImpl implements CnpjValidator {
             dig13 = (char) ((11 - r) + 48);
         }
 
-        // Cálculo do segundo dígito verificador
         sm = 0;
         peso = 2;
         for (i = 12; i >= 0; i--) {
-            num = (int) (CNPJ.charAt(i) - 48);
+            num = (int) (cnpj.charAt(i) - 48);
             sm = sm + (num * peso);
             peso = peso + 1;
             if (peso == 10)
@@ -92,13 +111,10 @@ public class CnpjValidatorImpl implements CnpjValidator {
             dig14 = (char) ((11 - r) + 48);
         }
 
-
-        // Verifica se os dígitos calculados conferem com os dígitos informados
-        if ((dig13 == CNPJ.charAt(12)) && (dig14 == CNPJ.charAt(13))) {
+        if ((dig13 == cnpj.charAt(12)) && (dig14 == cnpj.charAt(13))) {
             return true;
         } else {
             return false;
         }
     }
-
 }
