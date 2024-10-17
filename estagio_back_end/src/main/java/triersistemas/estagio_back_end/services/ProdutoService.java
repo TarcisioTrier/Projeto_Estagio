@@ -3,6 +3,7 @@ package triersistemas.estagio_back_end.services;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import triersistemas.estagio_back_end.dto.AtualizaPrecoDto;
 import triersistemas.estagio_back_end.dto.request.ProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.ProdutoResponseDto;
 import triersistemas.estagio_back_end.enuns.TipoProduto;
@@ -22,5 +23,7 @@ public interface ProdutoService {
 
     ProdutoResponseDto alteraProdutoById(Long id, boolean ativar);
 
-    List<ProdutoResponseDto> getProdutoFilter(String nome, Long grupoProdutoId);
+    List<ProdutoResponseDto> getAllProdutoAlteraPreco();
+
+    List<ProdutoResponseDto> alteraPrecoProduto(AtualizaPrecoDto atualizaProduto);
 }

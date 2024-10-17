@@ -36,10 +36,6 @@ public record ProdutoRequestDto(
         @DecimalMin(value = "0.0", message = "Valor Produto não pode ser negativo")
         BigDecimal valorProduto,
 
-        @NotNull(message = "Valor Venda é obrigatório")
-        @DecimalMin(value = "0.0", message = "Valor Venda não pode ser negativo")
-        BigDecimal valorVenda,
-
         SituacaoCadastro situacaoCadastro
 ) {
 }

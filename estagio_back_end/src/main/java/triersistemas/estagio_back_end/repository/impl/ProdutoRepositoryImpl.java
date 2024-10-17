@@ -8,9 +8,8 @@ import jakarta.persistence.PersistenceContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import triersistemas.estagio_back_end.dto.response.GrupoProdutoResponseDto;
 import triersistemas.estagio_back_end.dto.response.ProdutoResponseDto;
-import triersistemas.estagio_back_end.entity.Fornecedor;
+import triersistemas.estagio_back_end.entity.QGrupoProduto;
 import triersistemas.estagio_back_end.entity.QProduto;
 import triersistemas.estagio_back_end.enuns.TipoProduto;
 import triersistemas.estagio_back_end.repository.ProdutoRepositoryCustom;
@@ -21,6 +20,7 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
     @PersistenceContext
     private EntityManager em;
     final QProduto produto = QProduto.produto;
+    final QGrupoProduto grupoProduto = QGrupoProduto.grupoProduto;
 
     @Override
     public Page<ProdutoResponseDto> buscarProduto(String nome, TipoProduto tipo, Long grupoProdutoId, Pageable pageable) {
@@ -31,11 +31,11 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
         if (grupoProdutoId != null) {
             builder.and(produto.grupoProduto.id.eq(grupoProdutoId));
         }
-        if (tipo != null ) {
+        if (tipo != null) {
             builder.and(produto.tipoProduto.eq(tipo));
         }
         JPAQuery<ProdutoResponseDto> query = new JPAQuery<>(em);
-        List<ProdutoResponseDto> produtos = query.select(Projections.constructor(ProdutoResponseDto.class,produto))
+        List<ProdutoResponseDto> produtos = query.select(Projections.constructor(ProdutoResponseDto.class, produto))
                 .from(produto)
                 .where(builder)
                 .offset(pageable.getOffset())
@@ -48,18 +48,13 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
     }
 
     @Override
-    public List<ProdutoResponseDto> buscarProduto(String nome, Long grupoProdutoId) {
-        JPAQuery<Fornecedor> query = new JPAQuery<>(em);
+    public List<ProdutoResponseDto> getAllProdutoAlteraPreco() {
+        JPAQuery<ProdutoResponseDto> query = new JPAQuery<>(em);
 
-        BooleanBuilder builder = new BooleanBuilder();
-
-        if (nome != null && !nome.isEmpty()) {
-            builder.and(produto.nome.containsIgnoreCase(nome));
-        }
-        if (grupoProdutoId != null) {
-            builder.and(produto.grupoProduto.id.eq(grupoProdutoId));
-        }
-        return query.select(Projections.constructor(ProdutoResponseDto.class, produto)).from(produto)
-                .where(builder).fetch();
+        return query.select(Projections.constructor(ProdutoResponseDto.class, produto))
+                .from(produto)
+                .where(produto.aceitaAtualizacaoPreco.isTrue()
+                        .and(grupoProduto.atualizaPreco.isTrue()))
+                .fetch();
     }
 }

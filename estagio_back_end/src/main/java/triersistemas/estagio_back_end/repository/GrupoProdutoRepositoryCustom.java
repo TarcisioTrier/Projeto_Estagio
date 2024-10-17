@@ -12,5 +12,5 @@ import java.util.List;
 public interface GrupoProdutoRepositoryCustom {
    Page<GrupoProdutoResponseDto> buscarGrupoProduto(String nomeGrupo, TipoGrupoProduto tipoGrupo, Long idFilial, Pageable pageable);
 
-    List<GrupoProdutoResponseDto> buscarGrupoProduto(Long idFilial, String nomeGrupo);
+    List<GrupoProdutoResponseDto> getAllGrupoProdutoAlteraPreco();
 }

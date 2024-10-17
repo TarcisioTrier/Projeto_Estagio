@@ -8,9 +8,7 @@ import jakarta.persistence.PersistenceContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
-import triersistemas.estagio_back_end.dto.response.FornecedorResponseDto;
 import triersistemas.estagio_back_end.dto.response.GrupoProdutoResponseDto;
-import triersistemas.estagio_back_end.entity.Fornecedor;
 import triersistemas.estagio_back_end.entity.QGrupoProduto;
 import triersistemas.estagio_back_end.enuns.TipoGrupoProduto;
 import triersistemas.estagio_back_end.repository.GrupoProdutoRepositoryCustom;
@@ -52,18 +50,12 @@ public class GrupoProdutoRepositoryImpl implements GrupoProdutoRepositoryCustom 
     }
 
     @Override
-    public List<GrupoProdutoResponseDto> buscarGrupoProduto(Long filialId, String nomeGrupo) {
-        JPAQuery<Fornecedor> query = new JPAQuery<>(em);
+    public List<GrupoProdutoResponseDto> getAllGrupoProdutoAlteraPreco() {
+        JPAQuery<GrupoProdutoResponseDto> query = new JPAQuery<>(em);
 
-        BooleanBuilder builder = new BooleanBuilder();
-
-        if (nomeGrupo != null && !nomeGrupo.isEmpty()) {
-            builder.and(grupoProduto.nomeGrupo.containsIgnoreCase(nomeGrupo));
-        }
-        if (filialId != null) {
-            builder.and(grupoProduto.filial.id.eq(filialId));
-        }
-        return query.select(Projections.constructor(GrupoProdutoResponseDto.class, grupoProduto)).from(grupoProduto)
-                .where(builder).fetch();
+        return query.select(Projections.constructor(GrupoProdutoResponseDto.class, grupoProduto))
+                .from(grupoProduto)
+                .where(grupoProduto.atualizaPreco.eq(true))
+                .fetch();
     }
 }

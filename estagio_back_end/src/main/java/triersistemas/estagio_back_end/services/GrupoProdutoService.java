@@ -2,6 +2,7 @@ package triersistemas.estagio_back_end.services;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import triersistemas.estagio_back_end.dto.AtualizaPrecoDto;
 import triersistemas.estagio_back_end.dto.request.GrupoProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.GrupoProdutoResponseDto;
 import triersistemas.estagio_back_end.entity.GrupoProduto;
@@ -27,5 +28,7 @@ public interface GrupoProdutoService {
 
     GrupoProduto grupoProdutoById(Long id);
 
-    List<GrupoProdutoResponseDto> getGrupoProdutoFilter(String nomeGrupo, Long idFilial);
+    List<GrupoProdutoResponseDto> getAllGrupoProdutoAlteraPreco();
+
+    List<GrupoProdutoResponseDto> alteraPrecoGrupoProduto(AtualizaPrecoDto atualizaProduto);
 }
