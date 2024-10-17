@@ -305,7 +305,7 @@ public class FornecedorServiceTest {
 
         when(fornecedorRepository.buscarFornecedores(nomeFiltro, cnpjFiltro, situacaoCadastro, pageable)).thenReturn(page);
 
-        Page<FornecedorResponseDto> result = service.getFornecedorFilter(nomeFiltro, cnpjFiltro, situacaoCadastro, pageable);
+        Page<FornecedorResponseDto> result = service.getFornecedorPaged(nomeFiltro, cnpjFiltro, situacaoCadastro, pageable);
 
         assertNotNull(result);
         assertEquals(2, result.getTotalElements());
@@ -330,7 +330,7 @@ public class FornecedorServiceTest {
 
         when(fornecedorRepository.buscarFornecedores(nomeFiltro, cnpjFiltro, situacaoCadastro, pageable)).thenReturn(page);
 
-        Page<FornecedorResponseDto> result = service.getFornecedorFilter(nomeFiltro, cnpjFiltro, situacaoCadastro, pageable);
+        Page<FornecedorResponseDto> result = service.getFornecedorPaged(nomeFiltro, cnpjFiltro, situacaoCadastro, pageable);
 
         assertNotNull(result);
         assertEquals(0, result.getTotalElements());
