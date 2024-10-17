@@ -36,8 +36,8 @@ public class Produto {
     @NotBlank(message = "Nome é obrigatório")
     @Column(name = "nome", nullable = false)
     private String nome;
-
-    @Column(name = "descricao")
+    
+    @Column(name = "descricao", columnDefinition = "TEXT")
     private String descricao;
 
     @ManyToOne

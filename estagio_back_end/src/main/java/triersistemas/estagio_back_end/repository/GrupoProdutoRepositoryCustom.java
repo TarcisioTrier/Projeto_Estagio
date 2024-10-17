@@ -13,4 +13,6 @@ public interface GrupoProdutoRepositoryCustom {
    Page<GrupoProdutoResponseDto> buscarGrupoProduto(String nomeGrupo, TipoGrupoProduto tipoGrupo, Long idFilial, Pageable pageable);
 
     List<GrupoProdutoResponseDto> getAllGrupoProdutoAlteraPreco();
+
+    List<GrupoProdutoResponseDto> buscarGrupoProduto(String nomeGrupo, Long filialId);
 }

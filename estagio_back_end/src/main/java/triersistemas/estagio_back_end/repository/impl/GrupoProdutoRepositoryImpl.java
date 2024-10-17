@@ -58,4 +58,21 @@ public class GrupoProdutoRepositoryImpl implements GrupoProdutoRepositoryCustom 
                 .where(grupoProduto.atualizaPreco.eq(true))
                 .fetch();
     }
+
+    @Override
+    public List<GrupoProdutoResponseDto> buscarGrupoProduto(String nomeGrupo, Long filialId) {
+        BooleanBuilder builder = new BooleanBuilder();
+        if (nomeGrupo != null && !nomeGrupo.isEmpty()) {
+            builder.and(grupoProduto.nomeGrupo.containsIgnoreCase(nomeGrupo));
+        }
+        if (filialId != null) {
+            builder.and(grupoProduto.filial.id.eq(filialId));
+        }
+        JPAQuery<GrupoProdutoResponseDto> query = new JPAQuery<>(em);
+        List<GrupoProdutoResponseDto> gruposProduto = query.select(Projections.constructor(GrupoProdutoResponseDto.class,grupoProduto))
+                .from(grupoProduto)
+                .where(builder)
+                .fetch();
+        return gruposProduto;
+    }
 }

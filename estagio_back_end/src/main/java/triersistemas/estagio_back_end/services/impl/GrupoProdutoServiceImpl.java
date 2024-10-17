@@ -103,4 +103,9 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
         return atualizaPrecoService.alteraPrecoGrupoProduto(atualizaProduto);
     }
 
+    @Override
+    public List<GrupoProdutoResponseDto> getGrupoProdutoFilter(String nomeGrupo, Long filialId) {
+        return grupoProdutoRepository.buscarGrupoProduto(nomeGrupo, filialId);
+    }
+
 }

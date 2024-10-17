@@ -39,4 +39,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleNotFound(NotFoundException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+
+    @ExceptionHandler(InvalidBarcodeException.class)
+    public ResponseEntity<String> handleNotFound(InvalidBarcodeException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
+
 }

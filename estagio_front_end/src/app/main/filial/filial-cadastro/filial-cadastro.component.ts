@@ -15,6 +15,7 @@ import {
   validateCnpj,
 } from '../../../models/externalapi';
 import { MessageService } from 'primeng/api';
+import { debounce } from 'lodash';
 
 @Component({
   selector: 'app-filial-cadastro',
@@ -31,10 +32,13 @@ telefone(): boolean {
   loading = false;
   load() {
     this.loading = true;
+    console.log(this.cadastroFilial.telefone.replace(/[_]/g, ''));
     let filial = this.cadastroFilial;
+    filial.telefone = this.cadastroFilial.telefone.replace(/[_]/g, '');
     if (this.endereco.cep !== '') {
       filial.endereco = this.endereco;
     }
+    console.log(filial);
     this.http.postFilial(filial).subscribe({
       next: (retorno) => {
         console.log(retorno);
@@ -66,7 +70,7 @@ telefone(): boolean {
     });
     this.loading = false;
   }
-  cnpj() {
+  cnpj = debounce(() => {
     const cnpj = this.cadastroFilial.cnpj.replace(/[_./-]/g, '');
     console.log(cnpj);
     if (validateCnpj(cnpj)) {
@@ -110,7 +114,7 @@ telefone(): boolean {
       }
 
     }
-  }
+  }, 1000);
   cadastroSituacao(event: any) {
     this.cadastroFilial.situacaoContrato = event.value;
   }
@@ -118,7 +122,7 @@ telefone(): boolean {
     private http: HttpService,
     private messageService: MessageService
   ) {}
-  cep(cnpj?: Cnpj) {
+  cep = debounce((cnpj?: Cnpj) => {
     const cep = this.endereco.cep.replace(/[_-]/g, '');
     console.log(cep);
     if (cnpj) {
@@ -138,7 +142,7 @@ telefone(): boolean {
         },
       });
     }
-  }
+  }, 300);
   situacaoContrato = Object.keys(SituacaoContrato)
     .filter((key) => isNaN(Number(key)))
     .map((status, index) => ({

@@ -15,6 +15,7 @@ import triersistemas.estagio_back_end.repository.ProdutoRepository;
 import triersistemas.estagio_back_end.services.AtualizaPrecoService;
 import triersistemas.estagio_back_end.services.GrupoProdutoService;
 import triersistemas.estagio_back_end.services.ProdutoService;
+import triersistemas.estagio_back_end.validators.BarcodeValidator;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,14 +26,16 @@ public class ProdutoServiceImpl implements ProdutoService {
     private final ProdutoRepository produtoRepository;
     private final GrupoProdutoService grupoProdutoService;
     private final AtualizaPrecoService atualizaPrecoService;
+    private final BarcodeValidator barcodeValidator;
 
     @Autowired
     public ProdutoServiceImpl(ProdutoRepository produtoRepository,
                               GrupoProdutoService grupoProdutoService,
-                              AtualizaPrecoService atualizaPrecoService) {
+                              AtualizaPrecoService atualizaPrecoService, BarcodeValidator barcodeValidator) {
         this.produtoRepository = produtoRepository;
         this.grupoProdutoService = grupoProdutoService;
         this.atualizaPrecoService = atualizaPrecoService;
+        this.barcodeValidator = barcodeValidator;
     }
 
     @Override
@@ -42,12 +45,18 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Override
+    public Optional<Produto> getProdutoByCodigoBarras(String codigoBarras) {
+        return produtoRepository.getProdutoByCodigoBarras(codigoBarras);
+    }
+
+    @Override
     public Page<ProdutoResponseDto> getProdutoFilter(String nome, TipoProduto tipo, Long grupoProdutoId, Pageable pageable) {
         return produtoRepository.buscarProduto(nome, tipo, grupoProdutoId, pageable);
     }
 
     @Override
     public ProdutoResponseDto addProduto(ProdutoRequestDto produtoRequestDto) {
+        barcodeValidator.validateBarcodePost(produtoRequestDto.codigoBarras());
         var grupoProduto = grupoProdutoService.grupoProdutoById(produtoRequestDto.grupoProdutoId());
         var produto = new Produto(produtoRequestDto, grupoProduto);
         var saved = produtoRepository.save(produto);
