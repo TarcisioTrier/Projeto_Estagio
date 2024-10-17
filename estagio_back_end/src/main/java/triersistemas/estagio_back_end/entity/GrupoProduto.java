@@ -3,6 +3,7 @@ package triersistemas.estagio_back_end.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -37,6 +38,7 @@ public class GrupoProduto {
     @Enumerated(EnumType.STRING)
     private TipoGrupoProduto tipoGrupo;
 
+    @DecimalMin(value = "0.0", message = "Valor Venda não pode ser negativo")
     @NotNull(message = "Margem de lucro é obrigatória")
     @Column(name = "margem_lucro", nullable = false)
     private BigDecimal margemLucro;
@@ -74,6 +76,12 @@ public class GrupoProduto {
         this.atualizaPreco = Optional.ofNullable(grupoProdutoRequestDto.atualizaPreco()).orElse(this.atualizaPreco);
         this.situacaoCadastro = Optional.ofNullable(grupoProdutoRequestDto.situacaoCadastro()).orElse(this.situacaoCadastro);
         this.filial = filial.orElse(this.filial);
+        atualizarProdutos();
+    }
 
+    private void atualizarProdutos() {
+        if (produtos != null) {
+            produtos.forEach(Produto::calculateValorVenda);
+        }
     }
 }

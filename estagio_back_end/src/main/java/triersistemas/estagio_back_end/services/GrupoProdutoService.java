@@ -2,11 +2,13 @@ package triersistemas.estagio_back_end.services;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import triersistemas.estagio_back_end.dto.AtualizaPrecoDto;
 import triersistemas.estagio_back_end.dto.request.GrupoProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.GrupoProdutoResponseDto;
 import triersistemas.estagio_back_end.entity.GrupoProduto;
 import triersistemas.estagio_back_end.enuns.TipoGrupoProduto;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface GrupoProdutoService {
@@ -25,4 +27,8 @@ public interface GrupoProdutoService {
     Optional<GrupoProduto> buscaGrupoProdutoPorId(Long id);
 
     GrupoProduto grupoProdutoById(Long id);
+
+    List<GrupoProdutoResponseDto> getAllGrupoProdutoAlteraPreco();
+
+    List<GrupoProdutoResponseDto> alteraPrecoGrupoProduto(AtualizaPrecoDto atualizaProduto);
 }

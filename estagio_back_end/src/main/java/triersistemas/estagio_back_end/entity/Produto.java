@@ -13,6 +13,7 @@ import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
 import triersistemas.estagio_back_end.enuns.TipoProduto;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
@@ -57,8 +58,8 @@ public class Produto {
     @Column(name = "margem_lucro")
     private BigDecimal margemLucro;
 
-    @Column(name = "aceita_atualizacao_preco")
-    private Boolean aceitaAtualizacaoPreco;
+    @Column(name = "atualizaPreco")
+    private Boolean atualizaPreco;
 
     @NotNull(message = "Valor Produto é obrigatório")
     @DecimalMin(value = "0.0", message = "Valor Produto não pode ser negativo")
@@ -85,10 +86,12 @@ public class Produto {
         this.tipoProduto = dto.tipoProduto();
         this.apresentacao = dto.apresentacao();
         this.margemLucro = dto.margemLucro();
-        this.aceitaAtualizacaoPreco = dto.aceitaAtualizacaoPreco();
+        this.atualizaPreco = dto.atualizaPreco();
         this.valorProduto = dto.valorProduto();
-        this.situacaoCadastro = Objects.nonNull(dto.situacaoCadastro()) ? dto.situacaoCadastro() : SituacaoCadastro.ATIVO;;
+        this.situacaoCadastro = Objects.nonNull(dto.situacaoCadastro()) ? dto.situacaoCadastro() : SituacaoCadastro.ATIVO;
+        ;
     }
+
     public void atualizaProduto(ProdutoRequestDto dto, Optional<GrupoProduto> grupoProduto) {
         this.codigoBarras = Optional.ofNullable(dto.codigoBarras()).orElse(this.codigoBarras);
         this.nome = Optional.ofNullable(dto.nome()).orElse(this.nome);
@@ -97,19 +100,26 @@ public class Produto {
         this.tipoProduto = Optional.ofNullable(dto.tipoProduto()).orElse(this.tipoProduto);
         this.apresentacao = Optional.ofNullable(dto.apresentacao()).orElse(this.apresentacao);
         this.margemLucro = Optional.ofNullable(dto.margemLucro()).orElse(this.margemLucro);
-        this.aceitaAtualizacaoPreco = Optional.ofNullable(dto.aceitaAtualizacaoPreco()).orElse(this.aceitaAtualizacaoPreco);
+        this.atualizaPreco = Optional.ofNullable(dto.atualizaPreco()).orElse(this.atualizaPreco);
         this.valorProduto = Optional.ofNullable(dto.valorProduto()).orElse(this.valorProduto);
         this.situacaoCadastro = Optional.ofNullable(dto.situacaoCadastro()).orElse(this.situacaoCadastro);
-
+        calculateValorVenda();
     }
-
 
     @PrePersist
-    @PreUpdate
-    private void calculateValorVenda() {
-        if (this.margemLucro != null) {
-            this.valorVenda = this.valorProduto.add(this.margemLucro);
-        }
+    public void calculateValorVenda() {
+        BigDecimal margemLucroEfetiva = Optional.ofNullable(this.margemLucro)
+                .orElse(this.grupoProduto.getMargemLucro());
+
+        this.valorVenda = this.valorProduto.divide(
+                BigDecimal.ONE.subtract(
+                        margemLucroEfetiva.divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_EVEN)
+                ),
+                2, RoundingMode.HALF_EVEN
+        );
+
     }
+
+
 
 }

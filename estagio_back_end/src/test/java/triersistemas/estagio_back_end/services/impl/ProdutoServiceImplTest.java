@@ -69,7 +69,6 @@ class ProdutoServiceImplTest {
                     BigDecimal.valueOf(0.2),
                     true,
                     BigDecimal.TEN,
-                    BigDecimal.valueOf(12),
                     SituacaoCadastro.ATIVO
             );
 
@@ -82,9 +81,8 @@ class ProdutoServiceImplTest {
             produto.setTipoProduto(input.tipoProduto());
             produto.setApresentacao(input.apresentacao());
             produto.setMargemLucro(input.margemLucro());
-            produto.setAceitaAtualizacaoPreco(input.aceitaAtualizacaoPreco());
+            produto.setAtualizaPreco(input.atualizaPreco());
             produto.setValorProduto(input.valorProduto());
-            produto.setValorVenda(input.valorVenda());
             produto.setSituacaoCadastro(input.situacaoCadastro());
             produto.setDataUltimaAtualizacaoPreco(LocalDate.now());
 
@@ -104,9 +102,8 @@ class ProdutoServiceImplTest {
             assertEquals(input.tipoProduto(), result.tipoProduto());
             assertEquals(input.apresentacao(), result.apresentacao());
             assertEquals(input.margemLucro(), result.margemLucro());
-            assertEquals(input.aceitaAtualizacaoPreco(), result.aceitaAtualizacaoPreco());
+            assertEquals(input.atualizaPreco(), result.atualizaPreco());
             assertEquals(input.valorProduto(), result.valorProduto());
-            assertEquals(input.valorVenda(), result.valorVenda());
             assertEquals(input.situacaoCadastro(), result.situacaoCadastro());
             assertNotNull(result.dataUltimaAtualizacaoPreco());
 
@@ -177,7 +174,6 @@ class ProdutoServiceImplTest {
                     BigDecimal.valueOf(0.25),
                     false,
                     BigDecimal.valueOf(15.0),
-                    BigDecimal.valueOf(18.75),
                     SituacaoCadastro.ATIVO
             );
 
@@ -198,9 +194,8 @@ class ProdutoServiceImplTest {
             assertEquals(inputDto.tipoProduto(), result.tipoProduto());
             assertEquals(inputDto.apresentacao(), result.apresentacao());
             assertEquals(inputDto.margemLucro(), result.margemLucro());
-            assertEquals(inputDto.aceitaAtualizacaoPreco(), result.aceitaAtualizacaoPreco());
+            assertEquals(inputDto.atualizaPreco(), result.atualizaPreco());
             assertEquals(inputDto.valorProduto(), result.valorProduto());
-            assertEquals(inputDto.valorVenda(), result.valorVenda());
             assertEquals(inputDto.situacaoCadastro(), result.situacaoCadastro());
 
             verify(produtoRepository, times(1)).findById(1L);
@@ -303,7 +298,7 @@ class ProdutoServiceImplTest {
             assertEquals(TipoProduto.PERFUMARIA, firstItem.tipoProduto());
             assertEquals(Apresentacao.LIQUIDO, firstItem.apresentacao());
             assertEquals(BigDecimal.valueOf(0.2), firstItem.margemLucro());
-            assertTrue(firstItem.aceitaAtualizacaoPreco());
+            assertTrue(firstItem.atualizaPreco());
             assertEquals(BigDecimal.valueOf(10.0), firstItem.valorProduto());
             assertEquals(BigDecimal.valueOf(12.0), firstItem.valorVenda());
             assertEquals(SituacaoCadastro.ATIVO, firstItem.situacaoCadastro());

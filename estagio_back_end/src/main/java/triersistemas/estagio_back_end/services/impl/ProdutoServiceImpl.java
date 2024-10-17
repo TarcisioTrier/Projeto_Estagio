@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import triersistemas.estagio_back_end.dto.AtualizaPrecoDto;
 import triersistemas.estagio_back_end.dto.request.ProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.ProdutoResponseDto;
 import triersistemas.estagio_back_end.entity.Produto;
@@ -11,18 +12,28 @@ import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
 import triersistemas.estagio_back_end.enuns.TipoProduto;
 import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.repository.ProdutoRepository;
+import triersistemas.estagio_back_end.services.AtualizaPrecoService;
 import triersistemas.estagio_back_end.services.GrupoProdutoService;
 import triersistemas.estagio_back_end.services.ProdutoService;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class ProdutoServiceImpl implements ProdutoService {
-    @Autowired
-    ProdutoRepository produtoRepository;
-    @Autowired
-    GrupoProdutoService grupoProdutoService;
 
+    private final ProdutoRepository produtoRepository;
+    private final GrupoProdutoService grupoProdutoService;
+    private final AtualizaPrecoService atualizaPrecoService;
+
+    @Autowired
+    public ProdutoServiceImpl(ProdutoRepository produtoRepository,
+                              GrupoProdutoService grupoProdutoService,
+                              AtualizaPrecoService atualizaPrecoService) {
+        this.produtoRepository = produtoRepository;
+        this.grupoProdutoService = grupoProdutoService;
+        this.atualizaPrecoService = atualizaPrecoService;
+    }
 
     @Override
     public ProdutoResponseDto getProdutoById(Long id) {
@@ -69,6 +80,16 @@ public class ProdutoServiceImpl implements ProdutoService {
         }
         var saved = produtoRepository.save(produto);
         return new ProdutoResponseDto(saved);
+    }
+
+    @Override
+    public List<ProdutoResponseDto> getAllProdutoAlteraPreco() {
+        return produtoRepository.getAllProdutoAlteraPreco();
+    }
+
+    @Override
+    public List<ProdutoResponseDto> alteraPrecoProduto(AtualizaPrecoDto atualizaProduto) {
+        return atualizaPrecoService.alteraPrecoProduto(atualizaProduto);
     }
 
     Optional<Produto> buscarProdutoPorId(Long id) {

@@ -48,4 +48,14 @@ public class GrupoProdutoRepositoryImpl implements GrupoProdutoRepositoryCustom 
                 .fetchCount();
         return new PageImpl<>(gruposProduto, pageable, total);
     }
+
+    @Override
+    public List<GrupoProdutoResponseDto> getAllGrupoProdutoAlteraPreco() {
+        JPAQuery<GrupoProdutoResponseDto> query = new JPAQuery<>(em);
+
+        return query.select(Projections.constructor(GrupoProdutoResponseDto.class, grupoProduto))
+                .from(grupoProduto)
+                .where(grupoProduto.atualizaPreco.eq(true))
+                .fetch();
+    }
 }
