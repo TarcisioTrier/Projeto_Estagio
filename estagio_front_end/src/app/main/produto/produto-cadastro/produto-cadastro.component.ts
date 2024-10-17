@@ -139,6 +139,7 @@ apiBarcode = debounce(() => {
             });
           }
         }
+        this.loading = false;
       },
       complete: () => {
         this.loading = false;

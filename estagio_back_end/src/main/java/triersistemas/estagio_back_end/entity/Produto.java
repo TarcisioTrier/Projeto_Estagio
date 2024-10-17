@@ -21,7 +21,10 @@ import java.util.Optional;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Entity(name = "Produtos")
+@Entity
+@Table(name = "Produtos",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"codigo_barras", "filial_id"})}
+)
 public class Produto {
 
     @Id
@@ -30,7 +33,7 @@ public class Produto {
     private Long id;
 
     @NotBlank(message = "Código de Barras é obrigatório")
-    @Column(name = "codigo_barras", nullable = false, unique = true)
+    @Column(name = "codigo_barras", nullable = false)
     private String codigoBarras;
 
     @NotBlank(message = "Nome é obrigatório")
@@ -43,6 +46,10 @@ public class Produto {
     @ManyToOne
     @JoinColumn(name = "grupo_produto_id", nullable = false)
     private GrupoProduto grupoProduto;
+
+    @ManyToOne
+    @JoinColumn(name = "filial_id", nullable = false)
+    private Filial filial;
 
     @NotNull(message = "Tipo de Produto é obrigatório")
     @Column(name = "tipo_produto", nullable = false)
@@ -88,6 +95,7 @@ public class Produto {
         this.margemLucro = dto.margemLucro();
         this.atualizaPreco = dto.atualizaPreco();
         this.valorProduto = dto.valorProduto();
+        this.filial = grupoProduto.getFilial();
         this.situacaoCadastro = Objects.nonNull(dto.situacaoCadastro()) ? dto.situacaoCadastro() : SituacaoCadastro.ATIVO;
         ;
     }

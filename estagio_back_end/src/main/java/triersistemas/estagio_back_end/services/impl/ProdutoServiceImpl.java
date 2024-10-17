@@ -45,19 +45,14 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Override
-    public Optional<Produto> getProdutoByCodigoBarras(String codigoBarras) {
-        return produtoRepository.getProdutoByCodigoBarras(codigoBarras);
-    }
-
-    @Override
     public Page<ProdutoResponseDto> getProdutoFilter(String nome, TipoProduto tipo, Long grupoProdutoId, Pageable pageable) {
         return produtoRepository.buscarProduto(nome, tipo, grupoProdutoId, pageable);
     }
 
     @Override
     public ProdutoResponseDto addProduto(ProdutoRequestDto produtoRequestDto) {
-        barcodeValidator.validateBarcodePost(produtoRequestDto.codigoBarras());
         var grupoProduto = grupoProdutoService.grupoProdutoById(produtoRequestDto.grupoProdutoId());
+        barcodeValidator.validateBarcodePost(produtoRequestDto.codigoBarras(), grupoProduto.getFilial().getId());
         var produto = new Produto(produtoRequestDto, grupoProduto);
         var saved = produtoRepository.save(produto);
         return new ProdutoResponseDto(saved);

@@ -18,6 +18,7 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
+import { TableModule } from 'primeng/table';
 
 @NgModule({
   declarations: [],
@@ -41,7 +42,8 @@ import { CheckboxModule } from 'primeng/checkbox';
     InputNumberModule,
     ToastModule,
     DialogModule,
-    CheckboxModule
+    CheckboxModule,
+    TableModule
   ],
   exports:[
     MenuModule,
@@ -62,7 +64,8 @@ import { CheckboxModule } from 'primeng/checkbox';
     InputNumberModule,
     ToastModule,
     DialogModule,
-    CheckboxModule
+    CheckboxModule,
+    TableModule
   ]
 })
 export class PrimengModule { }

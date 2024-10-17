@@ -6,16 +6,12 @@ import org.springframework.data.domain.Pageable;
 import triersistemas.estagio_back_end.dto.AtualizaPrecoDto;
 import triersistemas.estagio_back_end.dto.request.ProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.ProdutoResponseDto;
-import triersistemas.estagio_back_end.entity.Produto;
 import triersistemas.estagio_back_end.enuns.TipoProduto;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface ProdutoService {
     ProdutoResponseDto getProdutoById(Long id);
-
-    Optional<Produto> getProdutoByCodigoBarras(String codigoBarras);
 
     Page<ProdutoResponseDto> getProdutoFilter(String nome, TipoProduto tipo, Long grupoProdutoId, Pageable pageable);
 

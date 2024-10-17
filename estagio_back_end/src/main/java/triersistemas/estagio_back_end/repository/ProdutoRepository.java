@@ -9,4 +9,6 @@ import java.util.Optional;
 @Repository
 public interface ProdutoRepository extends JpaRepository<Produto, Long>, ProdutoRepositoryCustom {
     Optional<Produto> getProdutoByCodigoBarras(String codigoBarras);
+
+    Optional<Produto> getProdutoByCodigoBarrasAndFilialId(String barcode, Long filialId);
 }

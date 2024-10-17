@@ -46,11 +46,13 @@ load() {
           });
         }
       }
+      this.loading = false;
     },
     complete: () => {
       this.loading = false;
     },
   });
+  this.loading = false;
 }
   loading = false;
 cadastroTipoGrupo(event: any) {

@@ -4,7 +4,8 @@ import org.springframework.stereotype.Component;
 
 
 public interface BarcodeValidator {
-    void validateBarcodePost(String barcode);
 
-    void validateBarcodeUpdate(String barcode, Long produtoId);
+    void validateBarcodePost(String barcode, Long filialId);
+
+    void validateBarcodeUpdate(String barcode, Long produtoId, Long filialId);
 }

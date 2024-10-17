@@ -83,7 +83,6 @@ telefone(): boolean {
               summary: 'Erro',
               detail: obj.error,
             });
-            return;
           }
 
           this.cadastroFilial = cnpjToFilial(obj);
