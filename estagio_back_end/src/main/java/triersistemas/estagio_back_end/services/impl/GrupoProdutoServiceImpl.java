@@ -100,12 +100,14 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
 
     @Override
     public List<GrupoProdutoResponseDto> alteraPrecoGrupoProduto(AtualizaPrecoDto atualizaProduto) {
-        return atualizaPrecoService.alteraPrecoGrupoProduto(atualizaProduto);
+        return atualizaPrecoService.alteraMargemGrupoProduto(atualizaProduto);
     }
 
     @Override
     public List<GrupoProdutoResponseDto> getGrupoProdutoFilter(String nomeGrupo, Long filialId) {
         return grupoProdutoRepository.buscarGrupoProduto(nomeGrupo, filialId);
     }
+
+
 
 }

@@ -49,6 +49,8 @@ public class GrupoProdutoRepositoryImpl implements GrupoProdutoRepositoryCustom 
         return new PageImpl<>(gruposProduto, pageable, total);
     }
 
+
+
     @Override
     public List<GrupoProdutoResponseDto> getAllGrupoProdutoAlteraPreco() {
         JPAQuery<GrupoProdutoResponseDto> query = new JPAQuery<>(em);

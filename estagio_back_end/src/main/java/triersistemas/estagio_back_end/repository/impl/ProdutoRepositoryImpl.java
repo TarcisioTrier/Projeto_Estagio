@@ -53,8 +53,7 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
 
         return query.select(Projections.constructor(ProdutoResponseDto.class, produto))
                 .from(produto)
-                .where(produto.atualizaPreco.isTrue()
-                        .and(grupoProduto.atualizaPreco.isTrue()))
+                .where(produto.atualizaPreco.isTrue())
                 .fetch();
     }
 }

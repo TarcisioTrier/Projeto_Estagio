@@ -68,8 +68,6 @@ public class Produto {
     @Column(name = "atualizaPreco")
     private Boolean atualizaPreco;
 
-    @NotNull(message = "Valor Produto é obrigatório")
-    @DecimalMin(value = "0.0", message = "Valor Produto não pode ser negativo")
     @Column(name = "valor_produto", nullable = false)
     private BigDecimal valorProduto;
 
@@ -120,14 +118,14 @@ public class Produto {
                 .orElse(this.grupoProduto.getMargemLucro());
 
         this.valorVenda = this.valorProduto.divide(
-                BigDecimal.ONE.subtract(
-                        margemLucroEfetiva.divide(BigDecimal.valueOf(100), 4, RoundingMode.HALF_EVEN)
-                ),
-                2, RoundingMode.HALF_EVEN
-        );
-
+                BigDecimal.ONE.subtract(divide(margemLucroEfetiva)),2,RoundingMode.HALF_EVEN);
     }
 
+    public void calculateValorProduto(BigDecimal percentage){
+        this.valorProduto = this.valorProduto.add(this.valorProduto.multiply(divide(percentage)));
+    }
 
-
+    private BigDecimal divide(BigDecimal percentage){
+        return percentage.divide(new BigDecimal(100), 2, RoundingMode.HALF_EVEN);
+    }
 }

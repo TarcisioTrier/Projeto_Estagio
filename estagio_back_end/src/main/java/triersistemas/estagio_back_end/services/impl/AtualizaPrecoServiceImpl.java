@@ -29,10 +29,9 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
     }
 
     @Override
-    public List<ProdutoResponseDto> alteraPrecoProduto(AtualizaPrecoDto atualizaPrecoDto) {
+    public List<ProdutoResponseDto> alteraMargemProduto(AtualizaPrecoDto atualizaPrecoDto) {
         List<Produto> produtos = produtoRepository.findAllById(atualizaPrecoDto.produtoId());
         produtos.forEach(produto -> {
-            produto.setMargemLucro(atualizaPrecoDto.margemLucroAtualizada());
             produto.setDataUltimaAtualizacaoPreco(LocalDate.now());
             produto.calculateValorVenda();
         });
@@ -41,7 +40,7 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
     }
 
     @Override
-    public List<GrupoProdutoResponseDto> alteraPrecoGrupoProduto(AtualizaPrecoDto atualizaProduto) {
+    public List<GrupoProdutoResponseDto> alteraMargemGrupoProduto(AtualizaPrecoDto atualizaProduto) {
         List<GrupoProduto> grupoProdutos = grupoProdutoRepository.findAllById(atualizaProduto.grupoProdutoId());
         List<Produto> produtosParaAtualizar = new ArrayList<>();
 

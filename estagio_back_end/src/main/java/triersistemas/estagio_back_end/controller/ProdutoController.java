@@ -1,7 +1,6 @@
 package triersistemas.estagio_back_end.controller;
 
 import jakarta.validation.Valid;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -9,13 +8,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import triersistemas.estagio_back_end.dto.AtualizaPrecoDto;
 import triersistemas.estagio_back_end.dto.request.ProdutoRequestDto;
-import triersistemas.estagio_back_end.dto.response.GrupoProdutoResponseDto;
 import triersistemas.estagio_back_end.dto.response.ProdutoResponseDto;
 import triersistemas.estagio_back_end.enuns.TipoProduto;
 import triersistemas.estagio_back_end.services.ProdutoService;
 
 import java.util.List;
-import java.util.logging.Logger;
 
 
 @RestController
@@ -60,7 +57,7 @@ public class ProdutoController {
 
     @PutMapping("alteraPrecoProduto")
     public ResponseEntity<List<ProdutoResponseDto>> alteraPrecoProduto(@Valid @RequestBody AtualizaPrecoDto atualizaProduto){
-        return ResponseEntity.ok(produtoService.alteraPrecoProduto(atualizaProduto));
+        return ResponseEntity.ok(produtoService.alteraMargemProduto(atualizaProduto));
     }
 
     @DeleteMapping("/altera/{id}")

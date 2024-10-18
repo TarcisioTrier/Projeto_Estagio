@@ -92,8 +92,8 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Override
-    public List<ProdutoResponseDto> alteraPrecoProduto(AtualizaPrecoDto atualizaProduto) {
-        return atualizaPrecoService.alteraPrecoProduto(atualizaProduto);
+    public List<ProdutoResponseDto> alteraMargemProduto(AtualizaPrecoDto atualizaProduto) {
+        return atualizaPrecoService.alteraMargemProduto(atualizaProduto);
     }
 
     Optional<Produto> buscarProdutoPorId(Long id) {
