@@ -29,39 +29,33 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.getProdutoById(id));
     }
 
-    @GetMapping("/getAllFilter")
-    public Page<ProdutoResponseDto> getProdutoFilter(
+    @GetMapping("/getAllPaged")
+    public Page<ProdutoResponseDto> getProdutoPaged(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) Long grupoProdutoId,
             @RequestParam(required = false) String nome,
             @RequestParam(required = false) TipoProduto tipo) {
         Pageable pageable = PageRequest.of(page, size);
-        return produtoService.getProdutoFilter(nome, tipo, grupoProdutoId, pageable);
-    }
-
-    @GetMapping("/getAllProdutoAlteraPreco/")
-    public List<ProdutoResponseDto> getAllProdutoAlteraPreco(){
-        return produtoService.getAllProdutoAlteraPreco();
+        return produtoService.getProdutoPaged(nome, tipo, grupoProdutoId, pageable);
     }
 
     @PostMapping("/post")
-    public ResponseEntity<ProdutoResponseDto> postProduto(@Valid @RequestBody ProdutoRequestDto produtoRequestDto) {
-        return ResponseEntity.ok(produtoService.addProduto(produtoRequestDto));
+    public ResponseEntity<ProdutoResponseDto> postProduto(@Valid @RequestBody ProdutoRequestDto produtoDto) {
+        return ResponseEntity.ok(produtoService.addProduto(produtoDto));
     }
 
     @PutMapping("/put/{id}")
-    public ResponseEntity<ProdutoResponseDto> putProduto(@PathVariable Long id,@Valid @RequestBody ProdutoRequestDto ProdutoRequestDto) {
-        return ResponseEntity.ok(produtoService.updateProduto(id, ProdutoRequestDto));
+    public ResponseEntity<ProdutoResponseDto> putProduto(@PathVariable Long id,@Valid @RequestBody ProdutoRequestDto produtoDto) {
+        return ResponseEntity.ok(produtoService.updateProduto(id, produtoDto));
     }
 
-//    @PutMapping("alteraPrecoProduto")
-//    public ResponseEntity<List<ProdutoResponseDto>> alteraPrecoProduto(@Valid @RequestBody AtualizaPrecoDto atualizaProduto){
-//        return ResponseEntity.ok(produtoService.alteraMargemProduto(atualizaProduto));
-//    }
-
-    @DeleteMapping("/altera/{id}")
-    public ResponseEntity<ProdutoResponseDto> alteraProdutoById(@PathVariable Long id, @RequestParam boolean ativar) {
-        return ResponseEntity.ok(produtoService.alteraProdutoById(id, ativar));
+    @DeleteMapping("/remove/{id}")
+    public ResponseEntity<ProdutoResponseDto> removeProduto(@PathVariable Long id) {
+        return ResponseEntity.ok(produtoService.removeProduto(id));
+    }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ProdutoResponseDto> deleteProduto(@PathVariable Long id) {
+        return ResponseEntity.ok(produtoService.deleteProduto(id));
     }
 }

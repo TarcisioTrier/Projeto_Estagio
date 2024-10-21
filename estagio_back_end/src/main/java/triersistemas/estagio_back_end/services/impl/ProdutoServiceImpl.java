@@ -25,16 +25,12 @@ public class ProdutoServiceImpl implements ProdutoService {
 
     private final ProdutoRepository produtoRepository;
     private final GrupoProdutoService grupoProdutoService;
-    private final AtualizaPrecoService atualizaPrecoService;
     private final BarcodeValidator barcodeValidator;
 
     @Autowired
-    public ProdutoServiceImpl(ProdutoRepository produtoRepository,
-                              GrupoProdutoService grupoProdutoService,
-                              AtualizaPrecoService atualizaPrecoService, BarcodeValidator barcodeValidator) {
+    public ProdutoServiceImpl(ProdutoRepository produtoRepository, GrupoProdutoService grupoProdutoService, BarcodeValidator barcodeValidator) {
         this.produtoRepository = produtoRepository;
         this.grupoProdutoService = grupoProdutoService;
-        this.atualizaPrecoService = atualizaPrecoService;
         this.barcodeValidator = barcodeValidator;
     }
 
@@ -45,7 +41,7 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Override
-    public Page<ProdutoResponseDto> getProdutoFilter(String nome, TipoProduto tipo, Long grupoProdutoId, Pageable pageable) {
+    public Page<ProdutoResponseDto> getProdutoPaged(String nome, TipoProduto tipo, Long grupoProdutoId, Pageable pageable) {
         return produtoRepository.buscarProduto(nome, tipo, grupoProdutoId, pageable);
     }
 
@@ -68,20 +64,16 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Override
-    public ProdutoResponseDto deleteProdutoById(Long id) {
+    public ProdutoResponseDto deleteProduto(Long id) {
         var produto = produtoById(id);
         produtoRepository.delete(produto);
         return new ProdutoResponseDto(produto);
     }
 
     @Override
-    public ProdutoResponseDto alteraProdutoById(Long id, boolean ativar) {
+    public ProdutoResponseDto removeProduto(Long id) {
         var produto = produtoById(id);
-        if (ativar) {
-            produto.setSituacaoCadastro(SituacaoCadastro.ATIVO);
-        } else {
-            produto.setSituacaoCadastro(SituacaoCadastro.INATIVO);
-        }
+        produto.setSituacaoCadastro(SituacaoCadastro.INATIVO);
         var saved = produtoRepository.save(produto);
         return new ProdutoResponseDto(saved);
     }

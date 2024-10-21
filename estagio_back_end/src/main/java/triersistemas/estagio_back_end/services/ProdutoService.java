@@ -13,17 +13,18 @@ import java.util.List;
 public interface ProdutoService {
     ProdutoResponseDto getProdutoById(Long id);
 
-    Page<ProdutoResponseDto> getProdutoFilter(String nome, TipoProduto tipo, Long grupoProdutoId, Pageable pageable);
+    Page<ProdutoResponseDto> getProdutoPaged(String nome, TipoProduto tipo, Long grupoProdutoId, Pageable pageable);
 
     ProdutoResponseDto addProduto(@Valid ProdutoRequestDto produtoRequestDto);
 
     ProdutoResponseDto updateProduto(Long id, @Valid ProdutoRequestDto produtoRequestDto);
 
-    ProdutoResponseDto deleteProdutoById(Long id);
-
-    ProdutoResponseDto alteraProdutoById(Long id, boolean ativar);
+    ProdutoResponseDto deleteProduto(Long id);
 
     List<ProdutoResponseDto> getAllProdutoAlteraPreco();
+
+    ProdutoResponseDto removeProduto(Long id);
+
 
 //    List<ProdutoResponseDto> alteraMargemProduto(AtualizaPrecoDto atualizaProduto);
 }

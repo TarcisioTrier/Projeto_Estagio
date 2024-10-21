@@ -40,40 +40,28 @@ public class FilialServiceImpl implements FilialService {
     }
 
     @Override
-    public FilialResponseDto addFilial(FilialRequestDto requestDto) {
-        validateFilial(requestDto);
-        cnpjValidator.validateCnpjPostFilial(requestDto.cnpj());
-        var filial = new Filial(requestDto);
-        if (!Utils.isNull(requestDto.endereco())) {
-            var enderecoValido = enderecosValidator.validateEndereco(requestDto.endereco());
-            filial.setEndereco(enderecoValido);
-        }
-        filial = filialRepository.save(filial);
-        return new FilialResponseDto(filial);
+    public FilialResponseDto addFilial(FilialRequestDto filialDto) {
+        validateFilial(filialDto);
+        cnpjValidator.validateCnpjPostFilial(filialDto.cnpj());
+        var filial = new Filial(filialDto);
+        Optional.ofNullable(filialDto.endereco()).map(enderecosValidator::validateEndereco).ifPresent(filial::setEndereco);
+        var saved = filialRepository.save(filial);
+        return new FilialResponseDto(saved);
     }
 
     @Override
-    public FilialResponseDto updateFilial(Long id, FilialRequestDto requestDto) {
+    public FilialResponseDto updateFilial(Long id, FilialRequestDto filialDto) {
         Filial filial = findById(id);
+        Optional.ofNullable(filialDto).ifPresent(this::validateFilial);
+        Optional.ofNullable(filialDto.cnpj()).ifPresent(cnpj->{
+                    if(!cnpj.equals(filial.getCnpj()))
+                        cnpjValidator.validateCnpjUpdateFilial(cnpj, filial.getId());
+        });
+        Optional.ofNullable(filialDto.endereco()).map(enderecosValidator::validateEndereco).ifPresent(filial::setEndereco);
+        filial.alterarDados(filialDto);
+        var saved = filialRepository.save(filial);
 
-        if (!Utils.isNull(requestDto)) {
-            validateFilial(requestDto);
-        }
-
-        if (requestDto.cnpj() != null && !requestDto.cnpj().equals(filial.getCnpj())) {
-            cnpjValidator.validateCnpjUpdateFilial(requestDto.cnpj(), id);
-        }
-
-        if (requestDto.endereco() != null) {
-            var enderecoValido = enderecosValidator.validateEndereco(requestDto.endereco());
-            filial.setEndereco(enderecoValido);
-        }
-
-        filial.alterarDados(requestDto);
-
-        filial = filialRepository.save(filial);
-
-        return new FilialResponseDto(filial);
+        return new FilialResponseDto(saved);
     }
 
     @Override

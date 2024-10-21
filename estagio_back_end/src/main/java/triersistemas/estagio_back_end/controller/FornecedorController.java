@@ -23,8 +23,8 @@ public class FornecedorController {
     }
 
     @PostMapping("/post")
-    public ResponseEntity<FornecedorResponseDto> postFornecedor(@Valid @RequestBody FornecedorRequestDto requestDto) {
-        return ResponseEntity.ok(fornecedorService.addFornecedor(requestDto));
+    public ResponseEntity<FornecedorResponseDto> postFornecedor(@Valid @RequestBody FornecedorRequestDto fornecedorDto) {
+        return ResponseEntity.ok(fornecedorService.addFornecedor(fornecedorDto));
     }
 
     @GetMapping("/get/{id}")
@@ -50,8 +50,8 @@ public class FornecedorController {
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<FornecedorResponseDto> updateFornecedor(@PathVariable Long id, @Valid @RequestBody FornecedorRequestDto requestDto) {
-        return ResponseEntity.ok(fornecedorService.updateFornecedor(id, requestDto));
+    public ResponseEntity<FornecedorResponseDto> updateFornecedor(@PathVariable Long id, @Valid @RequestBody FornecedorRequestDto fornecedorDto) {
+        return ResponseEntity.ok(fornecedorService.updateFornecedor(id, fornecedorDto));
     }
 
     @DeleteMapping("/situacao/{id}")

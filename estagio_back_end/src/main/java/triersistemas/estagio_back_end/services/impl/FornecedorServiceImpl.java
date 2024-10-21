@@ -17,6 +17,7 @@ import triersistemas.estagio_back_end.validators.FoneValidator;
 import triersistemas.estagio_back_end.validators.Utils;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class FornecedorServiceImpl implements FornecedorService {
@@ -33,13 +34,10 @@ public class FornecedorServiceImpl implements FornecedorService {
         this.foneValidator = foneValidator;
     }
     @Override
-    public FornecedorResponseDto addFornecedor(FornecedorRequestDto requestDto) {
-        Filial filial = filialService.findById(requestDto.filialId());
-        cnpjValidator.validateCnpjPostFornecedor(requestDto.cnpj());
-        if(Utils.isNull(filial)){
-            throw new NotFoundException("Filial não encontrada.");
-        }
-        var fornecedor = new Fornecedor(requestDto, filial);
+    public FornecedorResponseDto addFornecedor(FornecedorRequestDto fornecedorDto) {
+        Filial filial = filialService.findById(fornecedorDto.filialId());
+        cnpjValidator.validateCnpjPostFornecedor(fornecedorDto.cnpj());
+        var fornecedor = new Fornecedor(fornecedorDto, filial);
         return new FornecedorResponseDto(fornecedorRepository.save(fornecedor));
     }
 
@@ -59,22 +57,15 @@ public class FornecedorServiceImpl implements FornecedorService {
     }
 
     @Override
-    public FornecedorResponseDto updateFornecedor(Long id, FornecedorRequestDto requestDto) {
+    public FornecedorResponseDto updateFornecedor(Long id, FornecedorRequestDto fornecedorDto) {
         Fornecedor fornecedor = findById(id);
-        Filial filial = null;
-
-        if (requestDto.filialId() != null) {
-            filial = filialService.findById(requestDto.filialId());
-        }
-        if (requestDto.cnpj() != null && !requestDto.cnpj().equals(fornecedor.getCnpj())) {
-            cnpjValidator.validateCnpjUpdateFornecedor(requestDto.cnpj(), id);
-        }
-
-        if (requestDto.telefone() != null) {
-            foneValidator.validateFone(requestDto.telefone());
-        }
-
-        fornecedor.alterarDados(requestDto, filial);
+        var filial = filialService.buscaFilialPorId(fornecedorDto.filialId());
+        Optional.ofNullable(fornecedorDto.cnpj()).ifPresent(cnpj->{
+            if(!cnpj.equals(fornecedor.getCnpj()))
+                cnpjValidator.validateCnpjUpdateFornecedor(cnpj, id);
+        });
+        Optional.ofNullable(fornecedorDto.telefone()).ifPresent(foneValidator::validateFone);
+        fornecedor.alterarDados(fornecedorDto, filial);
         fornecedorRepository.save(fornecedor);
         return new FornecedorResponseDto(fornecedor);
     }

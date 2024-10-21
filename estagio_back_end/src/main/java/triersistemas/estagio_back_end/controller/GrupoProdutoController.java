@@ -6,11 +6,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import triersistemas.estagio_back_end.dto.AtualizaPrecoDto;
 import triersistemas.estagio_back_end.dto.request.GrupoProdutoRequestDto;
-import triersistemas.estagio_back_end.dto.response.FilialResponseDto;
 import triersistemas.estagio_back_end.dto.response.GrupoProdutoResponseDto;
-import triersistemas.estagio_back_end.dto.response.ProdutoResponseDto;
 import triersistemas.estagio_back_end.enuns.TipoGrupoProduto;
 import triersistemas.estagio_back_end.services.GrupoProdutoService;
 
@@ -38,7 +35,7 @@ public class GrupoProdutoController {
             @RequestParam(required = false) String nomeGrupo,
             @RequestParam(required = false) TipoGrupoProduto tipoGrupo) {
         Pageable pageable = PageRequest.of(page, size);
-        return grupoProdutoService.getGrupoProdutoFilter(nomeGrupo, tipoGrupo, filialId, pageable);
+        return grupoProdutoService.getGrupoProdutoPaged(nomeGrupo, tipoGrupo, filialId, pageable);
     }
 
     @GetMapping("/getAllFilter")
@@ -48,33 +45,23 @@ public class GrupoProdutoController {
         return grupoProdutoService.getGrupoProdutoFilter(nomeGrupo, filialId);
     }
 
-    @GetMapping("/getAllGrupoProdutoAlteraPreco")
-    public List<GrupoProdutoResponseDto> getAllGrupoProdutoAlteraPreco(){
-        return grupoProdutoService.getAllGrupoProdutoAlteraPreco();
-    }
-
     @PostMapping("/post")
-    public ResponseEntity<GrupoProdutoResponseDto> postGrupoProduto(@Valid @RequestBody GrupoProdutoRequestDto grupoProdutoRequestDto) {
-        return ResponseEntity.ok(grupoProdutoService.addGrupoProduto(grupoProdutoRequestDto));
+    public ResponseEntity<GrupoProdutoResponseDto> postGrupoProduto(@Valid @RequestBody GrupoProdutoRequestDto grupoProdutoDto) {
+        return ResponseEntity.ok(grupoProdutoService.addGrupoProduto(grupoProdutoDto));
     }
 
     @PutMapping("/put/{id}")
-    public ResponseEntity<GrupoProdutoResponseDto> putGrupoProduto(@PathVariable Long id,@Valid @RequestBody GrupoProdutoRequestDto grupoProdutoRequestDto) {
-        return ResponseEntity.ok(grupoProdutoService.updateGrupoProduto(id, grupoProdutoRequestDto));
+    public ResponseEntity<GrupoProdutoResponseDto> putGrupoProduto(@PathVariable Long id,@Valid @RequestBody GrupoProdutoRequestDto grupoProdutoDto) {
+        return ResponseEntity.ok(grupoProdutoService.updateGrupoProduto(id, grupoProdutoDto));
     }
-
-//    @PutMapping("/alteraPrecoGrupoProduto")
-//    public ResponseEntity<List<GrupoProdutoResponseDto>> alteraPrecoProduto(@Valid @RequestBody AtualizaPrecoDto atualizaProduto){
-//        return ResponseEntity.ok(grupoProdutoService.alteraPrecoGrupoProduto(atualizaProduto));
-//    }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<GrupoProdutoResponseDto> deleteGrupoProdutoById(@PathVariable Long id) {
-        return ResponseEntity.ok(grupoProdutoService.deleteGrupoProdutoById(id));
+    public ResponseEntity<GrupoProdutoResponseDto> deleteGrupoProduto(@PathVariable Long id) {
+        return ResponseEntity.ok(grupoProdutoService.deleteGrupoProduto(id));
     }
 
-    @DeleteMapping("/altera/{id}")
-    public ResponseEntity<GrupoProdutoResponseDto> alteraGrupoProdutoById(@PathVariable Long id, @RequestParam boolean ativar) {
-        return ResponseEntity.ok(grupoProdutoService.alteraGrupoProdutoById(id, ativar));
+    @DeleteMapping("/remove/{id}")
+    public ResponseEntity<GrupoProdutoResponseDto> removeGrupoProduto(@PathVariable Long id) {
+        return ResponseEntity.ok(grupoProdutoService.removeGrupoProduto(id));
     }
 }

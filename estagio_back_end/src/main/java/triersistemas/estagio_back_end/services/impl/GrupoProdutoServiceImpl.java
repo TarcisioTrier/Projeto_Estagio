@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import triersistemas.estagio_back_end.dto.AtualizaPrecoDto;
 import triersistemas.estagio_back_end.dto.request.GrupoProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.GrupoProdutoResponseDto;
 import triersistemas.estagio_back_end.entity.GrupoProduto;
@@ -12,7 +11,6 @@ import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
 import triersistemas.estagio_back_end.enuns.TipoGrupoProduto;
 import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.repository.GrupoProdutoRepository;
-import triersistemas.estagio_back_end.services.AtualizaPrecoService;
 import triersistemas.estagio_back_end.services.FilialService;
 import triersistemas.estagio_back_end.services.GrupoProdutoService;
 
@@ -25,13 +23,11 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
 
     private GrupoProdutoRepository grupoProdutoRepository;
     private FilialService filialService;
-    private AtualizaPrecoService atualizaPrecoService;
 
     @Autowired
-    public GrupoProdutoServiceImpl(GrupoProdutoRepository grupoProdutoRepository, FilialService filialService, AtualizaPrecoService atualizaPrecoService) {
+    public GrupoProdutoServiceImpl(GrupoProdutoRepository grupoProdutoRepository, FilialService filialService) {
         this.grupoProdutoRepository = grupoProdutoRepository;
         this.filialService = filialService;
-        this.atualizaPrecoService = atualizaPrecoService;
     }
 
 
@@ -59,7 +55,7 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
     }
 
     @Override
-    public GrupoProdutoResponseDto deleteGrupoProdutoById(Long id) {
+    public GrupoProdutoResponseDto deleteGrupoProduto(Long id) {
         var grupoProduto = grupoProdutoById(id);
         this.grupoProdutoRepository.delete(grupoProduto);
         return new GrupoProdutoResponseDto(grupoProduto);
@@ -67,18 +63,14 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
     }
 
     @Override
-    public Page<GrupoProdutoResponseDto> getGrupoProdutoFilter(String nomeGrupo, TipoGrupoProduto tipoGrupo, Long idFilial, Pageable pageable) {
+    public Page<GrupoProdutoResponseDto> getGrupoProdutoPaged(String nomeGrupo, TipoGrupoProduto tipoGrupo, Long idFilial, Pageable pageable) {
         return grupoProdutoRepository.buscarGrupoProduto(nomeGrupo,tipoGrupo,idFilial,pageable);
     }
 
     @Override
-    public GrupoProdutoResponseDto alteraGrupoProdutoById(Long id, boolean ativar) {
+    public GrupoProdutoResponseDto removeGrupoProduto(Long id) {
        var grupoProduto =  grupoProdutoById(id);
-       if(ativar){
-           grupoProduto.setSituacaoCadastro(SituacaoCadastro.ATIVO);
-       }else{
-           grupoProduto.setSituacaoCadastro(SituacaoCadastro.INATIVO);
-       }
+       grupoProduto.setSituacaoCadastro(SituacaoCadastro.INATIVO);
 
         return new GrupoProdutoResponseDto(grupoProduto);
     }
@@ -93,10 +85,10 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
        return this.buscaGrupoProdutoPorId(id).orElseThrow(() -> new NotFoundException("Grupo de Produto não encontrado"));
     }
 
-    @Override
-    public List<GrupoProdutoResponseDto> getAllGrupoProdutoAlteraPreco() {
-        return grupoProdutoRepository.getAllGrupoProdutoAlteraPreco();
-    }
+//    @Override
+//    public List<GrupoProdutoResponseDto> getAllGrupoProdutoAlteraPreco() {
+//        return grupoProdutoRepository.getAllGrupoProdutoAlteraPreco();
+//    }
 
 //    @Override
 //    public List<GrupoProdutoResponseDto> alteraPrecoGrupoProduto(AtualizaPrecoDto atualizaProduto) {
