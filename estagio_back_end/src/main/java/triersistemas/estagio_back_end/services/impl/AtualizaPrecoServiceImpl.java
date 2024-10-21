@@ -18,8 +18,6 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.fasterxml.jackson.databind.type.LogicalType.Collection;
-
 @Service
 public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
 
