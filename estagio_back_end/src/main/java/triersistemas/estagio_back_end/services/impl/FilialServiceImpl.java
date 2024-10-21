@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import triersistemas.estagio_back_end.dto.request.FilialRequestDto;
 import triersistemas.estagio_back_end.dto.response.FilialResponseDto;
 import triersistemas.estagio_back_end.entity.Filial;
+import triersistemas.estagio_back_end.enuns.SituacaoContrato;
 import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.repository.FilialRepository;
 import triersistemas.estagio_back_end.services.FilialService;
@@ -76,9 +77,10 @@ public class FilialServiceImpl implements FilialService {
     }
 
     @Override
-    public void deleteFilial(Long id) {
-        Filial filial = findById(id);
+    public FilialResponseDto deleteFilial(Long id) {
+        var filial = findById(id);
         filialRepository.delete(filial);
+        return new FilialResponseDto(filial);
     }
 
     @Override
@@ -111,6 +113,14 @@ public class FilialServiceImpl implements FilialService {
     @Override
     public List<FilialResponseDto> getFilialFilter(String nome) {
         return filialRepository.buscarFiliais(nome);
+    }
+
+    @Override
+    public FilialResponseDto removeFilial(Long id) {
+        var filial = findById(id);
+        filial.setSituacaoContrato(SituacaoContrato.INATIVO);
+        var saved = filialRepository.save(filial);
+        return new FilialResponseDto(saved);
     }
 
     private void validateFilial(FilialRequestDto requestDto) {
