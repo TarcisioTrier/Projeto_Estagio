@@ -1,27 +1,26 @@
 export enum SituacaoContrato {
-  ATIVO = 0,
-  INATIVO = 1,
-  RESCINDIDO = 2,
-  EM_IMPLEMENTACAO = 3
+  ATIVO ,
+  INATIVO ,
+  RESCINDIDO ,
+  EM_IMPLEMENTACAO,
 }
 export enum Apresentacao {
   CAPS_COMP_DRAG,
-    GOTAS,
-    INJETAVEL,
-    LIQUIDO,
-    OUTROS,
-    POMADA_CREME,
+  GOTAS,
+  INJETAVEL,
+  LIQUIDO,
+  OUTROS,
+  POMADA_CREME,
 }
 export enum SituacaoCadastro {
   ATIVO,
   INATIVO,
 }
 export enum TipoGrupoProduto {
-
   MEDICAMENTO,
   PERFUMARIA,
   BEBIDA,
-  OUTROS
+  OUTROS,
 }
 export enum TipoProduto {
   ANTICONCEPCIONAIS,
@@ -37,5 +36,13 @@ export enum TipoProduto {
   PERFUMARIA,
   REFERENCIA,
   SIMILAR,
+}
 
+export enum AtualizaPrecoEnum {
+  MARGEM_RELATIVA,
+  MARGEM_ABSOLUTA,
+  VALOR_PRODUTO_RELATIVO,
+  VALOR_PRODUTO_ABSOLUTO,
+  VALOR_VENDA_RELATIVO,
+  VALOR_VENDA_ABSOLUTO,
 }

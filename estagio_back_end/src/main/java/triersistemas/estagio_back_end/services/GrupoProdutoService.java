@@ -30,7 +30,7 @@ public interface GrupoProdutoService {
 
     List<GrupoProdutoResponseDto> getAllGrupoProdutoAlteraPreco();
 
-    List<GrupoProdutoResponseDto> alteraPrecoGrupoProduto(AtualizaPrecoDto atualizaProduto);
+//    List<GrupoProdutoResponseDto> alteraPrecoGrupoProduto(AtualizaPrecoDto atualizaProduto);
 
     List<GrupoProdutoResponseDto> getGrupoProdutoFilter(String nomeGrupo, Long filialId);
 }

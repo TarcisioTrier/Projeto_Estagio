@@ -55,10 +55,10 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.updateProduto(id, ProdutoRequestDto));
     }
 
-    @PutMapping("alteraPrecoProduto")
-    public ResponseEntity<List<ProdutoResponseDto>> alteraPrecoProduto(@Valid @RequestBody AtualizaPrecoDto atualizaProduto){
-        return ResponseEntity.ok(produtoService.alteraMargemProduto(atualizaProduto));
-    }
+//    @PutMapping("alteraPrecoProduto")
+//    public ResponseEntity<List<ProdutoResponseDto>> alteraPrecoProduto(@Valid @RequestBody AtualizaPrecoDto atualizaProduto){
+//        return ResponseEntity.ok(produtoService.alteraMargemProduto(atualizaProduto));
+//    }
 
     @DeleteMapping("/altera/{id}")
     public ResponseEntity<ProdutoResponseDto> alteraProdutoById(@PathVariable Long id, @RequestParam boolean ativar) {

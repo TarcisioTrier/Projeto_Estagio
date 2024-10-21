@@ -116,16 +116,20 @@ public class Produto {
     public void calculateValorVenda() {
         BigDecimal margemLucroEfetiva = Optional.ofNullable(this.margemLucro)
                 .orElse(this.grupoProduto.getMargemLucro());
+        margemLucroEfetiva = margemLucroEfetiva.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_EVEN);
 
         this.valorVenda = this.valorProduto.divide(
-                BigDecimal.ONE.subtract(divide(margemLucroEfetiva)),2,RoundingMode.HALF_EVEN);
+                BigDecimal.ONE.subtract(margemLucroEfetiva));
+        dataUltimaAtualizacaoPreco = LocalDate.now();
     }
 
-    public void calculateValorProduto(BigDecimal percentage){
-        this.valorProduto = this.valorProduto.add(this.valorProduto.multiply(divide(percentage)));
+    public void calculateValorProduto(){
+        BigDecimal margemLucroEfetiva = Optional.ofNullable(this.margemLucro)
+                .orElse(this.grupoProduto.getMargemLucro());
+        margemLucroEfetiva = margemLucroEfetiva.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_EVEN);
+
+        this.valorProduto = this.valorVenda.subtract(this.valorVenda.multiply(margemLucroEfetiva));
+        dataUltimaAtualizacaoPreco = LocalDate.now();
     }
 
-    private BigDecimal divide(BigDecimal percentage){
-        return percentage.divide(new BigDecimal(100), 2, RoundingMode.HALF_EVEN);
-    }
 }
