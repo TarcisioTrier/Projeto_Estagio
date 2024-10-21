@@ -25,5 +25,5 @@ public interface ProdutoService {
 
     List<ProdutoResponseDto> getAllProdutoAlteraPreco();
 
-    List<ProdutoResponseDto> alteraMargemProduto(AtualizaPrecoDto atualizaProduto);
+//    List<ProdutoResponseDto> alteraMargemProduto(AtualizaPrecoDto atualizaProduto);
 }

@@ -3,6 +3,7 @@ package triersistemas.estagio_back_end.dto;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import triersistemas.estagio_back_end.enuns.AtualizaPrecoEnum;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -10,9 +11,11 @@ import java.util.List;
 public record AtualizaPrecoDto(
         List<Long> produtoId,
         List<Long> grupoProdutoId,
-
-        @DecimalMin(value = "0.0", message = "Valor Venda não pode ser negativo")
-        @NotNull(message = "O valor de atualização da margem de lucro é obrigatório")
-        BigDecimal margemLucroAtualizada
+        Long filialId,
+        Boolean all,
+        Boolean isProduto,
+        Boolean isRelativo,
+        BigDecimal valor,
+        AtualizaPrecoEnum atualizaPreco
 ) {
 }

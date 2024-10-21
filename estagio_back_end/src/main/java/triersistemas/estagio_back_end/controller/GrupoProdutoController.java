@@ -63,10 +63,10 @@ public class GrupoProdutoController {
         return ResponseEntity.ok(grupoProdutoService.updateGrupoProduto(id, grupoProdutoRequestDto));
     }
 
-    @PutMapping("/alteraPrecoGrupoProduto")
-    public ResponseEntity<List<GrupoProdutoResponseDto>> alteraPrecoProduto(@Valid @RequestBody AtualizaPrecoDto atualizaProduto){
-        return ResponseEntity.ok(grupoProdutoService.alteraPrecoGrupoProduto(atualizaProduto));
-    }
+//    @PutMapping("/alteraPrecoGrupoProduto")
+//    public ResponseEntity<List<GrupoProdutoResponseDto>> alteraPrecoProduto(@Valid @RequestBody AtualizaPrecoDto atualizaProduto){
+//        return ResponseEntity.ok(grupoProdutoService.alteraPrecoGrupoProduto(atualizaProduto));
+//    }
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<GrupoProdutoResponseDto> deleteGrupoProdutoById(@PathVariable Long id) {

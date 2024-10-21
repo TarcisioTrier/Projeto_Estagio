@@ -44,5 +44,9 @@ public class GlobalExceptionHandler {
     public ResponseEntity<String> handleNotFound(InvalidBarcodeException ex) {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
+    @ExceptionHandler(InvalidMargemException.class)
+    public ResponseEntity<String> handleNotFound(InvalidMargemException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
+    }
 
 }
