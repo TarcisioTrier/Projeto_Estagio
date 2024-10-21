@@ -41,6 +41,7 @@ public class FilialController {
         Pageable pageable = PageRequest.of(page, size);
         return filialService.getFilialFilter(nome, cnpj, pageable);
     }
+
     @GetMapping("/getAllFilter")
     public List<FilialResponseDto> getFilialFilter(@RequestParam(required = false) String nome) {
         return filialService.getFilialFilter(nome);

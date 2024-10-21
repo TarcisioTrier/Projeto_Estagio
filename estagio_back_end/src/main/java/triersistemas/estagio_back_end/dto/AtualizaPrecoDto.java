@@ -16,6 +16,7 @@ public record AtualizaPrecoDto(
         Boolean isProduto,
         Boolean isRelativo,
         BigDecimal valor,
+        Boolean isPercentual,
         AtualizaPrecoEnum atualizaPreco
 ) {
 }

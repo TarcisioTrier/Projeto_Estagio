@@ -11,6 +11,7 @@ import triersistemas.estagio_back_end.dto.request.ProdutoRequestDto;
 import triersistemas.estagio_back_end.enuns.Apresentacao;
 import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
 import triersistemas.estagio_back_end.enuns.TipoProduto;
+import triersistemas.estagio_back_end.exceptions.InvalidMargemException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -118,18 +119,20 @@ public class Produto {
                 .orElse(this.grupoProduto.getMargemLucro());
         margemLucroEfetiva = margemLucroEfetiva.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_EVEN);
 
-        this.valorVenda = this.valorProduto.divide(
-                BigDecimal.ONE.subtract(margemLucroEfetiva));
+        this.valorVenda = this.valorProduto.divide(BigDecimal.ONE.subtract(margemLucroEfetiva), 2, RoundingMode.HALF_EVEN);
         dataUltimaAtualizacaoPreco = LocalDate.now();
     }
 
-    public void calculateValorProduto(){
-        BigDecimal margemLucroEfetiva = Optional.ofNullable(this.margemLucro)
-                .orElse(this.grupoProduto.getMargemLucro());
-        margemLucroEfetiva = margemLucroEfetiva.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_EVEN);
-
-        this.valorProduto = this.valorVenda.subtract(this.valorVenda.multiply(margemLucroEfetiva));
-        dataUltimaAtualizacaoPreco = LocalDate.now();
+    public void calculateMargemLucro(){
+        var margemLucro = this.valorVenda.subtract(this.valorProduto).divide(this.valorVenda, 2, RoundingMode.HALF_EVEN).multiply(BigDecimal.valueOf(100));
+        if (margemLucro.compareTo(BigDecimal.ZERO) < 0) {
+            throw new InvalidMargemException("Valor da Margem não pode ser negativo");
+        }
+        if (margemLucro.compareTo(BigDecimal.valueOf(99.99)) >= 0) {
+            throw new InvalidMargemException("Valor da Margem não pode ser maior que ou igual a 100%");
+        }else{
+            this.margemLucro = margemLucro;
+        }
     }
 
 }
