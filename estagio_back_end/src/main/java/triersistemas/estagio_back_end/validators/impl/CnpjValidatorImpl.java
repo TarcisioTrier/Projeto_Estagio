@@ -49,7 +49,7 @@ public class CnpjValidatorImpl implements CnpjValidator {
         }
     }
 
-    public void validateCnpjPostFornecedor(String cnpj){
+    public void validateCnpjPostFornecedor(String cnpj) {
         Optional<Fornecedor> fornecedorExistente = fornecedorRepository.findByCnpj(cnpj);
         if (fornecedorExistente.isPresent()) {
             throw new InvalidCnpjException("CNPJ já cadastrado em outra empresa.");
@@ -58,16 +58,14 @@ public class CnpjValidatorImpl implements CnpjValidator {
 
     private static boolean isCNPJ(String CNPJ) {
 
-        if (CNPJ.length() != 14) {
+        if (CNPJ.length() != 14)
             return false;
-        }
+
 
         char dig13, dig14;
-        int sm, i, r, num, peso;
-        sm = 0;
-        peso = 2;
-        for (i = 11; i >= 0; i--) {
-            num = (int) (CNPJ.charAt(i) - 48);
+        int sm = 0, r, peso = 2;
+        for (int i = 11; i >= 0; i--) {
+            var num = Character.getNumericValue(CNPJ.charAt(i));
             sm = sm + (num * peso);
             peso = peso + 1;
             if (peso == 10)
@@ -77,13 +75,13 @@ public class CnpjValidatorImpl implements CnpjValidator {
         if ((r == 0) || (r == 1)) {
             dig13 = '0';
         } else {
-            dig13 = (char) ((11 - r) + 48);
+            dig13 = Character.forDigit((11 - r), 10);
         }
 
         sm = 0;
         peso = 2;
-        for (i = 12; i >= 0; i--) {
-            num = (int) (CNPJ.charAt(i) - 48);
+        for (int i = 12; i >= 0; i--) {
+            var num = Character.getNumericValue(CNPJ.charAt(i));
             sm = sm + (num * peso);
             peso = peso + 1;
             if (peso == 10)
@@ -94,13 +92,12 @@ public class CnpjValidatorImpl implements CnpjValidator {
         if ((r == 0) || (r == 1)) {
             dig14 = '0';
         } else {
-            dig14 = (char) ((11 - r) + 48);
+            dig14 = Character.forDigit((11 - r), 10);
         }
 
         if ((dig13 == CNPJ.charAt(12)) && (dig14 == CNPJ.charAt(13))) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 }

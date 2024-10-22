@@ -14,7 +14,6 @@ import triersistemas.estagio_back_end.services.FilialService;
 import triersistemas.estagio_back_end.services.FornecedorService;
 import triersistemas.estagio_back_end.validators.CnpjValidator;
 import triersistemas.estagio_back_end.validators.FoneValidator;
-import triersistemas.estagio_back_end.validators.Utils;
 
 import java.util.List;
 import java.util.Optional;
@@ -70,18 +69,11 @@ public class FornecedorServiceImpl implements FornecedorService {
         return new FornecedorResponseDto(fornecedor);
     }
 
-
-
     @Override
     public void alteraSituacao(Long id) {
         Fornecedor fornecedor = findById(id);
         fornecedor.alterarSituacao();
         fornecedorRepository.save(fornecedor);
-    }
-
-    private void validateFornecedor(FornecedorRequestDto requestDto) {
-        cnpjValidator.validateCnpj(requestDto.cnpj());
-        foneValidator.validateFone(requestDto.telefone());
     }
 
     private Fornecedor findById(Long id) {

@@ -38,18 +38,18 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
     }
 
     @Override
-    public GrupoProdutoResponseDto addGrupoProduto(GrupoProdutoRequestDto grupoProdutoRequestDto) {
-        var filial = filialService.findById(grupoProdutoRequestDto.filialId());
-        var grupoProduto = new GrupoProduto(grupoProdutoRequestDto, filial);
+    public GrupoProdutoResponseDto addGrupoProduto(GrupoProdutoRequestDto grupoProdutoDto) {
+        var filial = filialService.findById(grupoProdutoDto.filialId());
+        var grupoProduto = new GrupoProduto(grupoProdutoDto, filial);
         var saved = this.grupoProdutoRepository.save(grupoProduto);
         return new GrupoProdutoResponseDto(saved);
     }
 
     @Override
-    public GrupoProdutoResponseDto updateGrupoProduto(Long id, GrupoProdutoRequestDto grupoProdutoRequestDto) {
+    public GrupoProdutoResponseDto updateGrupoProduto(Long id, GrupoProdutoRequestDto grupoProdutoDto) {
         var grupoProduto = grupoProdutoById(id);
-        var filial = filialService.buscaFilialPorId(grupoProdutoRequestDto.filialId());
-        grupoProduto.alteraGrupoProduto(grupoProdutoRequestDto, filial);
+        var filial = filialService.buscaFilialPorId(grupoProdutoDto.filialId());
+        grupoProduto.alteraGrupoProduto(grupoProdutoDto, filial);
         var saved = this.grupoProdutoRepository.save(grupoProduto);
         return new GrupoProdutoResponseDto(saved);
     }
@@ -71,7 +71,6 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
     public GrupoProdutoResponseDto removeGrupoProduto(Long id) {
        var grupoProduto =  grupoProdutoById(id);
        grupoProduto.setSituacaoCadastro(SituacaoCadastro.INATIVO);
-
         return new GrupoProdutoResponseDto(grupoProduto);
     }
 
@@ -84,16 +83,6 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
     public GrupoProduto grupoProdutoById(Long id){
        return this.buscaGrupoProdutoPorId(id).orElseThrow(() -> new NotFoundException("Grupo de Produto não encontrado"));
     }
-
-//    @Override
-//    public List<GrupoProdutoResponseDto> getAllGrupoProdutoAlteraPreco() {
-//        return grupoProdutoRepository.getAllGrupoProdutoAlteraPreco();
-//    }
-
-//    @Override
-//    public List<GrupoProdutoResponseDto> alteraPrecoGrupoProduto(AtualizaPrecoDto atualizaProduto) {
-//        return atualizaPrecoService.alteraMargemGrupoProduto(atualizaProduto);
-//    }
 
     @Override
     public List<GrupoProdutoResponseDto> getGrupoProdutoFilter(String nomeGrupo, Long filialId) {

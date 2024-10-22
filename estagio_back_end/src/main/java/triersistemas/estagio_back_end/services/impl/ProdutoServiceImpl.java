@@ -46,19 +46,19 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Override
-    public ProdutoResponseDto addProduto(ProdutoRequestDto produtoRequestDto) {
-        var grupoProduto = grupoProdutoService.grupoProdutoById(produtoRequestDto.grupoProdutoId());
-        barcodeValidator.validateBarcodePost(produtoRequestDto.codigoBarras(), grupoProduto.getFilial().getId());
-        var produto = new Produto(produtoRequestDto, grupoProduto);
+    public ProdutoResponseDto addProduto(ProdutoRequestDto produtoDto) {
+        var grupoProduto = grupoProdutoService.grupoProdutoById(produtoDto.grupoProdutoId());
+        barcodeValidator.validateBarcodePost(produtoDto.codigoBarras(), grupoProduto.getFilial().getId());
+        var produto = new Produto(produtoDto, grupoProduto);
         var saved = produtoRepository.save(produto);
         return new ProdutoResponseDto(saved);
     }
 
     @Override
-    public ProdutoResponseDto updateProduto(Long id, ProdutoRequestDto produtoRequestDto) {
-        var grupoProduto = grupoProdutoService.buscaGrupoProdutoPorId(produtoRequestDto.grupoProdutoId());
+    public ProdutoResponseDto updateProduto(Long id, ProdutoRequestDto produtoDto) {
+        var grupoProduto = grupoProdutoService.buscaGrupoProdutoPorId(produtoDto.grupoProdutoId());
         var produto = produtoById(id);
-        produto.atualizaProduto(produtoRequestDto, grupoProduto);
+        produto.atualizaProduto(produtoDto, grupoProduto);
         var saved = produtoRepository.save(produto);
         return new ProdutoResponseDto(saved);
     }
