@@ -221,7 +221,7 @@ class ProdutoServiceImplTest {
             when(produtoRepository.findById(id)).thenReturn(Optional.of(produto));
 
             // Act
-            var result = produtoService.deleteProdutoById(id);
+            var result = produtoService.deleteProduto(id);
 
             // Assert
             assertNotNull(result);
@@ -280,7 +280,7 @@ class ProdutoServiceImplTest {
             when(produtoRepository.buscarProduto(nome, tipo, grupoProdutoId, pageable)).thenReturn(expectedPage);
 
             // Act
-            Page<ProdutoResponseDto> result = produtoService.getProdutoFilter(nome, tipo, grupoProdutoId, pageable);
+            Page<ProdutoResponseDto> result = produtoService.getProdutoPaged(nome, tipo, grupoProdutoId, pageable);
 
             // Assert
             assertNotNull(result);
@@ -327,11 +327,11 @@ class ProdutoServiceImplTest {
             when(produtoRepository.save(any(Produto.class))).thenReturn(produto);
 
             // Act
-            var result = produtoService.alteraProdutoById(id, true);
+            var result = produtoService.removeProduto(id);
 
             // Assert
             assertNotNull(result);
-            assertEquals(SituacaoCadastro.ATIVO, result.situacaoCadastro());
+            assertEquals(SituacaoCadastro.INATIVO, result.situacaoCadastro());
             verify(produtoRepository, times(1)).findById(id);
             verify(produtoRepository, times(1)).save(produto);
         }
@@ -353,7 +353,7 @@ class ProdutoServiceImplTest {
             when(produtoRepository.save(any(Produto.class))).thenReturn(produto);
 
             // Act
-            var result = produtoService.alteraProdutoById(id, false);
+            var result = produtoService.removeProduto(id);
 
             // Assert
             assertNotNull(result);
@@ -370,7 +370,7 @@ class ProdutoServiceImplTest {
             when(produtoRepository.findById(id)).thenReturn(Optional.empty());
 
             // Act & Assert
-            assertThrows(NotFoundException.class, () -> produtoService.alteraProdutoById(id, true));
+            assertThrows(NotFoundException.class, () -> produtoService.removeProduto(id));
             verify(produtoRepository, times(1)).findById(id);
             verify(produtoRepository, never()).save(any(Produto.class));
         }

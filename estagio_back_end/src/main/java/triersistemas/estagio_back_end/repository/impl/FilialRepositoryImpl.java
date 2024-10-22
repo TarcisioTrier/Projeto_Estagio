@@ -43,7 +43,6 @@ public class FilialRepositoryImpl implements FilialRepositoryCustom {
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        // Conta o total de registros
         long total = query.from(filial)
                 .where(builder)
                 .fetchCount();

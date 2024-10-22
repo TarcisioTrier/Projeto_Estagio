@@ -5,6 +5,8 @@ import triersistemas.estagio_back_end.exceptions.InvalidBarcodeException;
 import triersistemas.estagio_back_end.repository.ProdutoRepository;
 import triersistemas.estagio_back_end.validators.BarcodeValidator;
 
+import java.util.Optional;
+
 @Component
 public class BarcodeValidatorImpl implements BarcodeValidator {
 
@@ -18,17 +20,19 @@ public class BarcodeValidatorImpl implements BarcodeValidator {
     @Override
     public void validateBarcodePost(String barcode, Long filialId) {
         var produto = this.repository.getProdutoByCodigoBarrasAndFilialId(barcode, filialId);
-        if (produto.isPresent()) {
+        produto.ifPresent(p -> {
             throw new InvalidBarcodeException("Codigo de Barras já cadastrado");
-        }
+        });
 
     }
 
     @Override
     public void validateBarcodeUpdate(String barcode, Long produtoId, Long filialId) {
         var produto = this.repository.getProdutoByCodigoBarrasAndFilialId(barcode, filialId);
-        if (produto.isPresent() && !produtoId.equals(produto.get().getId())) {
-            throw new InvalidBarcodeException("Codigo de Barras já cadastrado");
-        }
+        produto.ifPresent(p -> {
+            if (!p.getId().equals(produtoId)) {
+                throw new InvalidBarcodeException("Codigo de Barras já cadastrado");
+            }
+        });
     }
 }

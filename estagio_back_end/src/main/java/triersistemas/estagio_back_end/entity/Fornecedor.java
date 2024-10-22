@@ -10,6 +10,7 @@ import triersistemas.estagio_back_end.dto.request.FornecedorRequestDto;
 import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -61,14 +62,14 @@ public class Fornecedor {
         this.filial = filial;
     }
 
-    public void alterarDados(FornecedorRequestDto dto, Filial filial) {
-        this.nomeFantasia = Objects.nonNull(dto.nomeFantasia())? dto.nomeFantasia() : this.nomeFantasia;
-        this.razaoSocial = Objects.nonNull(dto.razaoSocial())? dto.razaoSocial() : this.razaoSocial;
-        this.cnpj = Objects.nonNull(dto.cnpj())? dto.cnpj() : this.cnpj;
-        this.telefone = Objects.nonNull(dto.telefone())? dto.telefone() : this.telefone;
-        this.email = Objects.nonNull(dto.email())? dto.email() : this.email;
-        this.situacaoCadastro = Objects.nonNull(dto.situacaoCadastro())? dto.situacaoCadastro() : this.situacaoCadastro;
-        this.filial = Objects.nonNull(filial)? filial : this.filial;
+    public void alterarDados(FornecedorRequestDto dto, Optional<Filial> filial) {
+        Optional.ofNullable(dto.nomeFantasia()).ifPresent(this::setNomeFantasia);
+        Optional.ofNullable(dto.razaoSocial()).ifPresent(this::setRazaoSocial);
+        Optional.ofNullable(dto.cnpj()).ifPresent(this::setCnpj);
+        Optional.ofNullable(dto.telefone()).ifPresent(this::setTelefone);
+        Optional.ofNullable(dto.email()).ifPresent(this::setEmail);
+        Optional.ofNullable(dto.situacaoCadastro()).ifPresent(this::setSituacaoCadastro);
+        filial.ifPresent(this::setFilial);
     }
 
     public void alterarSituacao() {

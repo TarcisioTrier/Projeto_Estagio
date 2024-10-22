@@ -23,8 +23,8 @@ public class FilialController {
     }
 
     @PostMapping("/post")
-    public ResponseEntity<FilialResponseDto> postFilial(@Valid @RequestBody FilialRequestDto requestDto) {
-        return ResponseEntity.ok(filialService.addFilial(requestDto));
+    public ResponseEntity<FilialResponseDto> postFilial(@Valid @RequestBody FilialRequestDto filialDto) {
+        return ResponseEntity.ok(filialService.addFilial(filialDto));
     }
 
     @GetMapping("/get/{id}")
@@ -41,20 +41,25 @@ public class FilialController {
         Pageable pageable = PageRequest.of(page, size);
         return filialService.getFilialFilter(nome, cnpj, pageable);
     }
+
     @GetMapping("/getAllFilter")
     public List<FilialResponseDto> getFilialFilter(@RequestParam(required = false) String nome) {
         return filialService.getFilialFilter(nome);
     }
 
     @PutMapping("/update/{id}")
-    public ResponseEntity<FilialResponseDto> updateFilial(@PathVariable Long id, @Valid @RequestBody FilialRequestDto requestDto) {
-        return ResponseEntity.ok(filialService.updateFilial(id, requestDto));
+    public ResponseEntity<FilialResponseDto> updateFilial(@PathVariable Long id, @Valid @RequestBody FilialRequestDto filialDto) {
+        return ResponseEntity.ok(filialService.updateFilial(id, filialDto));
+    }
+
+    @DeleteMapping("/remove/{id}")
+    public ResponseEntity<FilialResponseDto> removeFilial(@PathVariable Long id) {
+        return ResponseEntity.ok(filialService.removeFilial(id));
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteFilial(@PathVariable Long id) {
-        filialService.deleteFilial(id);
-        return ResponseEntity.ok().body("filial deletada");
+    public ResponseEntity<FilialResponseDto> deleteFilial(@PathVariable Long id) {
+        return ResponseEntity.ok(filialService.deleteFilial(id));
     }
 
 

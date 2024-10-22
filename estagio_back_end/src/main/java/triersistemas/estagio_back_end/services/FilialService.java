@@ -15,7 +15,7 @@ public interface FilialService {
 
     FilialResponseDto updateFilial(Long id, FilialRequestDto requestDto);
 
-    void deleteFilial(Long id);
+    FilialResponseDto deleteFilial(Long id);
 
     FilialResponseDto getFilialById(Long id);
 
@@ -28,4 +28,6 @@ public interface FilialService {
     Filial findById(Long id);
 
     List<FilialResponseDto> getFilialFilter(String nome);
+
+    FilialResponseDto removeFilial(Long id);
 }

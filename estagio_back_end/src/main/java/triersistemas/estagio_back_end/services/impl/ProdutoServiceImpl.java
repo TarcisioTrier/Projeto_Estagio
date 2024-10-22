@@ -25,16 +25,12 @@ public class ProdutoServiceImpl implements ProdutoService {
 
     private final ProdutoRepository produtoRepository;
     private final GrupoProdutoService grupoProdutoService;
-    private final AtualizaPrecoService atualizaPrecoService;
     private final BarcodeValidator barcodeValidator;
 
     @Autowired
-    public ProdutoServiceImpl(ProdutoRepository produtoRepository,
-                              GrupoProdutoService grupoProdutoService,
-                              AtualizaPrecoService atualizaPrecoService, BarcodeValidator barcodeValidator) {
+    public ProdutoServiceImpl(ProdutoRepository produtoRepository, GrupoProdutoService grupoProdutoService, BarcodeValidator barcodeValidator) {
         this.produtoRepository = produtoRepository;
         this.grupoProdutoService = grupoProdutoService;
-        this.atualizaPrecoService = atualizaPrecoService;
         this.barcodeValidator = barcodeValidator;
     }
 
@@ -45,43 +41,39 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Override
-    public Page<ProdutoResponseDto> getProdutoFilter(String nome, TipoProduto tipo, Long grupoProdutoId, Pageable pageable) {
+    public Page<ProdutoResponseDto> getProdutoPaged(String nome, TipoProduto tipo, Long grupoProdutoId, Pageable pageable) {
         return produtoRepository.buscarProduto(nome, tipo, grupoProdutoId, pageable);
     }
 
     @Override
-    public ProdutoResponseDto addProduto(ProdutoRequestDto produtoRequestDto) {
-        var grupoProduto = grupoProdutoService.grupoProdutoById(produtoRequestDto.grupoProdutoId());
-        barcodeValidator.validateBarcodePost(produtoRequestDto.codigoBarras(), grupoProduto.getFilial().getId());
-        var produto = new Produto(produtoRequestDto, grupoProduto);
+    public ProdutoResponseDto addProduto(ProdutoRequestDto produtoDto) {
+        var grupoProduto = grupoProdutoService.grupoProdutoById(produtoDto.grupoProdutoId());
+        barcodeValidator.validateBarcodePost(produtoDto.codigoBarras(), grupoProduto.getFilial().getId());
+        var produto = new Produto(produtoDto, grupoProduto);
         var saved = produtoRepository.save(produto);
         return new ProdutoResponseDto(saved);
     }
 
     @Override
-    public ProdutoResponseDto updateProduto(Long id, ProdutoRequestDto produtoRequestDto) {
-        var grupoProduto = grupoProdutoService.buscaGrupoProdutoPorId(produtoRequestDto.grupoProdutoId());
+    public ProdutoResponseDto updateProduto(Long id, ProdutoRequestDto produtoDto) {
+        var grupoProduto = grupoProdutoService.buscaGrupoProdutoPorId(produtoDto.grupoProdutoId());
         var produto = produtoById(id);
-        produto.atualizaProduto(produtoRequestDto, grupoProduto);
+        produto.atualizaProduto(produtoDto, grupoProduto);
         var saved = produtoRepository.save(produto);
         return new ProdutoResponseDto(saved);
     }
 
     @Override
-    public ProdutoResponseDto deleteProdutoById(Long id) {
+    public ProdutoResponseDto deleteProduto(Long id) {
         var produto = produtoById(id);
         produtoRepository.delete(produto);
         return new ProdutoResponseDto(produto);
     }
 
     @Override
-    public ProdutoResponseDto alteraProdutoById(Long id, boolean ativar) {
+    public ProdutoResponseDto removeProduto(Long id) {
         var produto = produtoById(id);
-        if (ativar) {
-            produto.setSituacaoCadastro(SituacaoCadastro.ATIVO);
-        } else {
-            produto.setSituacaoCadastro(SituacaoCadastro.INATIVO);
-        }
+        produto.setSituacaoCadastro(SituacaoCadastro.INATIVO);
         var saved = produtoRepository.save(produto);
         return new ProdutoResponseDto(saved);
     }

@@ -11,12 +11,14 @@ import triersistemas.estagio_back_end.dto.request.ProdutoRequestDto;
 import triersistemas.estagio_back_end.enuns.Apresentacao;
 import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
 import triersistemas.estagio_back_end.enuns.TipoProduto;
+import triersistemas.estagio_back_end.exceptions.InvalidMargemException;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Spliterator;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -99,16 +101,16 @@ public class Produto {
     }
 
     public void atualizaProduto(ProdutoRequestDto dto, Optional<GrupoProduto> grupoProduto) {
-        this.codigoBarras = Optional.ofNullable(dto.codigoBarras()).orElse(this.codigoBarras);
-        this.nome = Optional.ofNullable(dto.nome()).orElse(this.nome);
-        this.descricao = Optional.ofNullable(dto.descricao()).orElse(this.descricao);
-        this.grupoProduto = grupoProduto.orElse(this.grupoProduto);
-        this.tipoProduto = Optional.ofNullable(dto.tipoProduto()).orElse(this.tipoProduto);
-        this.apresentacao = Optional.ofNullable(dto.apresentacao()).orElse(this.apresentacao);
-        this.margemLucro = Optional.ofNullable(dto.margemLucro()).orElse(this.margemLucro);
-        this.atualizaPreco = Optional.ofNullable(dto.atualizaPreco()).orElse(this.atualizaPreco);
-        this.valorProduto = Optional.ofNullable(dto.valorProduto()).orElse(this.valorProduto);
-        this.situacaoCadastro = Optional.ofNullable(dto.situacaoCadastro()).orElse(this.situacaoCadastro);
+        Optional.ofNullable(dto.codigoBarras()).ifPresent(this::setCodigoBarras);
+        Optional.ofNullable(dto.nome()).ifPresent(this::setNome);
+        Optional.ofNullable(dto.descricao()).ifPresent(this::setDescricao);
+        grupoProduto.ifPresent(this::setGrupoProduto);
+        Optional.ofNullable(dto.tipoProduto()).ifPresent(this::setTipoProduto);
+        Optional.ofNullable(dto.apresentacao()).ifPresent(this::setApresentacao);
+        Optional.ofNullable(dto.margemLucro()).ifPresent(this::setMargemLucro);
+        Optional.ofNullable(dto.atualizaPreco()).ifPresent(this::setAtualizaPreco);
+        Optional.ofNullable(dto.valorProduto()).ifPresent(this::setValorProduto);
+        Optional.ofNullable(dto.situacaoCadastro()).ifPresent(this::setSituacaoCadastro);
         calculateValorVenda();
     }
 
@@ -118,18 +120,20 @@ public class Produto {
                 .orElse(this.grupoProduto.getMargemLucro());
         margemLucroEfetiva = margemLucroEfetiva.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_EVEN);
 
-        this.valorVenda = this.valorProduto.divide(
-                BigDecimal.ONE.subtract(margemLucroEfetiva));
+        this.valorVenda = this.valorProduto.divide(BigDecimal.ONE.subtract(margemLucroEfetiva), 2, RoundingMode.HALF_EVEN);
         dataUltimaAtualizacaoPreco = LocalDate.now();
     }
 
-    public void calculateValorProduto(){
-        BigDecimal margemLucroEfetiva = Optional.ofNullable(this.margemLucro)
-                .orElse(this.grupoProduto.getMargemLucro());
-        margemLucroEfetiva = margemLucroEfetiva.divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_EVEN);
-
-        this.valorProduto = this.valorVenda.subtract(this.valorVenda.multiply(margemLucroEfetiva));
-        dataUltimaAtualizacaoPreco = LocalDate.now();
+    public void calculateMargemLucro(){
+        var margemLucro = this.valorVenda.subtract(this.valorProduto).divide(this.valorVenda, 2, RoundingMode.HALF_EVEN).multiply(BigDecimal.valueOf(100));
+        if (margemLucro.compareTo(BigDecimal.ZERO) < 0) {
+            throw new InvalidMargemException("Valor da Margem não pode ser negativo");
+        }
+        if (margemLucro.compareTo(BigDecimal.valueOf(99.99)) >= 0) {
+            throw new InvalidMargemException("Valor da Margem não pode ser maior que ou igual a 100%");
+        }else{
+            this.margemLucro = margemLucro;
+        }
     }
 
 }

@@ -205,7 +205,7 @@ class GrupoProdutoServiceImplTest {
             doReturn(Optional.of(grupoProduto)).when(grupoProdutoRepository).findById(id);
 
             //Act
-            grupoProdutoService.deleteGrupoProdutoById(id);
+            grupoProdutoService.deleteGrupoProduto(id);
 
             //Assert
             verify(grupoProdutoRepository, times(1)).delete(grupoProduto);
@@ -250,7 +250,7 @@ class GrupoProdutoServiceImplTest {
                     .thenReturn(expectedPage);
 
             // Act
-            Page<GrupoProdutoResponseDto> result = grupoProdutoService.getGrupoProdutoFilter(nomeGrupo, tipoGrupo, idFilial, pageable);
+            Page<GrupoProdutoResponseDto> result = grupoProdutoService.getGrupoProdutoPaged(nomeGrupo, tipoGrupo, idFilial, pageable);
 
             // Assert
             assertNotNull(result);
@@ -286,7 +286,7 @@ class GrupoProdutoServiceImplTest {
                     .thenReturn(expectedPage);
 
             // Act
-            Page<GrupoProdutoResponseDto> result = grupoProdutoService.getGrupoProdutoFilter(nomeGrupo, tipoGrupo, idFilial, pageable);
+            Page<GrupoProdutoResponseDto> result = grupoProdutoService.getGrupoProdutoPaged(nomeGrupo, tipoGrupo, idFilial, pageable);
 
             // Assert
             assertNotNull(result);
@@ -331,7 +331,7 @@ class GrupoProdutoServiceImplTest {
                     .thenReturn(expectedPage);
 
             // Act
-            Page<GrupoProdutoResponseDto> result = grupoProdutoService.getGrupoProdutoFilter(nomeGrupo, tipoGrupo, idFilial, pageable);
+            Page<GrupoProdutoResponseDto> result = grupoProdutoService.getGrupoProdutoPaged(nomeGrupo, tipoGrupo, idFilial, pageable);
 
             // Assert
             assertNotNull(result);
@@ -365,7 +365,7 @@ class GrupoProdutoServiceImplTest {
             doReturn(Optional.of(grupoProduto)).when(grupoProdutoRepository).findById(id);
 
             //Act
-            var result = grupoProdutoService.alteraGrupoProdutoById(id, true);
+            var result = grupoProdutoService.removeGrupoProduto(id);
 
             //Assert
             assertNotNull(result);
@@ -393,7 +393,7 @@ class GrupoProdutoServiceImplTest {
             doReturn(Optional.of(grupoProduto)).when(grupoProdutoRepository).findById(id);
 
             //Act
-            var result = grupoProdutoService.alteraGrupoProdutoById(id, false);
+            var result = grupoProdutoService.removeGrupoProduto(id);
 
             //Assert
             assertNotNull(result);

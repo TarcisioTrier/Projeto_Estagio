@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import triersistemas.estagio_back_end.dto.request.FilialRequestDto;
 import triersistemas.estagio_back_end.dto.response.FilialResponseDto;
 import triersistemas.estagio_back_end.entity.Filial;
+import triersistemas.estagio_back_end.enuns.SituacaoContrato;
 import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.repository.FilialRepository;
 import triersistemas.estagio_back_end.services.FilialService;
@@ -39,46 +40,35 @@ public class FilialServiceImpl implements FilialService {
     }
 
     @Override
-    public FilialResponseDto addFilial(FilialRequestDto requestDto) {
-        validateFilial(requestDto);
-        cnpjValidator.validateCnpjPostFilial(requestDto.cnpj());
-        var filial = new Filial(requestDto);
-        if (!Utils.isNull(requestDto.endereco())) {
-            var enderecoValido = enderecosValidator.validateEndereco(requestDto.endereco());
-            filial.setEndereco(enderecoValido);
-        }
-        filial = filialRepository.save(filial);
-        return new FilialResponseDto(filial);
+    public FilialResponseDto addFilial(FilialRequestDto filialDto) {
+        validateFilial(filialDto);
+        cnpjValidator.validateCnpjPostFilial(filialDto.cnpj());
+        var filial = new Filial(filialDto);
+        Optional.ofNullable(filialDto.endereco()).map(enderecosValidator::validateEndereco).ifPresent(filial::setEndereco);
+        var saved = filialRepository.save(filial);
+        return new FilialResponseDto(saved);
     }
 
     @Override
-    public FilialResponseDto updateFilial(Long id, FilialRequestDto requestDto) {
+    public FilialResponseDto updateFilial(Long id, FilialRequestDto filialDto) {
         Filial filial = findById(id);
+        Optional.ofNullable(filialDto).ifPresent(this::validateFilial);
+        Optional.ofNullable(filialDto.cnpj()).ifPresent(cnpj->{
+                    if(!cnpj.equals(filial.getCnpj()))
+                        cnpjValidator.validateCnpjUpdateFilial(cnpj, filial.getId());
+        });
+        Optional.ofNullable(filialDto.endereco()).map(enderecosValidator::validateEndereco).ifPresent(filial::setEndereco);
+        filial.alterarDados(filialDto);
+        var saved = filialRepository.save(filial);
 
-        if (!Utils.isNull(requestDto)) {
-            validateFilial(requestDto);
-        }
-
-        if (requestDto.cnpj() != null && !requestDto.cnpj().equals(filial.getCnpj())) {
-            cnpjValidator.validateCnpjUpdateFilial(requestDto.cnpj(), id);
-        }
-
-        if (requestDto.endereco() != null) {
-            var enderecoValido = enderecosValidator.validateEndereco(requestDto.endereco());
-            filial.setEndereco(enderecoValido);
-        }
-
-        filial.alterarDados(requestDto);
-
-        filial = filialRepository.save(filial);
-
-        return new FilialResponseDto(filial);
+        return new FilialResponseDto(saved);
     }
 
     @Override
-    public void deleteFilial(Long id) {
-        Filial filial = findById(id);
+    public FilialResponseDto deleteFilial(Long id) {
+        var filial = findById(id);
         filialRepository.delete(filial);
+        return new FilialResponseDto(filial);
     }
 
     @Override
@@ -111,6 +101,14 @@ public class FilialServiceImpl implements FilialService {
     @Override
     public List<FilialResponseDto> getFilialFilter(String nome) {
         return filialRepository.buscarFiliais(nome);
+    }
+
+    @Override
+    public FilialResponseDto removeFilial(Long id) {
+        var filial = findById(id);
+        filial.setSituacaoContrato(SituacaoContrato.INATIVO);
+        var saved = filialRepository.save(filial);
+        return new FilialResponseDto(saved);
     }
 
     private void validateFilial(FilialRequestDto requestDto) {
