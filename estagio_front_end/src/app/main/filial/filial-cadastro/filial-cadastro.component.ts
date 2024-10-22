@@ -24,7 +24,6 @@ import { debounce } from 'lodash';
   providers: [MessageService],
 })
 export class FilialCadastroComponent {
-
 telefone(): boolean {
   if(this.cadastroFilial.telefone.replace(/[_]/g, '').length < 15)
   return true;
@@ -93,12 +92,16 @@ telefone(): boolean {
         },
         error: (error) => {
           console.log(error);
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Erro',
+              detail: error.message,
+            });
+
         }
       });
     }else{
       const cnpjElement = document.getElementById('cnpj');
-      console.log("teste" + cnpjElement?.classList);
-      
       if(cnpjElement){
         if (cnpj.length > 0) {
           cnpjElement.classList.add('ng-invalid');
@@ -145,7 +148,6 @@ telefone(): boolean {
       label: status.replace(/_/g, ' '),
       value: index,
     }));
-  
   itemSelecionado: any;
   cadastroFilial: Filial = {
     nomeFantasia: '',

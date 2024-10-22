@@ -17,15 +17,12 @@
     "importHelpers": true,
     "target": "ES2022",
     "module": "ES2022",
-    "types": ["cypress", "node"],
     "useDefineForClassFields": false,
     "lib": [
-      "es5",
       "ES2022",
       "dom"
     ]
   },
-  "include": ["**/*.ts", "cypress/support/commands.js", "cypress/support/e2e.js"],
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
     "strictInjectionParameters": true,
