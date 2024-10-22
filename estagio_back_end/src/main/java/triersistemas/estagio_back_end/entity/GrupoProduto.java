@@ -70,12 +70,12 @@ public class GrupoProduto {
 
 
     public void alteraGrupoProduto(GrupoProdutoRequestDto grupoProdutoRequestDto, Optional<Filial> filial) {
-        this.nomeGrupo = Optional.ofNullable(grupoProdutoRequestDto.nomeGrupo()).orElse(this.nomeGrupo);
-        this.tipoGrupo = Optional.ofNullable(grupoProdutoRequestDto.tipoGrupo()).orElse(this.tipoGrupo);
-        this.margemLucro = Optional.ofNullable(grupoProdutoRequestDto.margemLucro()).orElse(this.margemLucro);
-        this.atualizaPreco = Optional.ofNullable(grupoProdutoRequestDto.atualizaPreco()).orElse(this.atualizaPreco);
-        this.situacaoCadastro = Optional.ofNullable(grupoProdutoRequestDto.situacaoCadastro()).orElse(this.situacaoCadastro);
-        this.filial = filial.orElse(this.filial);
+        Optional.ofNullable(grupoProdutoRequestDto.nomeGrupo()).ifPresent(this::setNomeGrupo);
+        Optional.ofNullable(grupoProdutoRequestDto.tipoGrupo()).ifPresent(this::setTipoGrupo);
+        Optional.ofNullable(grupoProdutoRequestDto.margemLucro()).ifPresent(this::setMargemLucro);
+        Optional.ofNullable(grupoProdutoRequestDto.atualizaPreco()).ifPresent(this::setAtualizaPreco);
+        Optional.ofNullable(grupoProdutoRequestDto.situacaoCadastro()).ifPresent(this::setSituacaoCadastro);
+        filial.ifPresent(this::setFilial);
         atualizarProdutos();
     }
 

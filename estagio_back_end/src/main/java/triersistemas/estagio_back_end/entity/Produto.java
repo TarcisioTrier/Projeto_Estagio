@@ -18,6 +18,7 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Spliterator;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -100,16 +101,16 @@ public class Produto {
     }
 
     public void atualizaProduto(ProdutoRequestDto dto, Optional<GrupoProduto> grupoProduto) {
-        this.codigoBarras = Optional.ofNullable(dto.codigoBarras()).orElse(this.codigoBarras);
-        this.nome = Optional.ofNullable(dto.nome()).orElse(this.nome);
-        this.descricao = Optional.ofNullable(dto.descricao()).orElse(this.descricao);
-        this.grupoProduto = grupoProduto.orElse(this.grupoProduto);
-        this.tipoProduto = Optional.ofNullable(dto.tipoProduto()).orElse(this.tipoProduto);
-        this.apresentacao = Optional.ofNullable(dto.apresentacao()).orElse(this.apresentacao);
-        this.margemLucro = Optional.ofNullable(dto.margemLucro()).orElse(this.margemLucro);
-        this.atualizaPreco = Optional.ofNullable(dto.atualizaPreco()).orElse(this.atualizaPreco);
-        this.valorProduto = Optional.ofNullable(dto.valorProduto()).orElse(this.valorProduto);
-        this.situacaoCadastro = Optional.ofNullable(dto.situacaoCadastro()).orElse(this.situacaoCadastro);
+        Optional.ofNullable(dto.codigoBarras()).ifPresent(this::setCodigoBarras);
+        Optional.ofNullable(dto.nome()).ifPresent(this::setNome);
+        Optional.ofNullable(dto.descricao()).ifPresent(this::setDescricao);
+        grupoProduto.ifPresent(this::setGrupoProduto);
+        Optional.ofNullable(dto.tipoProduto()).ifPresent(this::setTipoProduto);
+        Optional.ofNullable(dto.apresentacao()).ifPresent(this::setApresentacao);
+        Optional.ofNullable(dto.margemLucro()).ifPresent(this::setMargemLucro);
+        Optional.ofNullable(dto.atualizaPreco()).ifPresent(this::setAtualizaPreco);
+        Optional.ofNullable(dto.valorProduto()).ifPresent(this::setValorProduto);
+        Optional.ofNullable(dto.situacaoCadastro()).ifPresent(this::setSituacaoCadastro);
         calculateValorVenda();
     }
 
