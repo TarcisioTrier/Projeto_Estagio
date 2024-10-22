@@ -6,7 +6,7 @@ export default defineConfig({
     viewportHeight: 720,
     watchForFileChanges: false,
     specPattern: 'cypress/e2e/**/*.feature',
-    baseUrl: 'http://www.automationpractice.pl/',
+    baseUrl: 'http://localhost:4200/',
     setupNodeEvents(on, config) {
       const cucumber = require('cypress-cucumber-preprocessor').default
       on('file:preprocessor', cucumber())
