@@ -1,7 +1,7 @@
 export enum SituacaoContrato {
-  ATIVO ,
-  INATIVO ,
-  RESCINDIDO ,
+  ATIVO,
+  INATIVO,
+  RESCINDIDO,
   EM_IMPLEMENTACAO,
 }
 export enum Apresentacao {
@@ -45,4 +45,9 @@ export enum AtualizaPrecoEnum {
   VALOR_PRODUTO_ABSOLUTO,
   VALOR_VENDA_RELATIVO,
   VALOR_VENDA_ABSOLUTO,
+}
+
+export enum Theme {
+  LIGHT = 'theme-light.css',
+  DARK = 'theme-dark.css',
 }

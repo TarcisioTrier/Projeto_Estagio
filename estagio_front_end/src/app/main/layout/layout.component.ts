@@ -1,11 +1,10 @@
-import { HttpService } from '../../services/http/http.service';
-import { style } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
-import { MenuItem } from 'primeng/api';
-import { StylesService } from '../../services/styles.service';
-import { Filial } from '../../models/filial';
-import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { Router } from '@angular/router';
+import { MenuItem } from 'primeng/api';
+import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
+import { Filial } from '../../models/filial';
+import { HttpService } from '../../services/http/http.service';
+import { StylesService } from '../../services/styles.service';
 
 @Component({
   selector: 'app-layout',
@@ -20,17 +19,30 @@ export class LayoutComponent implements OnInit {
   expanded = false;
   visible = false;
   imagem = 'https://www.triersistemas.com.br/imagens/logo_topo.png';
-  saveFilial(filial: any) {
+  items: MenuItem[] = [];
+
+  constructor(
+    private styleService: StylesService,
+    private http: HttpService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.darkMode = this.styleService.isDarkMode;
+    const data = sessionStorage.getItem('filial');
+    this.localFilial = data ? JSON.parse(data) : undefined;
+    this.menuItem();
+  }
+
+  saveFilial(filial: Filial) {
     this.localFilial = filial;
     sessionStorage.setItem('filial', JSON.stringify(this.localFilial));
     this.menuItem();
-    this.selectedItem = undefined;
     this.visible = false;
+    this.selectedItem = undefined;
     this.router.navigate(['']);
   }
-  cancel() {
-    this.visible = false;
-  }
+
   filterItems(event: AutoCompleteCompleteEvent) {
     let query = event.query;
     this.http.getFilialFiltered(query).subscribe((filial) => {
@@ -38,6 +50,7 @@ export class LayoutComponent implements OnInit {
       console.log(this.filiaisFilter);
     });
   }
+
   quit() {
     sessionStorage.removeItem('filial');
     this.localFilial = undefined;
@@ -45,17 +58,6 @@ export class LayoutComponent implements OnInit {
     this.router.navigate(['/filial/cadastro']);
   }
 
-  showDialog() {
-    this.visible = true;
-  }
-  constructor(private styleService: StylesService, private http: HttpService, private router:Router) {}
-  ngOnInit(): void {
-    this.darkMode = this.styleService.isDarkMode;
-    const data = sessionStorage.getItem('filial');
-    this.localFilial = data ? JSON.parse(data) : undefined;
-    this.menuItem();
-
-  }
   hoverTest(event: Event, hover: boolean) {
     var local = event.target as HTMLElement;
 
@@ -65,9 +67,7 @@ export class LayoutComponent implements OnInit {
       local.style.color = 'var(--text-color-secundary)';
     }
   }
-  toggleMenu() {
-    this.expanded = !this.expanded;
-  }
+
   toggleMode() {
     this.styleService.toggleLightDark();
     this.darkMode = this.styleService.isDarkMode;
@@ -76,6 +76,14 @@ export class LayoutComponent implements OnInit {
     } else {
       document.body.classList.remove('dark');
     }
+  }
+
+  toggleMenu() {
+    this.expanded = !this.expanded;
+  }
+
+  showDialog() {
+    this.visible = true;
   }
 
   menuItem() {
@@ -88,25 +96,14 @@ export class LayoutComponent implements OnInit {
         },
       },
     ];
+
     if (!this.localFilial) {
       this.items.push({
         label: 'Filiais',
         routerLink: 'filial',
         items: [
-          {
-            label: 'Cadastro de Filiais',
-            routerLink: 'filial/cadastro',
-            command: () => {
-              this.toggleMenu();
-            },
-          },
-          {
-            label: 'Listagem de Filiais',
-            routerLink: 'filial/listagem',
-            command: () => {
-              this.toggleMenu();
-            },
-          },
+          this.createMenuItem('Cadastro de Filiais', 'filial/cadastro'),
+          this.createMenuItem('Listagem de Filiais', 'filial/listagem'),
         ],
       });
     } else {
@@ -114,64 +111,42 @@ export class LayoutComponent implements OnInit {
         label: 'Grupo de Produto',
         routerLink: 'grupo-de-produto',
         items: [
-          {
-            label: 'Cadastro de Grupo de Produto',
-            routerLink: 'grupo-de-produto/cadastro',
-            command: () => {
-              this.toggleMenu();
-            },
-          },
-          {
-            label: 'Listagem de Grupo de Produto',
-            routerLink: 'grupo-de-produto/listagem',
-            command: () => {
-              this.toggleMenu();
-            },
-          },
+          this.createMenuItem(
+            'Cadastro de grupo de produtos',
+            'grupo-de-produto/cadastro'
+          ),
+          this.createMenuItem(
+            'Listagem de grupo de produtos',
+            'grupo-de-produto/listagem'
+          ),
         ],
       });
+
       this.items.push({
         label: 'Fornecedor',
         routerLink: 'fornecedor',
         items: [
-          {
-            label: 'Cadastro de Fornecedor',
-            routerLink: 'fornecedor/cadastro',
-            command: () => {
-              this.toggleMenu();
-            },
-          },
-          {
-            label: 'Listagem de Fornecedor',
-            routerLink: 'fornecedor/listagem',
-            command: () => {
-              this.toggleMenu();
-            },
-          },
+          this.createMenuItem('Cadastro de fornecedor', 'fornecedor/cadastro'),
+          this.createMenuItem('Listagem de fornecedor', 'fornecedor/listagem'),
         ],
       });
+
       this.items.push({
         label: 'Produto',
         routerLink: 'produto',
         items: [
-          {
-            label: 'Cadastro de Produto',
-            routerLink: 'produto/cadastro',
-            command: () => {
-              this.toggleMenu();
-            },
-          },
-          {
-            label: 'Listagem de Produto',
-            routerLink: 'produto/listagem',
-            command: () => {
-              this.toggleMenu();
-            },
-          },
+          this.createMenuItem('Cadastro de Produto', 'produto/cadastro'),
+          this.createMenuItem('Listagem de Produto', 'produto/listagem'),
         ],
       });
     }
   }
 
-  items: MenuItem[] = [];
+  private createMenuItem(label: string, routerLink: string): MenuItem {
+    return {
+      label,
+      routerLink,
+      command: () => this.toggleMenu(),
+    };
+  }
 }

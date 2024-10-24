@@ -1,24 +1,40 @@
-
 import { DOCUMENT } from '@angular/common';
 import { inject, Injectable } from '@angular/core';
+import { Theme } from '../models/app-enums';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class StylesService{
+export class StylesService {
   isDarkMode = true;
   #document = inject(DOCUMENT);
-  constructor() {}
+
+  constructor() {
+    this.initializeTheme();
+  }
+
+  private initializeTheme() {
+    const linkElement = this.#document.getElementById(
+      'app-theme'
+    ) as HTMLLinkElement;
+    this.isDarkMode = linkElement.href.includes('dark');
+  }
+
   toggleLightDark() {
     const linkElement = this.#document.getElementById(
-      'app-theme',
+      'app-theme'
     ) as HTMLLinkElement;
-    if (linkElement.href.includes('light')) {
-      linkElement.href = 'theme-dark.css';
-      this.isDarkMode = true;
-    } else {
-      linkElement.href = 'theme-light.css';
+
+    if (this.isDarkMode) {
+      linkElement.href = Theme.LIGHT;
       this.isDarkMode = false;
+    } else {
+      linkElement.href = Theme.DARK;
+      this.isDarkMode = true;
     }
+  }
+
+  isDarkModeEnabled(): boolean {
+    return this.isDarkMode;
   }
 }
