@@ -1,6 +1,6 @@
 <div class="flex justify-content-center h-full flex-column">
   <div class="formgrid p-fluid grid mx-5 my-2">
-    <div class=" col-12 my-3 md:col-6">
+    <div class="col-12 my-3 md:col-6">
       <p-floatLabel>
         <input
           pInputText
@@ -8,6 +8,7 @@
           type="text"
           [(ngModel)]="fornecedor.nomeFantasia"
           [disabled]="fornecedor.disabled.nomeFantasia"
+          required
         />
         <label for="nomeFantasia">Nome Fantasia</label>
       </p-floatLabel>
@@ -20,6 +21,7 @@
           type="text"
           [(ngModel)]="fornecedor.razaoSocial"
           [disabled]="fornecedor.disabled.razaoSocial"
+          required
         />
         <label for="razaoSocial">Razão Social</label>
       </p-floatLabel>
@@ -31,19 +33,23 @@
           id="cnpj"
           [(ngModel)]="fornecedor.cnpj"
           (ngModelChange)="cnpj()"
+          required
         />
         <label for="cnpj">CNPJ</label>
       </p-floatLabel>
     </div>
+
     <div class="col-12 my-3 md:col-6">
       <p-floatLabel>
-        <p-inputMask *ngIf="telefone()"
+        <p-inputMask
+          *ngIf="isFoneValid()"
           mask="(99) 9999-99999"
           id="telefone"
           [autoClear]="false"
           [(ngModel)]="fornecedor.telefone"
         />
-        <p-inputMask *ngIf="!telefone()"
+        <p-inputMask
+          *ngIf="!isFoneValid()"
           mask="(99) 99999-9999"
           id="telefone"
           [autoClear]="false"
@@ -59,6 +65,7 @@
           id="email"
           [(ngModel)]="fornecedor.email"
           [disabled]="fornecedor.disabled.email"
+          required
         />
         <label for="email">Email</label>
       </p-floatLabel>
@@ -71,7 +78,6 @@
         optionLabel="label"
         [showClear]="true"
         placeholder="Situação do Contrato"
-
       >
         <ng-template pTemplate="selectedItem">
           <div style="width: 125px; height: fit-content">
@@ -86,14 +92,23 @@
       </p-dropdown>
     </div>
     <p-toast></p-toast>
-      <div class=" col my-3 sm:col md:col-6 lg:col-5 xl:col-4 ">
-        <p-button
-          label="Cadastrar"
-          icon="pi pi-check"
-          [loading]="loading"
-          [disabled]="!((fornecedor.nomeFantasia && fornecedor.razaoSocial && fornecedor.cnpj && fornecedor.telefone && fornecedor.email && situacaoCadastroSelecionado))"
-          (onClick)="load()"
-        />
-      </div>
+    <div class="col my-3 sm:col md:col-6 lg:col-5 xl:col-4">
+      <p-button
+        label="Cadastrar"
+        icon="pi pi-check"
+        [loading]="loading"
+        [disabled]="
+          !(
+            fornecedor.nomeFantasia &&
+            fornecedor.razaoSocial &&
+            fornecedor.cnpj &&
+            fornecedor.telefone &&
+            fornecedor.email &&
+            situacaoCadastroSelecionado
+          )
+        "
+        (onClick)="load()"
+      />
+    </div>
   </div>
 </div>

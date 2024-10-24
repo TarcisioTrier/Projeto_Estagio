@@ -22,7 +22,7 @@
             "name": "ao entrar no cadastro da filial",
             "result": {
               "status": "passed",
-              "duration": 1067000000
+              "duration": 2367000000
             }
           },
           {
@@ -32,7 +32,7 @@
             "name": "cadastra uma nova filial",
             "result": {
               "status": "passed",
-              "duration": 3606000000
+              "duration": 3872000000
             }
           },
           {
@@ -42,7 +42,7 @@
             "name": "valida o cadastro da filial",
             "result": {
               "status": "passed",
-              "duration": 275000000
+              "duration": 439000000
             }
           }
         ]
@@ -62,7 +62,7 @@
             "name": "ao entrar no cadastro da filial",
             "result": {
               "status": "passed",
-              "duration": 1032000000
+              "duration": 1140000000
             }
           },
           {
@@ -72,7 +72,7 @@
             "name": "tenta cadastrar uma nova filial com cnpj já cadastrado",
             "result": {
               "status": "passed",
-              "duration": 2565000000
+              "duration": 2362000000
             }
           },
           {
@@ -82,7 +82,7 @@
             "name": "lanca mensagem de erro CNPJ já cadastrado em outra empresa",
             "result": {
               "status": "passed",
-              "duration": 10000000
+              "duration": 8000000
             }
           }
         ]
@@ -102,7 +102,7 @@
             "name": "ao entrar no cadastro da filial",
             "result": {
               "status": "passed",
-              "duration": 969000000
+              "duration": 1140000000
             }
           },
           {
@@ -112,7 +112,7 @@
             "name": "tenta cadastrar uma nova filial com cnpj invalido",
             "result": {
               "status": "passed",
-              "duration": 2537000000
+              "duration": 2397000000
             }
           },
           {
@@ -122,7 +122,7 @@
             "name": "lança mensagem de erro de CNJP inválido",
             "result": {
               "status": "passed",
-              "duration": 9000000
+              "duration": 12000000
             }
           }
         ]
@@ -142,7 +142,7 @@
             "name": "ao entrar no cadastro da filial",
             "result": {
               "status": "passed",
-              "duration": 953000000
+              "duration": 1078000000
             }
           },
           {
@@ -152,7 +152,7 @@
             "name": "botao de cadatro desabilitado",
             "result": {
               "status": "passed",
-              "duration": 42000000
+              "duration": 54000000
             }
           }
         ]
@@ -172,7 +172,7 @@
             "name": "ao entrar em uma filial",
             "result": {
               "status": "passed",
-              "duration": 745000000
+              "duration": 1236000000
             }
           },
           {
@@ -182,7 +182,7 @@
             "name": "aparece a filial que entrou",
             "result": {
               "status": "passed",
-              "duration": 10000000
+              "duration": 12000000
             }
           }
         ]
@@ -202,7 +202,7 @@
             "name": "ao entrar em uma filial",
             "result": {
               "status": "passed",
-              "duration": 840000000
+              "duration": 870000000
             }
           },
           {
@@ -212,7 +212,7 @@
             "name": "clicar para sair",
             "result": {
               "status": "passed",
-              "duration": 253000000
+              "duration": 260000000
             }
           },
           {
@@ -222,7 +222,7 @@
             "name": "deve voltar para o cadastro",
             "result": {
               "status": "passed",
-              "duration": 5000000
+              "duration": 8000000
             }
           }
         ]
@@ -242,7 +242,7 @@
             "name": "ao entrar em uma filial",
             "result": {
               "status": "passed",
-              "duration": 811000000
+              "duration": 934000000
             }
           },
           {
@@ -252,7 +252,7 @@
             "name": "clica no menu de opcoes",
             "result": {
               "status": "passed",
-              "duration": 181000000
+              "duration": 200000000
             }
           },
           {
@@ -282,7 +282,7 @@
             "name": "entra na pagina inicial",
             "result": {
               "status": "passed",
-              "duration": 232000000
+              "duration": 284000000
             }
           },
           {
@@ -292,7 +292,7 @@
             "name": "tenta entrar em uma filial inexistente",
             "result": {
               "status": "passed",
-              "duration": 647000000
+              "duration": 642000000
             }
           },
           {
@@ -302,7 +302,7 @@
             "name": "deve retornar para a pagina inicial",
             "result": {
               "status": "passed",
-              "duration": 5000000
+              "duration": 9000000
             }
           }
         ]
