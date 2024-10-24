@@ -28,13 +28,16 @@ export class AtualizacaoPrecoComponent implements OnInit {
   totalGrupoProdutos!: number;
   grupoProduto!: GrupoProduto;
   produto!: Produto;
+tipoProdutoOptions: any[] = Object.keys(TipoProduto).filter((key) => isNaN(Number(key))).map((key) => {
+    return { label: key, value: key };
+  });
 
   loadProdutos(event: any) {
     console.log(event);
     Object.keys(event.filters).forEach((element: string) => {
       (this.produto as any)[element] = event.filters[element].value;
       if(event.filters[element].value === null || event.filters[element].value === undefined || event.filters[element].value === '') return;
-      this.produto.filter!.set(element, event.filters[element].matchMode);
+      this.produto.filter![element] = event.filters[element].matchMode;
     });
     this.produto.orderer = event.multiSortMeta;
     console.log(this.produto);

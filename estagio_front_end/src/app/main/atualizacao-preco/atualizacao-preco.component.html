@@ -19,7 +19,7 @@
           <tr>
             <th></th>
             <th><p-columnFilter
-              type="text"
+              type="numeric"
               field="id"
               placeholder="Buscar Por Id"
               ariaLabel="Filter Id"/></th>
@@ -29,12 +29,20 @@
               placeholder="Buscar por nome"
               ariaLabel="Filter Nome" /></th>
               <th>
-                <p-columnFilter
-                  type="text"
-                  field="tipoProduto"
-                  placeholder="Buscar por tipo"
-                  ariaLabel="Filter Tipo Produto"
-                />
+                <p-columnFilter field="tipoProduto" matchMode="equals" [showMenu]="false">
+                  <ng-template pTemplate="filter" let-value let-filter="filterCallback">
+                      <p-dropdown
+                          [ngModel]="value"
+                          [options]="tipoProdutoOptions"
+                          (onChange)="filter($event.value)"
+                          placeholder="Select One"
+                          [showClear]="true">
+                              <ng-template let-option pTemplate="item">
+                                  {{option.label}}
+                              </ng-template>
+                      </p-dropdown>
+                  </ng-template>
+              </p-columnFilter>
               </th>
               <th>
                 <p-columnFilter
@@ -46,7 +54,7 @@
               </th>
               <th>
                 <p-columnFilter
-                  type="text"
+                  type="numeric"
                   field="valorProduto"
                   placeholder="Buscar por valor"
                   ariaLabel="Filter Valor Produto"
@@ -54,7 +62,7 @@
               </th>
               <th>
                 <p-columnFilter
-                  type="text"
+                  type="numeric"
                   field="margemLucro"
                   placeholder="Buscar por margem de lucro"
                   ariaLabel="Filter Margem Lucro"
@@ -62,7 +70,7 @@
               </th>
               <th>
                 <p-columnFilter
-                  type="text"
+                  type="numeric"
                   field="valorVenda"
                   placeholder="Buscar por valor de venda"
                   ariaLabel="Filter Valor Venda"
@@ -70,7 +78,7 @@
               </th>
               <th>
                 <p-columnFilter
-                  type="text"
+                  type="boolean"
                   field="atualizaPreco"
                   placeholder="Buscar por atualização de preço"
                   ariaLabel="Filter Atualiza Preço"

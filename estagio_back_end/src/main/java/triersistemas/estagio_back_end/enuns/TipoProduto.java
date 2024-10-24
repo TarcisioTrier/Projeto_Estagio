@@ -14,6 +14,10 @@ public enum TipoProduto {
     OFICINAL,
     PERFUMARIA,
     REFERENCIA,
-    SIMILAR,
+    SIMILAR;
+    @Override
+    public String toString() {
+        return name().toLowerCase();
+    }
 
 }

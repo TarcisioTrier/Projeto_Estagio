@@ -4,6 +4,7 @@ import triersistemas.estagio_back_end.enuns.FornecedorOrderEnum;
 import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
 
 import java.util.List;
+import java.util.Map;
 
 public record FornecedorPagedRequestDto(
         String nomeFantasia,
@@ -13,7 +14,7 @@ public record FornecedorPagedRequestDto(
         String email,
         SituacaoCadastro situacaoCadastro,
         List<Orderer> orderer,
-        List<Filter> filter
+        Map<String, String>  filter
 
 ) {
 }

@@ -5,6 +5,7 @@ import triersistemas.estagio_back_end.enuns.FilialOrderEnum;
 import triersistemas.estagio_back_end.enuns.SituacaoContrato;
 
 import java.util.List;
+import java.util.Map;
 
 public record FilialPagedRequestDto(
         String nomeFantasia,
@@ -15,6 +16,6 @@ public record FilialPagedRequestDto(
         SituacaoContrato situacaoContrato,
         EnderecosDto endereco,
         List<Orderer> order,
-        List<Filter> filter
+        Map<String, String> filter
 ) {
 }

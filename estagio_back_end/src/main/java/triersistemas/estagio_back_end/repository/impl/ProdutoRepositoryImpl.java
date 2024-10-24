@@ -17,11 +17,13 @@ import triersistemas.estagio_back_end.dto.request.Orderer;
 import triersistemas.estagio_back_end.dto.request.ProdutoPagedRequestDto;
 import triersistemas.estagio_back_end.dto.response.ProdutoResponseDto;
 import triersistemas.estagio_back_end.entity.QProduto;
+import triersistemas.estagio_back_end.enuns.Apresentacao;
+import triersistemas.estagio_back_end.enuns.TipoProduto;
 import triersistemas.estagio_back_end.repository.ProdutoRepositoryCustom;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
@@ -35,9 +37,18 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
         List<OrderSpecifier<?>> sort = new ArrayList<>();
         Optional.of(filialId).ifPresent(id -> builder.and(produto.filial.id.eq(id)));
         Optional.ofNullable(pagedDto).ifPresent(dto -> {
-            Optional.ofNullable(dto.nome()).ifPresent(nome-> builder.and(mapperString(dto.filter().get("nome"), "nome", nome)));
-            Optional.ofNullable(dto.orderer()).ifPresent(orders ->{
-                        if(orders.size()>0){ orders.forEach(produtoOrd -> sort.add(createOrderSpecifier(produtoOrd)));}});
+            Optional.ofNullable(dto.nome()).ifPresent(nome -> builder.and(mapper(dto.filter().get("nome"), "nome", nome)));
+            Optional.ofNullable(dto.codigoBarras()).ifPresent(codigoBarras -> builder.and(mapper(dto.filter().get("codigoBarras"), "codigoBarras", codigoBarras)));
+            Optional.ofNullable(dto.descricao()).ifPresent(descricao -> builder.and(mapper(dto.filter().get("descricao"), "descricao", descricao)));
+            Optional.ofNullable(dto.tipoProduto()).ifPresent(tipoProduto -> builder.and(mapper("tipoProduto", tipoProduto)));
+            Optional.ofNullable(dto.apresentacao()).ifPresent(apresentacao -> builder.and(mapper("apresentacao", apresentacao)));
+            Optional.ofNullable(dto.margemLucro()).ifPresent(margemLucro -> builder.and(mapper(dto.filter().get("margemLucro"),"margemLucro", margemLucro)));
+            Optional.ofNullable(dto.atualizaPreco()).ifPresent(atualizaPreco -> builder.and(produto.atualizaPreco.eq(atualizaPreco)));
+            Optional.ofNullable(dto.orderer()).ifPresent(orders -> {
+                if (orders.size() > 0) {
+                    orders.forEach(produtoOrd -> sort.add(createOrderSpecifier(produtoOrd)));
+                }
+            });
 
         });
 
@@ -56,22 +67,43 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
         return new PageImpl<>(produtos, pageable, total);
     }
 
-    private Predicate mapperString(String matchMode, String item, String field) {
+    private Predicate mapper(String matchMode, String item, BigDecimal field) {
+        var path = Expressions.numberPath(BigDecimal.class, produto, item);
+        return path.eq(field);
+    }
+
+    private Predicate mapper(String item, Apresentacao field) {
+        var path = Expressions.enumPath(Apresentacao.class, produto, item);
+        return path.eq(field);
+    }
+
+    private Predicate mapper( String item, TipoProduto field) {
+        var path = Expressions.enumPath(TipoProduto.class, produto, item);
+        return path.eq(field);
+    }
+
+    private Predicate mapper(String matchMode, String item, String field) {
         var path = Expressions.stringPath(produto, item);
-        switch(matchMode){
+        switch(matchMode) {
             case "startsWith":
                 return path.startsWith(field);
-                break;
-            case:
+            case "contains":
+                return path.contains(field);
+            case "endsWith":
+                return path.endsWith(field);
+            case "notContains":
+                return path.contains(field).not();
+            case "notEquals":
+                return path.eq(field).not();
+            default:
+                return path.eq(field);
 
         }
     }
-
-
     private OrderSpecifier<?> createOrderSpecifier(Orderer order) {
-        if (order.getOrder()>0){
+        if (order.getOrder() > 0) {
             return new OrderSpecifier<>(Order.ASC, Expressions.stringPath(produto, order.getField()));
-        }else{
+        } else {
             return new OrderSpecifier<>(Order.DESC, Expressions.stringPath(produto, order.getField()));
         }
     }
