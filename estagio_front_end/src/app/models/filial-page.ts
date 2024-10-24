@@ -1,6 +1,6 @@
-export interface FilialPage{
-  page?: number ,
-   size?: number,
-    nome?: string,
-     cnpj?: string
+export interface FilialPage {
+  page?: number;
+  size?: number;
+  nome?: string;
+  cnpj?: string;
 }
