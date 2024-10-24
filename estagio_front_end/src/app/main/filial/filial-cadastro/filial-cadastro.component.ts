@@ -11,7 +11,7 @@ import {
   Cnpj,
   cnpjToEndereco,
   cnpjToFilial,
-  cpnjEnderecoDisabler,
+  cnpjEnderecoDisabler,
   validateCnpj,
 } from '../../../models/externalapi';
 import { MessageService } from 'primeng/api';
@@ -24,7 +24,7 @@ import { debounce } from 'lodash';
   providers: [MessageService],
 })
 export class FilialCadastroComponent {
-telefone(): boolean {
+isValidFone(): boolean {
   if(this.cadastroFilial.telefone.replace(/[_]/g, '').length < 15)
   return true;
   return false;
@@ -132,7 +132,7 @@ telefone(): boolean {
           cepToEndereco(obj, this.endereco);
         },
       });
-      cpnjEnderecoDisabler(cnpj, this.endereco);
+      cnpjEnderecoDisabler(cnpj, this.endereco);
     } else if (cep.length == 8) {
       this.http.viaCep(cep).subscribe({
         next: (obj: Cep) => {
