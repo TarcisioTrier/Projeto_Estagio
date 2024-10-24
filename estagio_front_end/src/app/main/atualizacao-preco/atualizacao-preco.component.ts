@@ -5,7 +5,7 @@ import { HttpService } from '../../services/http/http.service';
 import { Filial } from '../../models/filial';
 import { LazyLoadEvent, MessageService, SortEvent } from 'primeng/api';
 import { TableLazyLoadEvent } from 'primeng/table';
-import { Apresentacao, Order, TipoProduto } from '../../models/app-enums';
+import { Apresentacao, Filter, Order, TipoProduto } from '../../models/app-enums';
 import { PaginatorState } from 'primeng/paginator';
 
 @Component({
@@ -14,9 +14,6 @@ import { PaginatorState } from 'primeng/paginator';
   styleUrl: './atualizacao-preco.component.scss',
 })
 export class AtualizacaoPrecoComponent implements OnInit {
-  test() {
-    console.log(this.selectedProdutos);
-  }
   selectedProdutos!: Produto[];
   selectedGrupoProdutos!: GrupoProduto[];
   produtosOptions: any[] = [
@@ -34,8 +31,12 @@ export class AtualizacaoPrecoComponent implements OnInit {
 
   loadProdutos(event: any) {
     console.log(event);
-    this.produto.order = event.multiSortMeta;
-    console.log(this.produto);
+    let temp: Filter[] = [];
+    Object.keys(event.filters).forEach((element: any) => {
+      temp.push({field: element, value: event.filters[element].value, matchMode: event.filters[element].matchMode});
+    });
+    this.produto.filter = temp;
+    this.produto.orderer = event.multiSortMeta;
     const page = event.first! / event.rows!;
     this.rows = event.rows!;
     const pager = { page: page, size: this.rows };
@@ -49,11 +50,10 @@ export class AtualizacaoPrecoComponent implements OnInit {
       },
     });
   }
-  produtoChange(value: number) {
-    this.isProduto = value === 0;
-  }
+
   loadGrupoProdutos(event: any) {
     console.log(event);
+    this.grupoProduto.orderer = event.multiSortMeta;
     const page = event.first! / event.rows!;
     this.rows = event.rows!;
     const pager = { page: page, size: this.rows };
@@ -70,17 +70,13 @@ export class AtualizacaoPrecoComponent implements OnInit {
     });
   }
 
-  localFilial: () => number = () => {
-    const data = sessionStorage.getItem('filial');
-    const temp = data ? JSON.parse(data) : undefined;
-    return Number(temp.id);
-  };
-
   ngOnInit(): void {
+    const data = sessionStorage.getItem('filial');
+    const filial = data ? JSON.parse(data) : undefined;
     const pager = {};
-    this.grupoProduto = { filialId: this.localFilial() };
+    this.grupoProduto = { filialId: filial.id! };
     this.produto = {
-      filialId: this.localFilial(),
+      filialId: filial.id!,
       disabled: {
         nome: false,
         descricao: false,
@@ -98,7 +94,9 @@ export class AtualizacaoPrecoComponent implements OnInit {
         this.totalGrupoProdutos = data.totalElements;
       });
   }
-
+  produtoChange(value: number) {
+    this.isProduto = value === 0;
+  }
   constructor(
     private http: HttpService,
     private messageService: MessageService

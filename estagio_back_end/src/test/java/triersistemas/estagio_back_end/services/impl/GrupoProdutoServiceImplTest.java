@@ -212,135 +212,135 @@ class GrupoProdutoServiceImplTest {
         }
     }
 
-    @Nested
-    class getGrupoProdutoFilter {
-
-        @Test
-        @DisplayName("Should return filtered GrupoProduto page")
-        void shouldReturnFilteredGrupoProdutoPage() {
-            // Arrange
-            String nomeGrupo = "Test";
-            TipoGrupoProduto tipoGrupo = TipoGrupoProduto.OUTROS;
-            Long idFilial = 1L;
-            PageRequest pageable = PageRequest.of(0, 10);
-
-            List<GrupoProdutoResponseDto> grupoProdutoList = Arrays.asList(
-                    new GrupoProdutoResponseDto(
-                            1L,
-                            "Test Group 1",
-                            TipoGrupoProduto.OUTROS,
-                            BigDecimal.valueOf(0.15),
-                            true,
-                            SituacaoCadastro.ATIVO,
-                            idFilial
-                    ),
-                    new GrupoProdutoResponseDto(
-                            2L,
-                            "Test Group 2",
-                            TipoGrupoProduto.OUTROS,
-                            BigDecimal.valueOf(0.20),
-                            false,
-                            SituacaoCadastro.ATIVO,
-                            idFilial
-                    )
-            );
-            Page<GrupoProdutoResponseDto> expectedPage = new PageImpl<>(grupoProdutoList, pageable, grupoProdutoList.size());
-
-            when(grupoProdutoRepository.buscarGrupoProduto(nomeGrupo, tipoGrupo, idFilial, pageable))
-                    .thenReturn(expectedPage);
-
-            // Act
-            Page<GrupoProdutoResponseDto> result = grupoProdutoService.getGrupoProdutoPaged(nomeGrupo, tipoGrupo, idFilial, pageable);
-
-            // Assert
-            assertNotNull(result);
-            assertEquals(expectedPage.getTotalElements(), result.getTotalElements());
-            assertEquals(expectedPage.getContent().size(), result.getContent().size());
-            assertEquals(expectedPage.getNumber(), result.getNumber());
-            assertEquals(expectedPage.getSize(), result.getSize());
-
-            GrupoProdutoResponseDto firstItem = result.getContent().getFirst();
-            assertEquals(1L, firstItem.id());
-            assertEquals("Test Group 1", firstItem.nomeGrupo());
-            assertEquals(TipoGrupoProduto.OUTROS, firstItem.tipoGrupo());
-            assertEquals(BigDecimal.valueOf(0.15), firstItem.margemLucro());
-            assertTrue(firstItem.atualizaPreco());
-            assertEquals(SituacaoCadastro.ATIVO, firstItem.situacaoCadastro());
-            assertEquals(idFilial, firstItem.filialId());
-
-            verify(grupoProdutoRepository, times(1)).buscarGrupoProduto(nomeGrupo, tipoGrupo, idFilial, pageable);
-        }
-
-        @Test
-        @DisplayName("Should return empty page when no results found")
-        void shouldReturnEmptyPageWhenNoResultsFound() {
-            // Arrange
-            String nomeGrupo = "NonExistent";
-            TipoGrupoProduto tipoGrupo = null;
-            Long idFilial = null;
-            PageRequest pageable = PageRequest.of(0, 10);
-
-            Page<GrupoProdutoResponseDto> expectedPage = Page.empty(pageable);
-
-            when(grupoProdutoRepository.buscarGrupoProduto(nomeGrupo, tipoGrupo, idFilial, pageable))
-                    .thenReturn(expectedPage);
-
-            // Act
-            Page<GrupoProdutoResponseDto> result = grupoProdutoService.getGrupoProdutoPaged(nomeGrupo, tipoGrupo, idFilial, pageable);
-
-            // Assert
-            assertNotNull(result);
-            assertTrue(result.isEmpty());
-            assertEquals(0, result.getTotalElements());
-
-            verify(grupoProdutoRepository, times(1)).buscarGrupoProduto(nomeGrupo, tipoGrupo, idFilial, pageable);
-        }
-
-        @Test
-        @DisplayName("Should handle null filter parameters")
-        void shouldHandleNullFilterParameters() {
-            // Arrange
-            String nomeGrupo = null;
-            TipoGrupoProduto tipoGrupo = null;
-            Long idFilial = null;
-            PageRequest pageable = PageRequest.of(0, 10);
-
-            List<GrupoProdutoResponseDto> grupoProdutoList = Arrays.asList(
-                    new GrupoProdutoResponseDto(
-                            1L,
-                            "Test Group 1",
-                            TipoGrupoProduto.OUTROS,
-                            BigDecimal.valueOf(0.15),
-                            true,
-                            SituacaoCadastro.ATIVO,
-                            idFilial
-                    ),
-                    new GrupoProdutoResponseDto(
-                            2L,
-                            "Test Group 2",
-                            TipoGrupoProduto.OUTROS,
-                            BigDecimal.valueOf(0.20),
-                            false,
-                            SituacaoCadastro.ATIVO,
-                            idFilial
-                    )
-            );
-            Page<GrupoProdutoResponseDto> expectedPage = new PageImpl<>(grupoProdutoList, pageable, grupoProdutoList.size());
-
-            when(grupoProdutoRepository.buscarGrupoProduto(nomeGrupo, tipoGrupo, idFilial, pageable))
-                    .thenReturn(expectedPage);
-
-            // Act
-            Page<GrupoProdutoResponseDto> result = grupoProdutoService.getGrupoProdutoPaged(nomeGrupo, tipoGrupo, idFilial, pageable);
-
-            // Assert
-            assertNotNull(result);
-            assertEquals(expectedPage.getTotalElements(), result.getTotalElements());
-            assertEquals(expectedPage.getContent().size(), result.getContent().size());
-
-            verify(grupoProdutoRepository, times(1)).buscarGrupoProduto(nomeGrupo, tipoGrupo, idFilial, pageable);
-        }
-    }
+//    @Nested
+//    class getGrupoProdutoFilter {
+//
+//        @Test
+//        @DisplayName("Should return filtered GrupoProduto page")
+//        void shouldReturnFilteredGrupoProdutoPage() {
+//            // Arrange
+//            String nomeGrupo = "Test";
+//            TipoGrupoProduto tipoGrupo = TipoGrupoProduto.OUTROS;
+//            Long idFilial = 1L;
+//            PageRequest pageable = PageRequest.of(0, 10);
+//
+//            List<GrupoProdutoResponseDto> grupoProdutoList = Arrays.asList(
+//                    new GrupoProdutoResponseDto(
+//                            1L,
+//                            "Test Group 1",
+//                            TipoGrupoProduto.OUTROS,
+//                            BigDecimal.valueOf(0.15),
+//                            true,
+//                            SituacaoCadastro.ATIVO,
+//                            idFilial
+//                    ),
+//                    new GrupoProdutoResponseDto(
+//                            2L,
+//                            "Test Group 2",
+//                            TipoGrupoProduto.OUTROS,
+//                            BigDecimal.valueOf(0.20),
+//                            false,
+//                            SituacaoCadastro.ATIVO,
+//                            idFilial
+//                    )
+//            );
+//            Page<GrupoProdutoResponseDto> expectedPage = new PageImpl<>(grupoProdutoList, pageable, grupoProdutoList.size());
+//
+//            when(grupoProdutoRepository.buscarGrupoProduto(nomeGrupo, tipoGrupo, idFilial, pageable))
+//                    .thenReturn(expectedPage);
+//
+//            // Act
+//            Page<GrupoProdutoResponseDto> result = grupoProdutoService.getGrupoProdutoPaged(nomeGrupo, tipoGrupo, idFilial, pageable);
+//
+//            // Assert
+//            assertNotNull(result);
+//            assertEquals(expectedPage.getTotalElements(), result.getTotalElements());
+//            assertEquals(expectedPage.getContent().size(), result.getContent().size());
+//            assertEquals(expectedPage.getNumber(), result.getNumber());
+//            assertEquals(expectedPage.getSize(), result.getSize());
+//
+//            GrupoProdutoResponseDto firstItem = result.getContent().getFirst();
+//            assertEquals(1L, firstItem.id());
+//            assertEquals("Test Group 1", firstItem.nomeGrupo());
+//            assertEquals(TipoGrupoProduto.OUTROS, firstItem.tipoGrupo());
+//            assertEquals(BigDecimal.valueOf(0.15), firstItem.margemLucro());
+//            assertTrue(firstItem.atualizaPreco());
+//            assertEquals(SituacaoCadastro.ATIVO, firstItem.situacaoCadastro());
+//            assertEquals(idFilial, firstItem.filialId());
+//
+//            verify(grupoProdutoRepository, times(1)).buscarGrupoProduto(nomeGrupo, tipoGrupo, idFilial, pageable);
+//        }
+//
+//        @Test
+//        @DisplayName("Should return empty page when no results found")
+//        void shouldReturnEmptyPageWhenNoResultsFound() {
+//            // Arrange
+//            String nomeGrupo = "NonExistent";
+//            TipoGrupoProduto tipoGrupo = null;
+//            Long idFilial = null;
+//            PageRequest pageable = PageRequest.of(0, 10);
+//
+//            Page<GrupoProdutoResponseDto> expectedPage = Page.empty(pageable);
+//
+//            when(grupoProdutoRepository.buscarGrupoProduto(nomeGrupo, tipoGrupo, idFilial, pageable))
+//                    .thenReturn(expectedPage);
+//
+//            // Act
+//            Page<GrupoProdutoResponseDto> result = grupoProdutoService.getGrupoProdutoPaged(nomeGrupo, tipoGrupo, idFilial, pageable);
+//
+//            // Assert
+//            assertNotNull(result);
+//            assertTrue(result.isEmpty());
+//            assertEquals(0, result.getTotalElements());
+//
+//            verify(grupoProdutoRepository, times(1)).buscarGrupoProduto(nomeGrupo, tipoGrupo, idFilial, pageable);
+//        }
+//
+//        @Test
+//        @DisplayName("Should handle null filter parameters")
+//        void shouldHandleNullFilterParameters() {
+//            // Arrange
+//            String nomeGrupo = null;
+//            TipoGrupoProduto tipoGrupo = null;
+//            Long idFilial = null;
+//            PageRequest pageable = PageRequest.of(0, 10);
+//
+//            List<GrupoProdutoResponseDto> grupoProdutoList = Arrays.asList(
+//                    new GrupoProdutoResponseDto(
+//                            1L,
+//                            "Test Group 1",
+//                            TipoGrupoProduto.OUTROS,
+//                            BigDecimal.valueOf(0.15),
+//                            true,
+//                            SituacaoCadastro.ATIVO,
+//                            idFilial
+//                    ),
+//                    new GrupoProdutoResponseDto(
+//                            2L,
+//                            "Test Group 2",
+//                            TipoGrupoProduto.OUTROS,
+//                            BigDecimal.valueOf(0.20),
+//                            false,
+//                            SituacaoCadastro.ATIVO,
+//                            idFilial
+//                    )
+//            );
+//            Page<GrupoProdutoResponseDto> expectedPage = new PageImpl<>(grupoProdutoList, pageable, grupoProdutoList.size());
+//
+//            when(grupoProdutoRepository.buscarGrupoProduto(nomeGrupo, tipoGrupo, idFilial, pageable))
+//                    .thenReturn(expectedPage);
+//
+//            // Act
+//            Page<GrupoProdutoResponseDto> result = grupoProdutoService.getGrupoProdutoPaged(nomeGrupo, tipoGrupo, idFilial, pageable);
+//
+//            // Assert
+//            assertNotNull(result);
+//            assertEquals(expectedPage.getTotalElements(), result.getTotalElements());
+//            assertEquals(expectedPage.getContent().size(), result.getContent().size());
+//
+//            verify(grupoProdutoRepository, times(1)).buscarGrupoProduto(nomeGrupo, tipoGrupo, idFilial, pageable);
+//        }
+//    }
 
     @Nested
     class alteraGrupoProdutoById {

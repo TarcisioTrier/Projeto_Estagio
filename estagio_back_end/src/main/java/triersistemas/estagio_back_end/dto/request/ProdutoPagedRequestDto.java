@@ -19,7 +19,8 @@ public record ProdutoPagedRequestDto(
         BigDecimal valorVenda,
         LocalDate dataUltimaAtualizacaoPreco,
         SituacaoCadastro situacaoCadastro,
-        List<Orderer> orderer
+        List<Orderer> orderer,
+        List<Filter> filter
 
 ) {
 }

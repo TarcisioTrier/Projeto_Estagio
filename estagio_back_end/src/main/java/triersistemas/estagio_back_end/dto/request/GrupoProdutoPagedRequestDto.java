@@ -9,15 +9,11 @@ import java.util.List;
 
 public record GrupoProdutoPagedRequestDto(
         String nomeGrupo,
-
         TipoGrupoProduto tipoGrupo,
-
         BigDecimal margemLucro,
-
         Boolean atualizaPreco,
-
         SituacaoCadastro situacaoCadastro,
-
-        List<GrupoProdutoOrderEnum> order
+        List<Orderer> orderer,
+        List<Filter> filter
 ) {
 }

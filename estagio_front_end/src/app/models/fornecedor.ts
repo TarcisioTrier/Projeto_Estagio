@@ -1,4 +1,4 @@
-import { SituacaoContrato } from "./app-enums";
+import { Filter, Order, SituacaoContrato } from "./app-enums";
 
 export interface Fornecedor{
   id?: number,
@@ -9,6 +9,8 @@ export interface Fornecedor{
   email?: string,
   situacaoContrato?: SituacaoContrato,
   filialId?: number,
+  orderer?: Order[],
+  filter?: Filter[],
   disabled:{
     nomeFantasia: boolean,
     razaoSocial: boolean,

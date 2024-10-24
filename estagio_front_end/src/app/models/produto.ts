@@ -1,4 +1,4 @@
-import { Apresentacao, Order, SituacaoCadastro, TipoProduto } from "./app-enums";
+import { Apresentacao, Filter, Order, SituacaoCadastro, TipoProduto } from "./app-enums";
 import { GrupoProduto } from "./grupo-produto";
 
 export interface Produto{
@@ -17,7 +17,8 @@ export interface Produto{
   dataUltimaAtualizacao?: Date,
   filialId?: number,
   situacaoCadastro?: SituacaoCadastro,
-  order?: Order[],
+  orderer?: Order[],
+  filter?: Filter[],
   disabled: {
     nome: boolean,
     descricao : boolean

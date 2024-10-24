@@ -4,16 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import triersistemas.estagio_back_end.dto.AtualizaPrecoDto;
-import triersistemas.estagio_back_end.dto.request.ProdutoPagedRequestDto;
+import triersistemas.estagio_back_end.dto.request.PagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.ProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.ProdutoResponseDto;
 import triersistemas.estagio_back_end.entity.Produto;
 import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
-import triersistemas.estagio_back_end.enuns.TipoProduto;
 import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.repository.ProdutoRepository;
-import triersistemas.estagio_back_end.services.AtualizaPrecoService;
 import triersistemas.estagio_back_end.services.GrupoProdutoService;
 import triersistemas.estagio_back_end.services.ProdutoService;
 import triersistemas.estagio_back_end.validators.BarcodeValidator;
@@ -75,8 +72,8 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Override
-    public Page<ProdutoResponseDto> getProdutoPaged(ProdutoPagedRequestDto produtoPagedDto, Long filialId, Pageable pageable) {
-        return produtoRepository.buscarProduto(produtoPagedDto, filialId, pageable);
+    public Page<ProdutoResponseDto> getProdutoPaged(PagedRequestDto pagedDto, Long filialId, Pageable pageable) {
+        return produtoRepository.buscarProduto(pagedDto, filialId, pageable);
     }
 
     @Override

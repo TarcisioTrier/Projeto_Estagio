@@ -7,18 +7,13 @@ import java.util.List;
 
 public record FornecedorPagedRequestDto(
         String nomeFantasia,
-
         String razaoSocial,
-
         String cnpj,
-
         String telefone,
-
         String email,
-
         SituacaoCadastro situacaoCadastro,
-
-        List<FornecedorOrderEnum> order
+        List<Orderer> orderer,
+        List<Filter> filter
 
 ) {
 }

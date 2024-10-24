@@ -1,4 +1,4 @@
-import { SituacaoContrato } from "./app-enums"
+import { Filter, Order, SituacaoContrato } from "./app-enums"
 import { Fornecedor } from "./fornecedor";
 import { GrupoProduto } from "./grupo-produto";
 
@@ -13,6 +13,8 @@ export interface Filial{
   endereco?: Endereco,
   fornecedores?: Array<Fornecedor>,
   grupoProdutos?: Array<GrupoProduto>,
+  orderer?:Order[],
+  filter?: Filter[],
   disabled:{
     nomeFantasia: boolean,
     razaoSocial: boolean,
