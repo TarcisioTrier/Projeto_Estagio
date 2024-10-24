@@ -5,9 +5,11 @@ import triersistemas.estagio_back_end.enuns.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public record ProdutoPagedRequestDto(
 
+        Long id,
         String codigoBarras,
         String nome,
         String descricao,
@@ -20,7 +22,7 @@ public record ProdutoPagedRequestDto(
         LocalDate dataUltimaAtualizacaoPreco,
         SituacaoCadastro situacaoCadastro,
         List<Orderer> orderer,
-        List<Filter> filter
+        Map<String, String> filter
 
 ) {
 }

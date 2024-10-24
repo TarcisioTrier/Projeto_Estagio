@@ -18,7 +18,7 @@ export interface Produto{
   filialId?: number,
   situacaoCadastro?: SituacaoCadastro,
   orderer?: Order[],
-  filter?: Filter[],
+  filter?: Map<string,string>,
   disabled: {
     nome: boolean,
     descricao : boolean

@@ -3,7 +3,7 @@ package triersistemas.estagio_back_end.services;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import triersistemas.estagio_back_end.dto.request.PagedRequestDto;
+import triersistemas.estagio_back_end.dto.request.ProdutoPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.ProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.ProdutoResponseDto;
 
@@ -22,7 +22,7 @@ public interface ProdutoService {
 
     ProdutoResponseDto removeProduto(Long id);
 
-    Page<ProdutoResponseDto> getProdutoPaged(PagedRequestDto produtoPagedDto, Long filialId, Pageable pageable);
+    Page<ProdutoResponseDto> getProdutoPaged(ProdutoPagedRequestDto produtoPagedDto, Long filialId, Pageable pageable);
 
 
 //    List<ProdutoResponseDto> alteraMargemProduto(AtualizaPrecoDto atualizaProduto);

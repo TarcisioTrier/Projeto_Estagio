@@ -31,12 +31,13 @@ export class AtualizacaoPrecoComponent implements OnInit {
 
   loadProdutos(event: any) {
     console.log(event);
-    let temp: Filter[] = [];
-    Object.keys(event.filters).forEach((element: any) => {
-      temp.push({field: element, value: event.filters[element].value, matchMode: event.filters[element].matchMode});
+    Object.keys(event.filters).forEach((element: string) => {
+      (this.produto as any)[element] = event.filters[element].value;
+      if(event.filters[element].value === null || event.filters[element].value === undefined || event.filters[element].value === '') return;
+      this.produto.filter!.set(element, event.filters[element].matchMode);
     });
-    this.produto.filter = temp;
     this.produto.orderer = event.multiSortMeta;
+    console.log(this.produto);
     const page = event.first! / event.rows!;
     this.rows = event.rows!;
     const pager = { page: page, size: this.rows };
@@ -44,29 +45,24 @@ export class AtualizacaoPrecoComponent implements OnInit {
       next: (data) => {
         this.produtos = data.content;
         this.totalProdutos = data.totalElements;
-      },
-      error: (error) => {
-        console.error(error);
-      },
+      }
     });
   }
-
   loadGrupoProdutos(event: any) {
-    console.log(event);
+    let temp: Filter[] = [];
+    Object.keys(event.filters).forEach((element: any) => {
+      temp.push({field: element, matchMode: event.filters[element].matchMode});
+    });
+    this.grupoProduto.filter = temp;
     this.grupoProduto.orderer = event.multiSortMeta;
     const page = event.first! / event.rows!;
     this.rows = event.rows!;
     const pager = { page: page, size: this.rows };
-
-    console.log(pager);
     this.http.getGrupoProdutoPaged(pager, this.grupoProduto).subscribe({
       next: (data) => {
         this.grupoProdutos = data.content;
         this.totalGrupoProdutos = data.totalElements;
-      },
-      error: (error) => {
-        console.error(error);
-      },
+      }
     });
   }
 
@@ -77,6 +73,7 @@ export class AtualizacaoPrecoComponent implements OnInit {
     this.grupoProduto = { filialId: filial.id! };
     this.produto = {
       filialId: filial.id!,
+      filter: new Map<string, string>(),
       disabled: {
         nome: false,
         descricao: false,

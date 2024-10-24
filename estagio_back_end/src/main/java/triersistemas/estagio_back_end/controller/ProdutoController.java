@@ -36,9 +36,9 @@ public class ProdutoController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) Long filialId,
-            @RequestBody(required = false) PagedRequestDto PagedDto){
+            @RequestBody(required = false) ProdutoPagedRequestDto ProdutoPagedDto){
         Pageable pageable = PageRequest.of(page, size);
-        return produtoService.getProdutoPaged(PagedDto, filialId, pageable);
+        return produtoService.getProdutoPaged(ProdutoPagedDto, filialId, pageable);
     }
 
     @PostMapping("/post")

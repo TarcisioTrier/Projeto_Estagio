@@ -54,6 +54,5 @@ export interface Order {
 
 export interface Filter{
   field:string,
-  value:string,
   matchMode:string
 }

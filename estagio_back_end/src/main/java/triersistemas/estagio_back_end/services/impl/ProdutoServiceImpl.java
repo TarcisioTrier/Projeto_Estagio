@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import triersistemas.estagio_back_end.dto.request.PagedRequestDto;
+import triersistemas.estagio_back_end.dto.request.ProdutoPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.ProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.ProdutoResponseDto;
 import triersistemas.estagio_back_end.entity.Produto;
@@ -72,7 +72,7 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Override
-    public Page<ProdutoResponseDto> getProdutoPaged(PagedRequestDto pagedDto, Long filialId, Pageable pageable) {
+    public Page<ProdutoResponseDto> getProdutoPaged(ProdutoPagedRequestDto pagedDto, Long filialId, Pageable pageable) {
         return produtoRepository.buscarProduto(pagedDto, filialId, pageable);
     }
 

@@ -76,7 +76,7 @@ public class GrupoProdutoRepositoryImpl implements GrupoProdutoRepositoryCustom 
 
         return query.select(Projections.constructor(GrupoProdutoResponseDto.class, grupoProduto))
                 .from(grupoProduto)
-                .where(grupoProduto.atualizaPreco.eq(true))
+                .where(grupoProduto.atualizaPreco.isTrue())
                 .fetch();
     }
 
