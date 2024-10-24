@@ -1,4 +1,4 @@
-import { SituacaoCadastro, TipoGrupoProduto } from "./app-enums";
+import { GrupoProdutoOrderEnum, SituacaoCadastro, TipoGrupoProduto } from "./app-enums";
 import { Produto } from "./produto";
 
 export interface GrupoProduto{
@@ -9,5 +9,6 @@ export interface GrupoProduto{
   margemLucro?: number,
   atualizaPreco?: boolean,
   situacaoCadastro?: SituacaoCadastro,
-  produtos?: Array<Produto>
+  produtos?: Array<Produto>,
+  order?: GrupoProdutoOrderEnum
   }

@@ -4,7 +4,6 @@ import { Component, inject, OnInit } from '@angular/core';
 import { PrimeNGConfig } from 'primeng/api';
 import { DOCUMENT } from '@angular/common';
 import { HttpService } from './services/http/http.service';
-import { FilialPage } from './models/filial-page';
 
 @Component({
     selector: 'app-root',

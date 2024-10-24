@@ -5,18 +5,37 @@ import {
   HttpErrorResponse,
   HttpParams,
 } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import { Observable, take, throwError } from 'rxjs';
 import { Fornecedor } from '../../models/fornecedor';
-import { FilialPage } from '../../models/filial-page';
 import { catchError } from 'rxjs/operators';
 import { Cep, Cnpj } from '../../models/externalapi';
 import { Produto } from '../../models/produto';
+import { Pager } from '../../models/page';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HttpService {
+
+  getGrupoProdutoPaged(pager:Pager, grupoProduto:GrupoProduto): Observable<any> {
+
+
+    return this.http.put('grupos-produtos/getAllPaged', grupoProduto, { params: {
+      page: pager.page || '',
+      size: pager.size || '',
+      filialId: grupoProduto.filialId || ''
+    }}).pipe(take(1), catchError(this.handleError));
+  }
+  getProdutoPaged(pager:Pager, produto:Produto): Observable<any> {
+    const params = new HttpParams()
+    .set('page', pager.page || '')
+    .set('size', pager.size || '')
+    .set('filialId', produto.filialId || '')
+
+    return this.http.put('produto/getAllPaged', produto, { params }).pipe(take(1), catchError(this.handleError));
+  }
+
   postProduto(produto: Produto) {
     return this.http.post('produto/post', produto).pipe(take(1),
       catchError(this.handleError));
@@ -67,28 +86,28 @@ export class HttpService {
   getFilialbyId(id: number) {
     return this.http.get(`filiais/get/${id}`).pipe(take(1));
   }
-  getFilialPaged(filialPage?: FilialPage) {
-    if (filialPage) {
-      let par = new HttpParams();
-      if (filialPage.size) {
-        par = par.set('size', filialPage.size);
-      }
-      if (filialPage.page) {
-        par = par.set('page', filialPage.page);
-      }
-      if (filialPage.nome) {
-        par = par.set('nome', filialPage.nome);
-      }
-      if (filialPage.cnpj) {
-        par = par.set('cnpj', filialPage.cnpj);
-      }
-      return this.http
-        .get('filiais/getAllPaged', { params: par })
-        .pipe(take(1));
-    } else {
-      return this.http.get('filiais/getAllPaged').pipe(take(1));
-    }
-  }
+  // getFilialPaged(filialPage?: FilialPage) {
+  //   if (filialPage) {
+  //     let par = new HttpParams();
+  //     if (filialPage.size) {
+  //       par = par.set('size', filialPage.size);
+  //     }
+  //     if (filialPage.page) {
+  //       par = par.set('page', filialPage.page);
+  //     }
+  //     if (filialPage.nome) {
+  //       par = par.set('nome', filialPage.nome);
+  //     }
+  //     if (filialPage.cnpj) {
+  //       par = par.set('cnpj', filialPage.cnpj);
+  //     }
+  //     return this.http
+  //       .get('filiais/getAllPaged', { params: par })
+  //       .pipe(take(1));
+  //   } else {
+  //     return this.http.get('filiais/getAllPaged').pipe(take(1));
+  //   }
+  // }
   getFilialFiltered(nome: string) {
     return this.http
       .get(`filiais/getAllFilter`, { params: { nome: nome } })

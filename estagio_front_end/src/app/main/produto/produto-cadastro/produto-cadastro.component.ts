@@ -20,8 +20,8 @@ export class ProdutoCadastroComponent {
 
 apiBarcode = debounce(() => {
   const barcode = this.produto.codigoBarras;
-  if (verificaBarcode(barcode)) {
-  this.http.barcode(barcode).subscribe({
+  if (verificaBarcode(barcode!)) {
+  this.http.barcode(barcode!).subscribe({
     next: (retorno) => {
       console.log(retorno);
       this.produto.nome = retorno.description;

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import triersistemas.estagio_back_end.dto.AtualizaPrecoDto;
+import triersistemas.estagio_back_end.dto.request.ProdutoPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.ProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.ProdutoResponseDto;
 import triersistemas.estagio_back_end.entity.Produto;
@@ -41,11 +42,6 @@ public class ProdutoServiceImpl implements ProdutoService {
     }
 
     @Override
-    public Page<ProdutoResponseDto> getProdutoPaged(String nome, TipoProduto tipo, Long grupoProdutoId, Pageable pageable) {
-        return produtoRepository.buscarProduto(nome, tipo, grupoProdutoId, pageable);
-    }
-
-    @Override
     public ProdutoResponseDto addProduto(ProdutoRequestDto produtoDto) {
         var grupoProduto = grupoProdutoService.grupoProdutoById(produtoDto.grupoProdutoId());
         barcodeValidator.validateBarcodePost(produtoDto.codigoBarras(), grupoProduto.getFilial().getId());
@@ -76,6 +72,11 @@ public class ProdutoServiceImpl implements ProdutoService {
         produto.setSituacaoCadastro(SituacaoCadastro.INATIVO);
         var saved = produtoRepository.save(produto);
         return new ProdutoResponseDto(saved);
+    }
+
+    @Override
+    public Page<ProdutoResponseDto> getProdutoPaged(ProdutoPagedRequestDto produtoPagedDto, Long filialId, Pageable pageable) {
+        return produtoRepository.buscarProduto(produtoPagedDto, filialId, pageable);
     }
 
     @Override

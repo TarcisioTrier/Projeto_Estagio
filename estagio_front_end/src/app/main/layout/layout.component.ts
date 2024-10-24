@@ -170,6 +170,10 @@ export class LayoutComponent implements OnInit {
           },
         ],
       });
+      this.items.push({
+        label: 'Atualização de Preço',
+        routerLink: 'atualizacao-de-preco',
+      });
     }
   }
 

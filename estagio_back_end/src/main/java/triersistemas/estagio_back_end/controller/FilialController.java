@@ -31,7 +31,7 @@ public class FilialController {
     public ResponseEntity<FilialResponseDto> getFilialById(@PathVariable Long id) {
         return ResponseEntity.ok(filialService.getFilialById(id));
     }
-
+    //Todo: Atualizar metodo para receber SituaçãoCadastro
     @GetMapping("/getAllPaged")
     public Page<FilialResponseDto> getFilialFilter(
             @RequestParam(defaultValue = "0") int page,

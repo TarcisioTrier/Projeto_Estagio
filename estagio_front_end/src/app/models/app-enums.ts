@@ -46,3 +46,20 @@ export enum AtualizaPrecoEnum {
   VALOR_VENDA_RELATIVO,
   VALOR_VENDA_ABSOLUTO,
 }
+
+export interface Order {
+  field:string,
+  order:number
+}
+
+export enum GrupoProdutoOrderEnum {
+  NOME_GRUPO_DESC,
+  NOME_GRUPO_ASC,
+  SITUACAO_CADASTRO_DESC,
+  SITUACAO_CADASTRO_ASC,
+  TIPO_PRODUTO_DESC,
+  TIPO_PRODUTO_ASC,
+  MARGEM_LUCRO_DESC,
+  MARGEM_LUCRO_ASC,
+
+}

@@ -19,6 +19,9 @@ import { ToastModule } from 'primeng/toast';
 import { DialogModule } from 'primeng/dialog';
 import { CheckboxModule } from 'primeng/checkbox';
 import { TableModule } from 'primeng/table';
+import { PaginatorModule } from 'primeng/paginator';
+import { SelectButtonModule } from 'primeng/selectbutton';
+import { TabViewModule } from 'primeng/tabview';
 
 @NgModule({
   declarations: [],
@@ -43,7 +46,10 @@ import { TableModule } from 'primeng/table';
     ToastModule,
     DialogModule,
     CheckboxModule,
-    TableModule
+    TableModule,
+    PaginatorModule,
+    SelectButtonModule,
+    TabViewModule
   ],
   exports:[
     MenuModule,
@@ -65,7 +71,10 @@ import { TableModule } from 'primeng/table';
     ToastModule,
     DialogModule,
     CheckboxModule,
-    TableModule
+    TableModule,
+    PaginatorModule,
+    SelectButtonModule,
+    TabViewModule
   ]
 })
 export class PrimengModule { }

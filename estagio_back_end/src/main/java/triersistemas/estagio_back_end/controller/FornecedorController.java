@@ -31,7 +31,7 @@ public class FornecedorController {
     public ResponseEntity<FornecedorResponseDto> getFornecedorById(@PathVariable Long id) {
         return ResponseEntity.ok(fornecedorService.getFornecedorById(id));
     }
-
+    //Todo: Atualizar metodo para receber filialId
     @GetMapping("/getAllPaged")
     public Page<FornecedorResponseDto> getFornecedorPaged(
             @RequestParam(defaultValue = "0") int page,

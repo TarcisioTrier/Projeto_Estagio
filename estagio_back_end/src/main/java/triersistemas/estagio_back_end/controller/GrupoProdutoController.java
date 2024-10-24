@@ -27,7 +27,7 @@ public class GrupoProdutoController {
         return ResponseEntity.ok(grupoProdutoService.getGrupoProdutoById(id));
     }
 
-    @GetMapping("/getAllPaged")
+    @PutMapping("/getAllPaged")
     public Page<GrupoProdutoResponseDto> getGrupoProdutoPaged(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,

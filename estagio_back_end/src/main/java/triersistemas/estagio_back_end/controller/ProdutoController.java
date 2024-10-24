@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import triersistemas.estagio_back_end.dto.AtualizaPrecoDto;
+import triersistemas.estagio_back_end.dto.request.ProdutoPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.ProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.ProdutoResponseDto;
 import triersistemas.estagio_back_end.enuns.TipoProduto;
@@ -29,15 +30,14 @@ public class ProdutoController {
         return ResponseEntity.ok(produtoService.getProdutoById(id));
     }
 
-    @GetMapping("/getAllPaged")
+    @PutMapping("/getAllPaged")
     public Page<ProdutoResponseDto> getProdutoPaged(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(required = false) Long grupoProdutoId,
-            @RequestParam(required = false) String nome,
-            @RequestParam(required = false) TipoProduto tipo) {
+            @RequestParam(required = false) Long filialId,
+            @RequestBody(required = false)ProdutoPagedRequestDto produtoPagedDto){
         Pageable pageable = PageRequest.of(page, size);
-        return produtoService.getProdutoPaged(nome, tipo, grupoProdutoId, pageable);
+        return produtoService.getProdutoPaged(produtoPagedDto, filialId, pageable);
     }
 
     @PostMapping("/post")
