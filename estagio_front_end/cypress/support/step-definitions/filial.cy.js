@@ -1,3 +1,5 @@
+import { Given, When, Then } from 'cypress-cucumber-preprocessor/steps';
+
 Given("ao entrar no cadastro da filial", ()=>{
     cy.acessarCadastro()
 })

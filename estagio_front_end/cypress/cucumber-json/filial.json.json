@@ -1,0 +1,307 @@
+[
+  {
+    "keyword": "Funcionalidade",
+    "name": "Cadastro de Filial",
+    "line": 4,
+    "id": "cadastro-de-filial",
+    "tags": [],
+    "uri": "filial.cy.feature",
+    "elements": [
+      {
+        "id": "cadastro-de-filial;cadastrar-filial-com-sucesso",
+        "keyword": "Scenario",
+        "line": 6,
+        "name": "Cadastrar Filial com sucesso",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 7,
+            "name": "ao entrar no cadastro da filial",
+            "result": {
+              "status": "passed",
+              "duration": 1418000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Quando ",
+            "line": 8,
+            "name": "cadastra uma nova filial",
+            "result": {
+              "status": "passed",
+              "duration": 4531000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Então ",
+            "line": 9,
+            "name": "valida o cadastro da filial",
+            "result": {
+              "status": "passed",
+              "duration": 333000000
+            }
+          }
+        ]
+      },
+      {
+        "id": "cadastro-de-filial;erro-ao-cadastrar-filial-com-cnpj-já-cadastrado",
+        "keyword": "Scenario",
+        "line": 11,
+        "name": "Erro ao cadastrar Filial com cnpj já cadastrado",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 12,
+            "name": "ao entrar no cadastro da filial",
+            "result": {
+              "status": "passed",
+              "duration": 1245000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Quando ",
+            "line": 13,
+            "name": "tenta cadastrar uma nova filial com cnpj já cadastrado",
+            "result": {
+              "status": "passed",
+              "duration": 2265000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Então ",
+            "line": 14,
+            "name": "lanca mensagem de erro CNPJ já cadastrado em outra empresa",
+            "result": {
+              "status": "passed",
+              "duration": 6000000
+            }
+          }
+        ]
+      },
+      {
+        "id": "cadastro-de-filial;filial-não-pode-ser-cadastrada-com-cnpj-invalido",
+        "keyword": "Scenario",
+        "line": 16,
+        "name": "Filial não pode ser cadastrada com cnpj invalido",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 17,
+            "name": "ao entrar no cadastro da filial",
+            "result": {
+              "status": "passed",
+              "duration": 1148000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Quando ",
+            "line": 18,
+            "name": "tenta cadastrar uma nova filial com cnpj invalido",
+            "result": {
+              "status": "passed",
+              "duration": 2300000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Então ",
+            "line": 19,
+            "name": "lança mensagem de erro de CNJP inválido",
+            "result": {
+              "status": "passed",
+              "duration": 11000000
+            }
+          }
+        ]
+      },
+      {
+        "id": "cadastro-de-filial;filial-com-campos-vazios",
+        "keyword": "Scenario",
+        "line": 21,
+        "name": "Filial com campos vazios",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 22,
+            "name": "ao entrar no cadastro da filial",
+            "result": {
+              "status": "passed",
+              "duration": 1070000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Então ",
+            "line": 23,
+            "name": "botao de cadatro desabilitado",
+            "result": {
+              "status": "passed",
+              "duration": 47000000
+            }
+          }
+        ]
+      },
+      {
+        "id": "cadastro-de-filial;entrando-em-uma-filial",
+        "keyword": "Scenario",
+        "line": 25,
+        "name": "Entrando em uma filial",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 26,
+            "name": "ao entrar em uma filial",
+            "result": {
+              "status": "failed",
+              "error_message": "CypressError: Timed out retrying after 4000ms: `cy.scrollTo()` failed because this element is not scrollable:\n\n`<div ng-reflect-ng-class=\"[object Object]\" ng-reflect-ng-style=\"[object Object]\" class=\"p-autocomplete-panel p-component ng-tns-c3756965041-3\" style=\"max-height: 200px;\">...</div>`\n\nMake sure you're targeting the correct element or use `{ensureScrollable: false}` to disable the scrollable check.\n    at Object.isScrollable (http://localhost:4200/__cypress/runner/cypress_runner.js:144886:56)\n    at ensureScrollability (http://localhost:4200/__cypress/runner/cypress_runner.js:113790:28)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1807:23)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4315:29)\nFrom previous event:\n    at Promise.longStackTracesCaptureStackTrace [as _captureStackTrace] (http://localhost:4200/__cypress/runner/cypress_runner.js:3486:19)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4305:9)\n    at whenStable (http://localhost:4200/__cypress/runner/cypress_runner.js:143587:68)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:143528:14)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1807:23)\n    at Promise._settlePromiseFromHandler (http://localhost:4200/__cypress/runner/cypress_runner.js:1519:31)\n    at Promise._settlePromise (http://localhost:4200/__cypress/runner/cypress_runner.js:1576:18)\n    at Promise._settlePromise0 (http://localhost:4200/__cypress/runner/cypress_runner.js:1621:10)\n    at Promise._settlePromises (http://localhost:4200/__cypress/runner/cypress_runner.js:1701:18)\n    at Promise._fulfill (http://localhost:4200/__cypress/runner/cypress_runner.js:1645:18)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:5450:46)\nFrom Your Spec Code:\n    at Context.eval (cypress/support/page/filial.page.js:114:7)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Então ",
+            "line": 27,
+            "name": "aparece a filial que entrou",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      },
+      {
+        "id": "cadastro-de-filial;saindo-de-uma-filial",
+        "keyword": "Scenario",
+        "line": 29,
+        "name": "Saindo de uma filial",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 30,
+            "name": "ao entrar em uma filial",
+            "result": {
+              "status": "failed",
+              "error_message": "CypressError: Timed out retrying after 4000ms: `cy.scrollTo()` failed because this element is not scrollable:\n\n`<div ng-reflect-ng-class=\"[object Object]\" ng-reflect-ng-style=\"[object Object]\" class=\"p-autocomplete-panel p-component ng-tns-c3756965041-3\" style=\"max-height: 200px;\">...</div>`\n\nMake sure you're targeting the correct element or use `{ensureScrollable: false}` to disable the scrollable check.\n    at Object.isScrollable (http://localhost:4200/__cypress/runner/cypress_runner.js:144886:56)\n    at ensureScrollability (http://localhost:4200/__cypress/runner/cypress_runner.js:113790:28)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1807:23)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4315:29)\nFrom previous event:\n    at Promise.longStackTracesCaptureStackTrace [as _captureStackTrace] (http://localhost:4200/__cypress/runner/cypress_runner.js:3486:19)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4305:9)\n    at whenStable (http://localhost:4200/__cypress/runner/cypress_runner.js:143587:68)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:143528:14)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1807:23)\n    at Promise._settlePromiseFromHandler (http://localhost:4200/__cypress/runner/cypress_runner.js:1519:31)\n    at Promise._settlePromise (http://localhost:4200/__cypress/runner/cypress_runner.js:1576:18)\n    at Promise._settlePromise0 (http://localhost:4200/__cypress/runner/cypress_runner.js:1621:10)\n    at Promise._settlePromises (http://localhost:4200/__cypress/runner/cypress_runner.js:1701:18)\n    at Promise._fulfill (http://localhost:4200/__cypress/runner/cypress_runner.js:1645:18)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:5450:46)\nFrom Your Spec Code:\n    at Context.eval (cypress/support/page/filial.page.js:114:7)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Quando ",
+            "line": 31,
+            "name": "clicar para sair",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Então ",
+            "line": 32,
+            "name": "deve voltar para o cadastro",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      },
+      {
+        "id": "cadastro-de-filial;verificando-opcoes-de-filial",
+        "keyword": "Scenario",
+        "line": 34,
+        "name": "verificando opcoes de filial",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 35,
+            "name": "ao entrar em uma filial",
+            "result": {
+              "status": "failed",
+              "error_message": "CypressError: Timed out retrying after 4000ms: `cy.scrollTo()` failed because this element is not scrollable:\n\n`<div ng-reflect-ng-class=\"[object Object]\" ng-reflect-ng-style=\"[object Object]\" class=\"p-autocomplete-panel p-component ng-tns-c3756965041-3\" style=\"max-height: 200px;\">...</div>`\n\nMake sure you're targeting the correct element or use `{ensureScrollable: false}` to disable the scrollable check.\n    at Object.isScrollable (http://localhost:4200/__cypress/runner/cypress_runner.js:144886:56)\n    at ensureScrollability (http://localhost:4200/__cypress/runner/cypress_runner.js:113790:28)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1807:23)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4315:29)\nFrom previous event:\n    at Promise.longStackTracesCaptureStackTrace [as _captureStackTrace] (http://localhost:4200/__cypress/runner/cypress_runner.js:3486:19)\n    at Promise.attempt.Promise.try (http://localhost:4200/__cypress/runner/cypress_runner.js:4305:9)\n    at whenStable (http://localhost:4200/__cypress/runner/cypress_runner.js:143587:68)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:143528:14)\n    at tryCatcher (http://localhost:4200/__cypress/runner/cypress_runner.js:1807:23)\n    at Promise._settlePromiseFromHandler (http://localhost:4200/__cypress/runner/cypress_runner.js:1519:31)\n    at Promise._settlePromise (http://localhost:4200/__cypress/runner/cypress_runner.js:1576:18)\n    at Promise._settlePromise0 (http://localhost:4200/__cypress/runner/cypress_runner.js:1621:10)\n    at Promise._settlePromises (http://localhost:4200/__cypress/runner/cypress_runner.js:1701:18)\n    at Promise._fulfill (http://localhost:4200/__cypress/runner/cypress_runner.js:1645:18)\n    at <unknown> (http://localhost:4200/__cypress/runner/cypress_runner.js:5450:46)\nFrom Your Spec Code:\n    at Context.eval (cypress/support/page/filial.page.js:114:7)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Quando ",
+            "line": 36,
+            "name": "clica no menu de opcoes",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Então ",
+            "line": 37,
+            "name": "deve aparecer as opcoes",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      },
+      {
+        "id": "cadastro-de-filial;tentando-entrar-em-filial-inexistente",
+        "keyword": "Scenario",
+        "line": 39,
+        "name": "Tentando entrar em filial inexistente",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 40,
+            "name": "entra na pagina inicial",
+            "result": {
+              "status": "passed",
+              "duration": 313000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Quando ",
+            "line": 41,
+            "name": "tenta entrar em uma filial inexistente",
+            "result": {
+              "status": "passed",
+              "duration": 677000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Então ",
+            "line": 42,
+            "name": "deve retornar para a pagina inicial",
+            "result": {
+              "status": "failed",
+              "error_message": "AssertionError: Timed out retrying after 4000ms: Expected <p.ng-star-inserted> not to exist in the DOM, but it was continuously found.\n    at Context.eval (cypress/support/step-definitions/filial.cy.js:74:33)\n    at Context.resolveAndRunStepDefinition (node_modules/cypress-cucumber-preprocessor/lib/resolveStepDefinition.js:193:0)\n    at Context.eval (node_modules/cypress-cucumber-preprocessor/lib/createTestFromScenario.js:27:0)"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
