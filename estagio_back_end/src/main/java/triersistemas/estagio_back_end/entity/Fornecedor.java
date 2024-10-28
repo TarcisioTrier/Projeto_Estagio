@@ -15,7 +15,10 @@ import java.util.Optional;
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-@Entity(name = "Fornecedores")
+@Entity
+@Table(name = "Fornecedores",
+        uniqueConstraints = {@UniqueConstraint(columnNames = {"cnpj", "filial_id"})}
+)
 public class Fornecedor {
 
     @Id
@@ -32,7 +35,7 @@ public class Fornecedor {
     private String razaoSocial;
 
     @NotBlank(message = "CNPJ é obrigatório")
-    @Column(name = "cnpj", nullable = false, unique = true)
+    @Column(name = "cnpj", nullable = false)
     private String cnpj;
 
     @NotBlank(message = "Telefone é obrigatório")
