@@ -6,6 +6,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import triersistemas.estagio_back_end.dto.request.GrupoProdutoPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.GrupoProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.GrupoProdutoResponseDto;
 import triersistemas.estagio_back_end.enuns.TipoGrupoProduto;
@@ -27,15 +28,14 @@ public class GrupoProdutoController {
         return ResponseEntity.ok(grupoProdutoService.getGrupoProdutoById(id));
     }
 
-    @GetMapping("/getAllPaged")
+    @PutMapping("/getAllPaged")
     public Page<GrupoProdutoResponseDto> getGrupoProdutoPaged(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) Long filialId,
-            @RequestParam(required = false) String nomeGrupo,
-            @RequestParam(required = false) TipoGrupoProduto tipoGrupo) {
+            @RequestBody (required = false)GrupoProdutoPagedRequestDto grupoProdutoDto){
         Pageable pageable = PageRequest.of(page, size);
-        return grupoProdutoService.getGrupoProdutoPaged(nomeGrupo, tipoGrupo, filialId, pageable);
+        return grupoProdutoService.getGrupoProdutoPaged(grupoProdutoDto, filialId, pageable);
     }
 
     @GetMapping("/getAllFilter")

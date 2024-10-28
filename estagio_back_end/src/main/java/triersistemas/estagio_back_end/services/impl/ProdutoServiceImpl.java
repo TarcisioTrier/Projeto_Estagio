@@ -4,15 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import triersistemas.estagio_back_end.dto.AtualizaPrecoDto;
+import triersistemas.estagio_back_end.dto.request.ProdutoPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.ProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.ProdutoResponseDto;
 import triersistemas.estagio_back_end.entity.Produto;
 import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
-import triersistemas.estagio_back_end.enuns.TipoProduto;
 import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.repository.ProdutoRepository;
-import triersistemas.estagio_back_end.services.AtualizaPrecoService;
 import triersistemas.estagio_back_end.services.GrupoProdutoService;
 import triersistemas.estagio_back_end.services.ProdutoService;
 import triersistemas.estagio_back_end.validators.BarcodeValidator;
@@ -38,11 +36,6 @@ public class ProdutoServiceImpl implements ProdutoService {
     public ProdutoResponseDto getProdutoById(Long id) {
         var produto = produtoById(id);
         return new ProdutoResponseDto(produto);
-    }
-
-    @Override
-    public Page<ProdutoResponseDto> getProdutoPaged(String nome, TipoProduto tipo, Long grupoProdutoId, Pageable pageable) {
-        return produtoRepository.buscarProduto(nome, tipo, grupoProdutoId, pageable);
     }
 
     @Override
@@ -76,6 +69,11 @@ public class ProdutoServiceImpl implements ProdutoService {
         produto.setSituacaoCadastro(SituacaoCadastro.INATIVO);
         var saved = produtoRepository.save(produto);
         return new ProdutoResponseDto(saved);
+    }
+
+    @Override
+    public Page<ProdutoResponseDto> getProdutoPaged(ProdutoPagedRequestDto pagedDto, Long filialId, Pageable pageable) {
+        return produtoRepository.buscarProduto(pagedDto, filialId, pageable);
     }
 
     @Override

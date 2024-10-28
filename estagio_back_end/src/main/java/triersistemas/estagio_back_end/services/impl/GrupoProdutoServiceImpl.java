@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import triersistemas.estagio_back_end.dto.request.GrupoProdutoPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.GrupoProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.GrupoProdutoResponseDto;
 import triersistemas.estagio_back_end.entity.GrupoProduto;
@@ -63,8 +64,8 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
     }
 
     @Override
-    public Page<GrupoProdutoResponseDto> getGrupoProdutoPaged(String nomeGrupo, TipoGrupoProduto tipoGrupo, Long idFilial, Pageable pageable) {
-        return grupoProdutoRepository.buscarGrupoProduto(nomeGrupo,tipoGrupo,idFilial,pageable);
+    public Page<GrupoProdutoResponseDto> getGrupoProdutoPaged(GrupoProdutoPagedRequestDto grupoProdutoDto, Long idFilial, Pageable pageable) {
+        return grupoProdutoRepository.buscarGrupoProduto(grupoProdutoDto,idFilial,pageable);
     }
 
     @Override

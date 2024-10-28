@@ -1,4 +1,6 @@
-
+app-root *{
+  transition: all 0.1s ease-out;
+}
 html{
   height: 100%;
 }
@@ -8,4 +10,7 @@ body{
 .p-autocomplete-panel {
   position: fixed;
   z-index: 500;
+}
+p-columnfilterformelement {
+  width: 100%;
 }

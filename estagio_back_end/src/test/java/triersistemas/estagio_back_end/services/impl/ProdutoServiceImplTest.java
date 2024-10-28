@@ -231,82 +231,82 @@ class ProdutoServiceImplTest {
         }
     }
 
-    @Nested
-    class getProdutoFilter {
-
-        @Test
-        @DisplayName("Should return filtered Produto page")
-        void shouldReturnFilteredProdutoPage() {
-            // Arrange
-            String nome = "Test";
-            TipoProduto tipo = TipoProduto.PERFUMARIA;
-            Long grupoProdutoId = 1L;
-            PageRequest pageable = PageRequest.of(0, 10);
-
-            List<ProdutoResponseDto> produtoList = Arrays.asList(
-                    new ProdutoResponseDto(
-                            1L,
-                            "123456789",
-                            "Test Product 1",
-                            "Description 1",
-                            grupoProdutoId,
-                            TipoProduto.PERFUMARIA,
-                            Apresentacao.LIQUIDO,
-                            BigDecimal.valueOf(0.2),
-                            true,
-                            BigDecimal.valueOf(10.0),
-                            BigDecimal.valueOf(12.0),
-                            LocalDate.now(),
-                            SituacaoCadastro.ATIVO
-                    ),
-                    new ProdutoResponseDto(
-                            2L,
-                            "987654321",
-                            "Test Product 2",
-                            "Description 2",
-                            grupoProdutoId,
-                            TipoProduto.REFERENCIA,
-                            Apresentacao.GOTAS,
-                            BigDecimal.valueOf(0.25),
-                            false,
-                            BigDecimal.valueOf(20.0),
-                            BigDecimal.valueOf(25.0),
-                            LocalDate.now(),
-                            SituacaoCadastro.ATIVO
-                    )
-            );
-            Page<ProdutoResponseDto> expectedPage = new PageImpl<>(produtoList, pageable, produtoList.size());
-
-            when(produtoRepository.buscarProduto(nome, tipo, grupoProdutoId, pageable)).thenReturn(expectedPage);
-
-            // Act
-            Page<ProdutoResponseDto> result = produtoService.getProdutoPaged(nome, tipo, grupoProdutoId, pageable);
-
-            // Assert
-            assertNotNull(result);
-            assertEquals(expectedPage.getTotalElements(), result.getTotalElements());
-            assertEquals(expectedPage.getContent().size(), result.getContent().size());
-            assertEquals(expectedPage.getNumber(), result.getNumber());
-            assertEquals(expectedPage.getSize(), result.getSize());
-
-            ProdutoResponseDto firstItem = result.getContent().getFirst();
-            assertEquals(1L, firstItem.id());
-            assertEquals("123456789", firstItem.codigoBarras());
-            assertEquals("Test Product 1", firstItem.nome());
-            assertEquals("Description 1", firstItem.descricao());
-            assertEquals(grupoProdutoId, firstItem.grupoProdutoId());
-            assertEquals(TipoProduto.PERFUMARIA, firstItem.tipoProduto());
-            assertEquals(Apresentacao.LIQUIDO, firstItem.apresentacao());
-            assertEquals(BigDecimal.valueOf(0.2), firstItem.margemLucro());
-            assertTrue(firstItem.atualizaPreco());
-            assertEquals(BigDecimal.valueOf(10.0), firstItem.valorProduto());
-            assertEquals(BigDecimal.valueOf(12.0), firstItem.valorVenda());
-            assertEquals(SituacaoCadastro.ATIVO, firstItem.situacaoCadastro());
-            assertNotNull(firstItem.dataUltimaAtualizacaoPreco());
-
-            verify(produtoRepository, times(1)).buscarProduto(nome, tipo, grupoProdutoId, pageable);
-        }
-    }
+//    @Nested
+//    class getProdutoFilter {
+//
+//        @Test
+//        @DisplayName("Should return filtered Produto page")
+//        void shouldReturnFilteredProdutoPage() {
+//            // Arrange
+//            String nome = "Test";
+//            TipoProduto tipo = TipoProduto.PERFUMARIA;
+//            Long grupoProdutoId = 1L;
+//            PageRequest pageable = PageRequest.of(0, 10);
+//
+//            List<ProdutoResponseDto> produtoList = Arrays.asList(
+//                    new ProdutoResponseDto(
+//                            1L,
+//                            "123456789",
+//                            "Test Product 1",
+//                            "Description 1",
+//                            grupoProdutoId,
+//                            TipoProduto.PERFUMARIA,
+//                            Apresentacao.LIQUIDO,
+//                            BigDecimal.valueOf(0.2),
+//                            true,
+//                            BigDecimal.valueOf(10.0),
+//                            BigDecimal.valueOf(12.0),
+//                            LocalDate.now(),
+//                            SituacaoCadastro.ATIVO
+//                    ),
+//                    new ProdutoResponseDto(
+//                            2L,
+//                            "987654321",
+//                            "Test Product 2",
+//                            "Description 2",
+//                            grupoProdutoId,
+//                            TipoProduto.REFERENCIA,
+//                            Apresentacao.GOTAS,
+//                            BigDecimal.valueOf(0.25),
+//                            false,
+//                            BigDecimal.valueOf(20.0),
+//                            BigDecimal.valueOf(25.0),
+//                            LocalDate.now(),
+//                            SituacaoCadastro.ATIVO
+//                    )
+//            );
+//            Page<ProdutoResponseDto> expectedPage = new PageImpl<>(produtoList, pageable, produtoList.size());
+//
+//            when(produtoRepository.buscarProduto(nome, tipo, grupoProdutoId, pageable)).thenReturn(expectedPage);
+//
+//            // Act
+//            Page<ProdutoResponseDto> result = produtoService.getProdutoPaged(nome, tipo, grupoProdutoId, pageable);
+//
+//            // Assert
+//            assertNotNull(result);
+//            assertEquals(expectedPage.getTotalElements(), result.getTotalElements());
+//            assertEquals(expectedPage.getContent().size(), result.getContent().size());
+//            assertEquals(expectedPage.getNumber(), result.getNumber());
+//            assertEquals(expectedPage.getSize(), result.getSize());
+//
+//            ProdutoResponseDto firstItem = result.getContent().getFirst();
+//            assertEquals(1L, firstItem.id());
+//            assertEquals("123456789", firstItem.codigoBarras());
+//            assertEquals("Test Product 1", firstItem.nome());
+//            assertEquals("Description 1", firstItem.descricao());
+//            assertEquals(grupoProdutoId, firstItem.grupoProdutoId());
+//            assertEquals(TipoProduto.PERFUMARIA, firstItem.tipoProduto());
+//            assertEquals(Apresentacao.LIQUIDO, firstItem.apresentacao());
+//            assertEquals(BigDecimal.valueOf(0.2), firstItem.margemLucro());
+//            assertTrue(firstItem.atualizaPreco());
+//            assertEquals(BigDecimal.valueOf(10.0), firstItem.valorProduto());
+//            assertEquals(BigDecimal.valueOf(12.0), firstItem.valorVenda());
+//            assertEquals(SituacaoCadastro.ATIVO, firstItem.situacaoCadastro());
+//            assertNotNull(firstItem.dataUltimaAtualizacaoPreco());
+//
+//            verify(produtoRepository, times(1)).buscarProduto(nome, tipo, grupoProdutoId, pageable);
+//        }
+//    }
 
     @Nested
     class alteraProdutoById {

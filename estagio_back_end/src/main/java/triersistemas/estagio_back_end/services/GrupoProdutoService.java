@@ -2,6 +2,7 @@ package triersistemas.estagio_back_end.services;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import triersistemas.estagio_back_end.dto.request.GrupoProdutoPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.GrupoProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.GrupoProdutoResponseDto;
 import triersistemas.estagio_back_end.entity.GrupoProduto;
@@ -27,5 +28,5 @@ public interface GrupoProdutoService {
 
     List<GrupoProdutoResponseDto> getGrupoProdutoFilter(String nomeGrupo, Long filialId);
 
-    Page<GrupoProdutoResponseDto> getGrupoProdutoPaged(String nomeGrupo, TipoGrupoProduto tipoGrupo, Long filialId, Pageable pageable);
+    Page<GrupoProdutoResponseDto> getGrupoProdutoPaged(GrupoProdutoPagedRequestDto grupoProdutoDto, Long filialId, Pageable pageable);
 }

@@ -1,17 +1,15 @@
-import { Component } from '@angular/core';
-import { debounce } from 'lodash';
-import { MessageService } from 'primeng/api';
+import { Component, OnInit } from '@angular/core';
+import { Produto } from '../../../models/produto';
+import { GrupoProduto } from '../../../models/grupo-produto';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
+import { HttpService } from '../../../services/http/http.service';
+import { MessageService } from 'primeng/api';
 import {
   Apresentacao,
   SituacaoCadastro,
   TipoProduto,
 } from '../../../models/app-enums';
-import { verificaBarcode } from '../../../models/externalapi';
-import { GrupoProduto } from '../../../models/grupo-produto';
-import { Produto } from '../../../models/produto';
-import { HttpService } from '../../../services/http/http.service';
-import { MessageHandleService } from '../../../services/message-handle.service';
+import { debounce } from 'lodash';
 
 @Component({
   selector: 'app-produto-cadastro',
@@ -19,11 +17,135 @@ import { MessageHandleService } from '../../../services/message-handle.service';
   styleUrl: './produto-cadastro.component.scss',
 })
 export class ProdutoCadastroComponent {
-  loading = false;
 
-  tipoProdutoSelecionado: any;
+apiBarcode = debounce(() => {
+  const barcode = this.produto.codigoBarras;
+  if (verificaBarcode(barcode!)) {
+  this.http.barcode(barcode!).subscribe({
+    next: (retorno) => {
+      console.log(retorno);
+      this.produto.nome = retorno.description;
+      this.produto.descricao = retorno.ncm.full_description;
+      this.produto.disabled.nome = true;
+      this.produto.disabled.descricao = true;
+    },
+    error: (erro) => {
+      let error = erro.error;
+      if (typeof error === 'string') {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Erro',
+          detail: error,
+        });
+      } else {
+        let erros = Object.values(error);
+        for (let erro of erros) {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: String(erro),
+          });
+        }
+      }
+    },
+  });
+}else{
+  this.messageService.add({
+    severity: 'error',
+    summary: 'Erro',
+    detail: 'Código de Barras Inválido',
+  });
+}
+}, 300);
+  cadastroApresentacao(event: any) {
+    this.produto.apresentacao = event.value;
+  }
+  apresentacao = Object.keys(Apresentacao)
+    .filter((key) => isNaN(Number(key)))
+    .map((status, index) => ({
+      label: status.replace(/_/g, ' '),
+      value: index,
+    }));
+
   apresentacaoSelecionado: any;
+  cadastroTipoProduto(event: any) {
+    this.produto.tipoProduto = event.value;
+  }
+  tipoProduto = Object.keys(TipoProduto)
+    .filter((key) => isNaN(Number(key)))
+    .map((status, index) => ({
+      label: status.replace(/_/g, ' '),
+      value: index,
+    }));
+  tipoProdutoSelecionado: any;
+  filterItems(event: AutoCompleteCompleteEvent) {
+    const data = sessionStorage.getItem('filial');
+    const localFilial = data ? JSON.parse(data) : undefined;
+    this.http.getGrupoProdutoAllFilter(localFilial.id, event.query).subscribe({
+      next: (list) => {
+        this.grupoProdutoFilter = Object.values(list);
+      },
+      error: (erro) => {
+        let error = erro.error;
+        if (typeof error === 'string') {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: error,
+          });
+        } else {
+          let erros = Object.values(error);
+          for (let erro of erros) {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Erro',
+              detail: String(erro),
+            });
+          }
+        }
+      },
+    });
+  }
   grupoProdutoFilter: GrupoProduto[] = [];
+  load() {
+    this.loading = true;
+    if (this.produto.grupoProduto) {
+      this.produto.grupoProdutoId = this.produto.grupoProduto.id;
+    }
+    this.http.postProduto(this.produto).subscribe({
+      next: (retorno) => {
+        console.log(retorno);
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Successo',
+          detail: 'Cadastrado com Sucesso',
+        });
+      },
+      error: (erro) => {
+        let error = erro.error;
+        if (typeof error === 'string') {
+          this.messageService.add({
+            severity: 'error',
+            summary: 'Erro',
+            detail: error,
+          });
+        } else {
+          let erros = Object.values(error);
+          for (let erro of erros) {
+            this.messageService.add({
+              severity: 'error',
+              summary: 'Erro',
+              detail: String(erro),
+            });
+          }
+        }
+        this.loading = false;
+      },
+      complete: () => {
+        this.loading = false;
+      },
+    });
+  }
   produto: Produto = {
     codigoBarras: '',
     nome: '',
@@ -36,86 +158,26 @@ export class ProdutoCadastroComponent {
     atualizaPreco: false,
     situacaoCadastro: SituacaoCadastro.ATIVO,
   };
-
+  loading = false;
   constructor(
     private http: HttpService,
-    private messageService: MessageService,
-    private messageHandle: MessageHandleService
+    private messageService: MessageService
   ) {}
-
-  load() {
-    this.loading = true;
-    if (this.produto.grupoProduto) {
-      this.produto.grupoProdutoId = this.produto.grupoProduto.id;
-    }
-    this.http.postProduto(this.produto).subscribe({
-      next: (retorno) => {
-        this.messageHandle.showSuccessMessage(retorno);
-      },
-      error: (erro) => {
-        this.messageHandle.showErrorMessage(erro);
-      },
-    });
-    this.loading = false;
-  }
-
-  apiBarcode = debounce(() => {
-    const barcode = this.produto.codigoBarras;
-
-    if (verificaBarcode(barcode)) {
-      this.http.barcode(barcode).subscribe({
-        next: (retorno) => {
-          console.log(retorno);
-          this.produto.nome = retorno.description;
-          this.produto.descricao = retorno.ncm.full_description;
-          this.produto.disabled.nome = true;
-          this.produto.disabled.descricao = true;
-        },
-        error: (erro) => {
-          this.messageHandle.showErrorMessage(erro);
-        },
-      });
-    } else {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Erro',
-        detail: 'Código de Barras Inválido',
-      });
-    }
-  }, 300);
-
-  filterItems(event: AutoCompleteCompleteEvent) {
-    const data = sessionStorage.getItem('filial');
-    const localFilial = data ? JSON.parse(data) : undefined;
-    this.http.getGrupoProdutoAllFilter(localFilial.id, event.query).subscribe({
-      next: (list) => {
-        this.grupoProdutoFilter = Object.values(list);
-      },
-      error: (erro) => {
-        this.messageHandle.showErrorMessage(erro);
-      },
-    });
-  }
-
-  apresentacao = Object.keys(Apresentacao)
-    .filter((key) => isNaN(Number(key)))
-    .map((key) => ({
-      label: key.replace(/_/g, ' '),
-      value: Apresentacao[key as keyof typeof Apresentacao],
-    }));
-
-  tipoProduto = Object.keys(TipoProduto)
-    .filter((key) => isNaN(Number(key)))
-    .map((key) => ({
-      label: key.replace(/_/g, ' '),
-      value: TipoProduto[key as keyof typeof TipoProduto],
-    }));
-
-  cadastroApresentacao(event: any) {
-    this.produto.apresentacao = event.value;
-  }
-
-  cadastroTipoProduto(event: any) {
-    this.produto.tipoProduto = event.value;
-  }
 }
+function verificaBarcode(barcode: string): boolean {
+  if (!barcode) return false; // Barcode cannot be empty
+
+  const length = barcode.length;
+  if (length !== 12 && length !== 13) return false; // Barcode must be 12 or 13 digits
+
+  let sum = 0;
+  for (let i = 0; i < length - 1; i++) {
+    const digit = parseInt(barcode[i], 10);
+    if (isNaN(digit)) return false; // Invalid digit
+    sum += (i % 2 === 0) ? digit : digit * 3;
+  }
+
+  const checkDigit = (10 - (sum % 10)) % 10;
+  return checkDigit == parseInt(barcode[length - 1], 10); // Check digit verification
+}
+

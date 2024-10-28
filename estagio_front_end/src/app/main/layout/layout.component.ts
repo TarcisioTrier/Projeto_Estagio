@@ -139,6 +139,10 @@ export class LayoutComponent implements OnInit {
           this.createMenuItem('Listagem de Produto', 'produto/listagem'),
         ],
       });
+      this.items.push({
+        label: 'Atualização de Preço',
+        routerLink: 'atualizacao-de-preco',
+      });
     }
   }
 

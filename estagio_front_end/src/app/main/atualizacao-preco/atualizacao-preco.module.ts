@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import { AtualizacaoPrecoRoutingModule } from './atualizacao-preco-routing.module';
 import { AtualizacaoPrecoComponent } from './atualizacao-preco.component';
+import { PrimengModule } from '../../primeng/primeng.module';
 
 
 @NgModule({
@@ -11,7 +12,8 @@ import { AtualizacaoPrecoComponent } from './atualizacao-preco.component';
   ],
   imports: [
     CommonModule,
-    AtualizacaoPrecoRoutingModule
+    AtualizacaoPrecoRoutingModule,
+    PrimengModule
   ]
 })
 export class AtualizacaoPrecoModule { }
