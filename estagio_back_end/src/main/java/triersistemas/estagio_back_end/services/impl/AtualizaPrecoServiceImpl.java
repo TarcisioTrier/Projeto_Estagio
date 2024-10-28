@@ -8,7 +8,6 @@ import triersistemas.estagio_back_end.entity.Produto;
 import triersistemas.estagio_back_end.enuns.AtualizaPrecoEnum;
 import triersistemas.estagio_back_end.exceptions.InvalidMargemException;
 import triersistemas.estagio_back_end.exceptions.NotFoundException;
-import triersistemas.estagio_back_end.repository.FilialRepository;
 import triersistemas.estagio_back_end.repository.GrupoProdutoRepository;
 import triersistemas.estagio_back_end.repository.ProdutoRepository;
 import triersistemas.estagio_back_end.services.AtualizaPrecoService;
@@ -22,20 +21,17 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
 
     private final ProdutoRepository produtoRepository;
     private final GrupoProdutoRepository grupoProdutoRepository;
-    private final FilialRepository filialRepository;
 
 
-    public AtualizaPrecoServiceImpl(ProdutoRepository produtoRepository, GrupoProdutoRepository grupoProdutoRepository, FilialRepository filialRepository) {
+    public AtualizaPrecoServiceImpl(ProdutoRepository produtoRepository, GrupoProdutoRepository grupoProdutoRepository) {
         this.produtoRepository = produtoRepository;
         this.grupoProdutoRepository = grupoProdutoRepository;
-        this.filialRepository = filialRepository;
     }
 
     @Override
     public List<?> atualizaPreco(AtualizaPrecoDto atualizaPrecoDto) {
-        var filial = filialRepository.findById(atualizaPrecoDto.filialId()).orElseThrow(() -> new NotFoundException("Filial não encontrada"));
-        var grupoProdutos = filial.getGrupoProdutos();
-        var produtos = getProdutos(grupoProdutos);
+        var grupoProdutos = grupoProdutoRepository.buscarGrupoProduto(atualizaPrecoDto.grupoProdutoFilter(), atualizaPrecoDto.filialId());
+        var produtos = produtoRepository.buscarProduto(atualizaPrecoDto.produtoFilter(), atualizaPrecoDto.filialId());
         if (!atualizaPrecoDto.all()) {
             if (atualizaPrecoDto.isProduto()) {
                 produtos = produtos.stream().filter(produto -> atualizaPrecoDto.produtoId().contains(produto.getId())).toList();

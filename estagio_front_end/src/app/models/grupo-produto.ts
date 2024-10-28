@@ -1,16 +1,16 @@
-import { Filter, Order, SituacaoCadastro, TipoGrupoProduto } from "./app-enums";
+import { Filter, Order, SituacaoCadastro, TipoGrupo } from "./app-enums";
 import { Produto } from "./produto";
 
 export interface GrupoProduto{
   id?: number,
   nomeGrupo?: string,
   filialId?: number,
-  tipoGrupo?: TipoGrupoProduto,
+  tipoGrupo?: TipoGrupo,
   margemLucro?: number,
   atualizaPreco?: boolean,
   situacaoCadastro?: SituacaoCadastro,
   produtos?: Array<Produto>,
   orderer?: Order[],
-  filter?: Filter[]
+  filter?: any
 
   }

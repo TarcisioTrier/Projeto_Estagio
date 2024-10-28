@@ -12,15 +12,20 @@ import { catchError } from 'rxjs/operators';
 import { Cep, Cnpj } from '../../models/externalapi';
 import { Produto } from '../../models/produto';
 import { Pager } from '../../models/page';
+import { AtualizaPreco } from '../../models/atualizapreco';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HttpService {
 
+  putAtualizacaoPreco(atualizacao: AtualizaPreco) {
+    return this.http.put('atualiza/put', atualizacao).pipe(take(1),
+      catchError(this.handleError));
+  }
+
+
   getGrupoProdutoPaged(pager:Pager, grupoProduto:GrupoProduto): Observable<any> {
-
-
     return this.http.put('grupos-produtos/getAllPaged', grupoProduto, { params: {
       page: pager.page || '',
       size: pager.size || '',

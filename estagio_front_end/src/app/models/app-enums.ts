@@ -1,7 +1,7 @@
 export enum SituacaoContrato {
-  ATIVO ,
-  INATIVO ,
-  RESCINDIDO ,
+  ATIVO,
+  INATIVO,
+  RESCINDIDO,
   EM_IMPLEMENTACAO,
 }
 export enum Apresentacao {
@@ -16,7 +16,7 @@ export enum SituacaoCadastro {
   ATIVO,
   INATIVO,
 }
-export enum TipoGrupoProduto {
+export enum TipoGrupo {
   MEDICAMENTO,
   PERFUMARIA,
   BEBIDA,
@@ -39,20 +39,25 @@ export enum TipoProduto {
 }
 
 export enum AtualizaPrecoEnum {
-  MARGEM_RELATIVA,
-  MARGEM_ABSOLUTA,
-  VALOR_PRODUTO_RELATIVO,
-  VALOR_PRODUTO_ABSOLUTO,
-  VALOR_VENDA_RELATIVO,
-  VALOR_VENDA_ABSOLUTO,
+  MARGEM,
+  VALOR_PRODUTO,
+  VALOR_VENDA,
 }
 
 export interface Order {
-  field:string,
-  order:number
+  field: string;
+  order: number;
 }
 
-export interface Filter{
-  field:string,
-  matchMode:string
+export interface Filter {
+  field: string;
+  matchMode: string;
+}
+export function enumToArray(enumme: any): any[] {
+  return Object.keys(enumme)
+    .filter((key) => isNaN(Number(key)))
+    .map((status, index) => ({
+      label: status.replace(/_/g, ' '),
+      value: index,
+    }));
 }

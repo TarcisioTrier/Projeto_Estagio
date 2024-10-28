@@ -6,15 +6,10 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import triersistemas.estagio_back_end.dto.AtualizaPrecoDto;
-import triersistemas.estagio_back_end.dto.request.PagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.ProdutoPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.ProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.ProdutoResponseDto;
-import triersistemas.estagio_back_end.enuns.TipoProduto;
 import triersistemas.estagio_back_end.services.ProdutoService;
-
-import java.util.List;
 
 
 @RestController

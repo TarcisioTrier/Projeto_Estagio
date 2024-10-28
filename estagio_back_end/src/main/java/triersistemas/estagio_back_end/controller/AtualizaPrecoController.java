@@ -17,7 +17,7 @@ public class AtualizaPrecoController {
         this.service = service;
     }
 
-    @PutMapping("/post")
+    @PutMapping("/put")
     public ResponseEntity<?> AtualizaPreco(@RequestBody AtualizaPrecoDto dto) {
         return ResponseEntity.ok(service.atualizaPreco(dto));
     }

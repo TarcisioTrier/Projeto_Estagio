@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { GrupoProduto } from '../../../models/grupo-produto';
-import { SituacaoCadastro, TipoGrupoProduto } from '../../../models/app-enums';
+import { SituacaoCadastro, TipoGrupo } from '../../../models/app-enums';
 import { HttpService } from '../../../services/http/http.service';
 import { MessageService } from 'primeng/api';
 
@@ -63,7 +63,7 @@ cadastroTipoGrupo(event: any) {
     atualizaPreco: false,
     situacaoCadastro: SituacaoCadastro.ATIVO
   }
-tipoGrupoProduto = Object.keys(TipoGrupoProduto)
+tipoGrupoProduto = Object.keys(TipoGrupo)
 .filter((key) => isNaN(Number(key)))
 .map((status, index) => ({
   label: status.replace(/_/g, ' '),

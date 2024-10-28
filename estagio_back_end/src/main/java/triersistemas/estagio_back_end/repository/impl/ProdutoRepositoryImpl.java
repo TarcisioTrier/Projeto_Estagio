@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import triersistemas.estagio_back_end.dto.request.Orderer;
 import triersistemas.estagio_back_end.dto.request.ProdutoPagedRequestDto;
 import triersistemas.estagio_back_end.dto.response.ProdutoResponseDto;
+import triersistemas.estagio_back_end.entity.Produto;
 import triersistemas.estagio_back_end.entity.QProduto;
 import triersistemas.estagio_back_end.enuns.Apresentacao;
 import triersistemas.estagio_back_end.enuns.TipoProduto;
@@ -32,6 +33,27 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
     final QProduto produto = QProduto.produto;
 
     @Override
+    public List<Produto> buscarProduto(ProdutoPagedRequestDto pagedDto, Long filialId) {
+        BooleanBuilder builder = new BooleanBuilder();
+        Optional.of(filialId).ifPresent(id -> builder.and(produto.filial.id.eq(id)));
+        Optional.ofNullable(pagedDto).ifPresent(dto -> {
+            Optional.ofNullable(dto.nome()).ifPresent(nome -> builder.and(mapper(dto.filter().get("nome"), "nome", nome)));
+            Optional.ofNullable(dto.codigoBarras()).ifPresent(codigoBarras -> builder.and(mapper(dto.filter().get("codigoBarras"), "codigoBarras", codigoBarras)));
+            Optional.ofNullable(dto.descricao()).ifPresent(descricao -> builder.and(mapper(dto.filter().get("descricao"), "descricao", descricao)));
+            Optional.ofNullable(dto.tipoProduto()).ifPresent(tipoProduto -> builder.and(mapper("tipoProduto", tipoProduto)));
+            Optional.ofNullable(dto.apresentacao()).ifPresent(apresentacao -> builder.and(mapper("apresentacao", apresentacao)));
+            Optional.ofNullable(dto.margemLucro()).ifPresent(margemLucro -> builder.and(mapper(dto.filter().get("margemLucro"),"margemLucro", margemLucro)));
+            Optional.ofNullable(dto.atualizaPreco()).ifPresent(atualizaPreco -> builder.and(produto.atualizaPreco.eq(atualizaPreco)));
+            Optional.ofNullable(dto.valorProduto()).ifPresent(valorProduto -> builder.and(mapper(dto.filter().get("valorProduto"), "valorProduto", valorProduto)));
+            Optional.ofNullable(dto.valorVenda()).ifPresent(valorVenda -> builder.and(mapper(dto.filter().get("valorVenda"), "valorVenda", valorVenda)));
+        });
+        JPAQuery<Produto> query = new JPAQuery<>(em);
+        return query.from(produto)
+                .where(builder)
+                .fetch();
+    }
+
+    @Override
     public Page<ProdutoResponseDto> buscarProduto(ProdutoPagedRequestDto pagedDto, Long filialId, Pageable pageable) {
         BooleanBuilder builder = new BooleanBuilder();
         List<OrderSpecifier<?>> sort = new ArrayList<>();
@@ -44,6 +66,9 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
             Optional.ofNullable(dto.apresentacao()).ifPresent(apresentacao -> builder.and(mapper("apresentacao", apresentacao)));
             Optional.ofNullable(dto.margemLucro()).ifPresent(margemLucro -> builder.and(mapper(dto.filter().get("margemLucro"),"margemLucro", margemLucro)));
             Optional.ofNullable(dto.atualizaPreco()).ifPresent(atualizaPreco -> builder.and(produto.atualizaPreco.eq(atualizaPreco)));
+            Optional.ofNullable(dto.valorProduto()).ifPresent(valorProduto -> builder.and(mapper(dto.filter().get("valorProduto"), "valorProduto", valorProduto)));
+            Optional.ofNullable(dto.valorVenda()).ifPresent(valorVenda -> builder.and(mapper(dto.filter().get("valorVenda"), "valorVenda", valorVenda)));
+
             Optional.ofNullable(dto.orderer()).ifPresent(orders -> {
                 if (orders.size() > 0) {
                     orders.forEach(produtoOrd -> sort.add(createOrderSpecifier(produtoOrd)));
@@ -67,9 +92,25 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
         return new PageImpl<>(produtos, pageable, total);
     }
 
+
+
     private Predicate mapper(String matchMode, String item, BigDecimal field) {
         var path = Expressions.numberPath(BigDecimal.class, produto, item);
-        return path.eq(field);
+        switch(matchMode) {
+            case "lt":
+                return path.lt(field);
+            case "lte":
+                return path.lt(field).or(path.eq(field));
+            case "gt":
+                return path.gt(field);
+            case "gte":
+                return path.gt(field).or(path.eq(field));
+            case "notEquals":
+                return path.eq(field).not();
+            default:
+                return path.eq(field);
+
+        }
     }
 
     private Predicate mapper(String item, Apresentacao field) {
@@ -118,4 +159,6 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
                 .where(produto.atualizaPreco.isTrue())
                 .fetch();
     }
+
+
 }
