@@ -1,22 +1,22 @@
 #utf-8
 #language: pt
 
-Funcionalidade: Cadastro de Filial
+Funcionalidade: Testes Filial
 
 Cenário: Cadastrar Filial com sucesso
 Dado ao entrar no cadastro da filial
-Quando cadastra uma nova filial
-Então valida o cadastro da filial
+Quando preencher os dados e pressionar para cadastrar
+Então valida o cadastro
 
 Cenário: Erro ao cadastrar Filial com cnpj já cadastrado
 Dado ao entrar no cadastro da filial
-Quando tenta cadastrar uma nova filial com cnpj já cadastrado
+Quando tenta cadastrar cnpj ja cadastrado
 Então lanca mensagem de erro CNPJ já cadastrado em outra empresa
 
 Cenário: Filial não pode ser cadastrada com cnpj invalido
 Dado ao entrar no cadastro da filial
-Quando tenta cadastrar uma nova filial com cnpj invalido
-Então lança mensagem de erro de CNJP inválido
+Quando tenta cadastrar cnpj invalido
+Então invalida cadastro cnpj invalido
 
 Cenário: Filial com campos vazios
 Dado ao entrar no cadastro da filial
@@ -40,3 +40,8 @@ Cenário: Tentando entrar em filial inexistente
 Dado entra na pagina inicial
 Quando tenta entrar em uma filial inexistente
 Então deve retornar para a pagina inicial
+
+Cenário: Encontrando cnpj na API
+Dado ao entrar no cadastro da filial
+Quando colocar um cnpj
+Então deve receber um request de 200OK

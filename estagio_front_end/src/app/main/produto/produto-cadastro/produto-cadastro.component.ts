@@ -7,11 +7,11 @@ import {
   SituacaoCadastro,
   TipoProduto,
 } from '../../../models/app-enums';
-import { verificaBarcode } from '../../../models/externalapi';
 import { GrupoProduto } from '../../../models/grupo-produto';
 import { Produto } from '../../../models/produto';
 import { HttpService } from '../../../services/http/http.service';
 import { MessageHandleService } from '../../../services/message-handle.service';
+import { verificaBarcode } from '../../../models/externalapi';
 
 @Component({
   selector: 'app-produto-cadastro',
@@ -39,7 +39,6 @@ export class ProdutoCadastroComponent {
 
   constructor(
     private http: HttpService,
-    private messageService: MessageService,
     private messageHandle: MessageHandleService
   ) {}
 
@@ -72,15 +71,11 @@ export class ProdutoCadastroComponent {
           this.produto.disabled.descricao = true;
         },
         error: (erro) => {
-          this.messageHandle.showErrorMessage(erro);
+          this.messageHandle.showErrorMessage('codigo de barra não encontrado');
         },
       });
     } else {
-      this.messageService.add({
-        severity: 'error',
-        summary: 'Erro',
-        detail: 'Código de Barras Inválido',
-      });
+      this.messageHandle.showErrorMessage('código de barra inválido');
     }
   }, 300);
 
@@ -117,5 +112,9 @@ export class ProdutoCadastroComponent {
 
   cadastroTipoProduto(event: any) {
     this.produto.tipoProduto = event.value;
+  }
+
+  verificaCodigoBarra(barcode: string) {
+    return verificaBarcode(barcode);
   }
 }

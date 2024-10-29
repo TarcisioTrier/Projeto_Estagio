@@ -9,6 +9,7 @@ import {
 import { Fornecedor } from '../../../models/fornecedor';
 import { HttpService } from '../../../services/http/http.service';
 import { MessageHandleService } from '../../../services/message-handle.service';
+import { debounce, first, take } from 'lodash';
 
 @Component({
   selector: 'app-fornecedor-cadastro',
@@ -58,7 +59,7 @@ export class FornecedorCadastroComponent {
     this.loading = false;
   }
 
-  cnpj() {
+  cnpj  = debounce(() =>{
     const cnpj = this.fornecedor.cnpj.replace(/[_./-]/g, '');
     console.log(cnpj);
 
@@ -68,7 +69,13 @@ export class FornecedorCadastroComponent {
 
     if (validateCnpj(cnpj)) {
       this.http.buscaCNPJ(cnpj).subscribe({
-        next: (obj: Cnpj) => this.processCNPJResponse(obj),
+        next: (obj: Cnpj) => {
+          if (obj && obj.error) {
+            this.messageHandler.showErrorMessage(obj.error);
+          } else {
+            this.fornecedor = cnpjtoFornecedor(obj); 
+          }
+        },
         error: (error) => {
           console.log(error);
         },
@@ -76,17 +83,8 @@ export class FornecedorCadastroComponent {
     } else {
       validateCnpjField(cnpj);
     }
-  }
-
-  processCNPJResponse(obj: Cnpj) {
-    console.log(obj);
-    if (obj.error) {
-      this.messageHandler.showErrorMessage(obj.error);
-      return;
-    }
-
-    this.fornecedor = cnpjtoFornecedor(obj);
-  }
+  },1000)
+  
 
   enableFieldsCnpj() {
     this.fornecedor.disabled.nomeFantasia = false;

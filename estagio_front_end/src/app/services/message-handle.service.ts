@@ -17,15 +17,24 @@ export class MessageHandleService {
   }
 
   showErrorMessage(erro: any) {
-    const error = erro.error;
-    console.log(erro);
+    if (typeof erro === 'string') {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: erro, 
+      });
+      return;
+    }
+    
+    const error = erro?.error;
+  
     if (typeof error === 'string') {
       this.messageService.add({
         severity: 'error',
         summary: 'Erro',
-        detail: error,
+        detail: error, 
       });
-    } else {
+    } else if (error && typeof error === 'object') {
       const erros = Object.values(error);
       for (let erro of erros) {
         this.messageService.add({
@@ -34,6 +43,12 @@ export class MessageHandleService {
           detail: String(erro),
         });
       }
+    } else {
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Erro',
+        detail: 'Ocorreu um erro desconhecido.',
+      });
     }
   }
 }

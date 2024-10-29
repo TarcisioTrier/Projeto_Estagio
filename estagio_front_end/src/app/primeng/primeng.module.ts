@@ -44,6 +44,7 @@ import { ToolbarModule } from 'primeng/toolbar';
     DialogModule,
     CheckboxModule,
     TableModule,
+
   ],
   exports: [
     MenuModule,

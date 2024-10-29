@@ -12,6 +12,7 @@ import { StylesService } from '../../services/styles.service';
   styleUrl: './layout.component.scss',
 })
 export class LayoutComponent implements OnInit {
+
   localFilial?: Filial;
   filiaisFilter: Filial[] = [];
   selectedItem: any;
@@ -20,6 +21,7 @@ export class LayoutComponent implements OnInit {
   visible = false;
   imagem = 'https://www.triersistemas.com.br/imagens/logo_topo.png';
   items: MenuItem[] = [];
+  activeIndex: number | null = null;
 
   constructor(
     private styleService: StylesService,
@@ -149,4 +151,5 @@ export class LayoutComponent implements OnInit {
       command: () => this.toggleMenu(),
     };
   }
+
 }

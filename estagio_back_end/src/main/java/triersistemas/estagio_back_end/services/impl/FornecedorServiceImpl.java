@@ -3,6 +3,7 @@ package triersistemas.estagio_back_end.services.impl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import triersistemas.estagio_back_end.dto.request.FilialRequestDto;
 import triersistemas.estagio_back_end.dto.request.FornecedorRequestDto;
 import triersistemas.estagio_back_end.dto.response.FornecedorResponseDto;
 import triersistemas.estagio_back_end.entity.Filial;
@@ -35,7 +36,7 @@ public class FornecedorServiceImpl implements FornecedorService {
     @Override
     public FornecedorResponseDto addFornecedor(FornecedorRequestDto fornecedorDto) {
         Filial filial = filialService.findById(fornecedorDto.filialId());
-        cnpjValidator.validateCnpjPostFornecedor(fornecedorDto.cnpj());
+        validateFornecedor(fornecedorDto);
         var fornecedor = new Fornecedor(fornecedorDto, filial);
         return new FornecedorResponseDto(fornecedorRepository.save(fornecedor));
     }
@@ -78,5 +79,11 @@ public class FornecedorServiceImpl implements FornecedorService {
 
     private Fornecedor findById(Long id) {
       return fornecedorRepository.findById(id).orElseThrow(() -> new NotFoundException("Fornecedor não encontrado."));
+    }
+
+    private void validateFornecedor(FornecedorRequestDto requestDto) {
+        cnpjValidator.validateCnpj(requestDto.cnpj());
+        cnpjValidator.validateCnpjPostFornecedor(requestDto.cnpj());
+        foneValidator.validateFone(requestDto.telefone());
     }
 }

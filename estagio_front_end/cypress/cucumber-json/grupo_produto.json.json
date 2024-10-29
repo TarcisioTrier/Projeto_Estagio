@@ -1,0 +1,122 @@
+[
+  {
+    "keyword": "Funcionalidade",
+    "name": "Testes Grupo Produto",
+    "line": 4,
+    "id": "testes-grupo-produto",
+    "tags": [],
+    "uri": "grupo_produto.cy.feature",
+    "elements": [
+      {
+        "id": "testes-grupo-produto;cadastrando-grupo-produto-com-sucesso.",
+        "keyword": "Scenario",
+        "line": 6,
+        "name": "Cadastrando Grupo Produto com sucesso.",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 7,
+            "name": "ao entrar no cadastro do grupo de produto",
+            "result": {
+              "status": "passed",
+              "duration": 2130000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Quando ",
+            "line": 8,
+            "name": "preenche os dados de grupo produto",
+            "result": {
+              "status": "passed",
+              "duration": 1049000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Então ",
+            "line": 9,
+            "name": "valida o cadastro",
+            "result": {
+              "status": "passed",
+              "duration": 86000000
+            }
+          }
+        ]
+      },
+      {
+        "id": "testes-grupo-produto;grupo-de-produto-com-campos-vazios",
+        "keyword": "Scenario",
+        "line": 11,
+        "name": "Grupo de Produto com campos vazios",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 12,
+            "name": "ao entrar no cadastro do grupo de produto",
+            "result": {
+              "status": "passed",
+              "duration": 1514000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Então ",
+            "line": 13,
+            "name": "botao de cadatro desabilitado",
+            "result": {
+              "status": "passed",
+              "duration": 20000000
+            }
+          }
+        ]
+      },
+      {
+        "id": "testes-grupo-produto;tentativa-de-por-uma-margem-maior-que-100%",
+        "keyword": "Scenario",
+        "line": 15,
+        "name": "Tentativa de por uma margem maior que 100%",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 16,
+            "name": "ao entrar no cadastro do grupo de produto",
+            "result": {
+              "status": "passed",
+              "duration": 1489000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Quando ",
+            "line": 17,
+            "name": "preenche a margem invalida",
+            "result": {
+              "status": "passed",
+              "duration": 467000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Então ",
+            "line": 18,
+            "name": "a margem se corrige para o valor maximo",
+            "result": {
+              "status": "passed",
+              "duration": 32000000
+            }
+          }
+        ]
+      }
+    ]
+  }
+]
