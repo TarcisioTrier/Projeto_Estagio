@@ -179,7 +179,6 @@ export function validateCnpjField(cnpj: string) {
     }
   }
 }
-
 export function verificaBarcode(barcode: string): boolean {
   if (!barcode) return false; // Barcode cannot be empty
 

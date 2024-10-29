@@ -128,6 +128,7 @@
           mode="decimal"
           [minFractionDigits]="2"
           [maxFractionDigits]="2"
+          [min]="0"
           prefix="R$"
           [(ngModel)]="produto.valorProduto"
         />
@@ -153,7 +154,7 @@
         icon="pi pi-check"
         [loading]="loading"
         [disabled]="
-          !produto.codigoBarras ||
+          !verificaCodigoBarra(produto.codigoBarras) ||
           !produto.nome ||
           !produto.grupoProduto ||
           !tipoProdutoSelecionado ||

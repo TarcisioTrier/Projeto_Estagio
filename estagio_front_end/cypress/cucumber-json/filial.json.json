@@ -1,14 +1,14 @@
 [
   {
     "keyword": "Funcionalidade",
-    "name": "Cadastro de Filial",
+    "name": "Testes Filial",
     "line": 4,
-    "id": "cadastro-de-filial",
+    "id": "testes-filial",
     "tags": [],
-    "uri": "filial-cadastro.cy.feature",
+    "uri": "filial.cy.feature",
     "elements": [
       {
-        "id": "cadastro-de-filial;cadastrar-filial-com-sucesso",
+        "id": "testes-filial;cadastrar-filial-com-sucesso",
         "keyword": "Scenario",
         "line": 6,
         "name": "Cadastrar Filial com sucesso",
@@ -22,33 +22,33 @@
             "name": "ao entrar no cadastro da filial",
             "result": {
               "status": "passed",
-              "duration": 1067000000
+              "duration": 1174000000
             }
           },
           {
             "arguments": [],
             "keyword": "Quando ",
             "line": 8,
-            "name": "cadastra uma nova filial",
+            "name": "preencher os dados e pressionar para cadastrar",
             "result": {
               "status": "passed",
-              "duration": 3606000000
+              "duration": 4418000000
             }
           },
           {
             "arguments": [],
             "keyword": "Então ",
             "line": 9,
-            "name": "valida o cadastro da filial",
+            "name": "valida o cadastro",
             "result": {
               "status": "passed",
-              "duration": 275000000
+              "duration": 338000000
             }
           }
         ]
       },
       {
-        "id": "cadastro-de-filial;erro-ao-cadastrar-filial-com-cnpj-já-cadastrado",
+        "id": "testes-filial;erro-ao-cadastrar-filial-com-cnpj-já-cadastrado",
         "keyword": "Scenario",
         "line": 11,
         "name": "Erro ao cadastrar Filial com cnpj já cadastrado",
@@ -62,17 +62,17 @@
             "name": "ao entrar no cadastro da filial",
             "result": {
               "status": "passed",
-              "duration": 1032000000
+              "duration": 1037000000
             }
           },
           {
             "arguments": [],
             "keyword": "Quando ",
             "line": 13,
-            "name": "tenta cadastrar uma nova filial com cnpj já cadastrado",
+            "name": "tenta cadastrar cnpj ja cadastrado",
             "result": {
               "status": "passed",
-              "duration": 2565000000
+              "duration": 2501000000
             }
           },
           {
@@ -82,13 +82,13 @@
             "name": "lanca mensagem de erro CNPJ já cadastrado em outra empresa",
             "result": {
               "status": "passed",
-              "duration": 10000000
+              "duration": 9000000
             }
           }
         ]
       },
       {
-        "id": "cadastro-de-filial;filial-não-pode-ser-cadastrada-com-cnpj-invalido",
+        "id": "testes-filial;filial-não-pode-ser-cadastrada-com-cnpj-invalido",
         "keyword": "Scenario",
         "line": 16,
         "name": "Filial não pode ser cadastrada com cnpj invalido",
@@ -102,33 +102,33 @@
             "name": "ao entrar no cadastro da filial",
             "result": {
               "status": "passed",
-              "duration": 969000000
+              "duration": 1042000000
             }
           },
           {
             "arguments": [],
             "keyword": "Quando ",
             "line": 18,
-            "name": "tenta cadastrar uma nova filial com cnpj invalido",
+            "name": "tenta cadastrar cnpj invalido",
             "result": {
               "status": "passed",
-              "duration": 2537000000
+              "duration": 2410000000
             }
           },
           {
             "arguments": [],
             "keyword": "Então ",
             "line": 19,
-            "name": "lança mensagem de erro de CNJP inválido",
+            "name": "invalida cadastro cnpj invalido",
             "result": {
               "status": "passed",
-              "duration": 9000000
+              "duration": 8000000
             }
           }
         ]
       },
       {
-        "id": "cadastro-de-filial;filial-com-campos-vazios",
+        "id": "testes-filial;filial-com-campos-vazios",
         "keyword": "Scenario",
         "line": 21,
         "name": "Filial com campos vazios",
@@ -142,7 +142,7 @@
             "name": "ao entrar no cadastro da filial",
             "result": {
               "status": "passed",
-              "duration": 953000000
+              "duration": 1016000000
             }
           },
           {
@@ -152,13 +152,13 @@
             "name": "botao de cadatro desabilitado",
             "result": {
               "status": "passed",
-              "duration": 42000000
+              "duration": 49000000
             }
           }
         ]
       },
       {
-        "id": "cadastro-de-filial;entrando-em-uma-filial",
+        "id": "testes-filial;entrando-em-uma-filial",
         "keyword": "Scenario",
         "line": 25,
         "name": "Entrando em uma filial",
@@ -172,7 +172,7 @@
             "name": "ao entrar em uma filial",
             "result": {
               "status": "passed",
-              "duration": 745000000
+              "duration": 776000000
             }
           },
           {
@@ -182,13 +182,13 @@
             "name": "aparece a filial que entrou",
             "result": {
               "status": "passed",
-              "duration": 10000000
+              "duration": 9000000
             }
           }
         ]
       },
       {
-        "id": "cadastro-de-filial;saindo-de-uma-filial",
+        "id": "testes-filial;saindo-de-uma-filial",
         "keyword": "Scenario",
         "line": 29,
         "name": "Saindo de uma filial",
@@ -202,7 +202,7 @@
             "name": "ao entrar em uma filial",
             "result": {
               "status": "passed",
-              "duration": 840000000
+              "duration": 791000000
             }
           },
           {
@@ -212,7 +212,7 @@
             "name": "clicar para sair",
             "result": {
               "status": "passed",
-              "duration": 253000000
+              "duration": 271000000
             }
           },
           {
@@ -222,13 +222,13 @@
             "name": "deve voltar para o cadastro",
             "result": {
               "status": "passed",
-              "duration": 5000000
+              "duration": 10000000
             }
           }
         ]
       },
       {
-        "id": "cadastro-de-filial;verificando-opcoes-de-filial",
+        "id": "testes-filial;verificando-opcoes-de-filial",
         "keyword": "Scenario",
         "line": 34,
         "name": "verificando opcoes de filial",
@@ -242,7 +242,7 @@
             "name": "ao entrar em uma filial",
             "result": {
               "status": "passed",
-              "duration": 811000000
+              "duration": 786000000
             }
           },
           {
@@ -252,7 +252,7 @@
             "name": "clica no menu de opcoes",
             "result": {
               "status": "passed",
-              "duration": 181000000
+              "duration": 199000000
             }
           },
           {
@@ -262,13 +262,13 @@
             "name": "deve aparecer as opcoes",
             "result": {
               "status": "passed",
-              "duration": 23000000
+              "duration": 19000000
             }
           }
         ]
       },
       {
-        "id": "cadastro-de-filial;tentando-entrar-em-filial-inexistente",
+        "id": "testes-filial;tentando-entrar-em-filial-inexistente",
         "keyword": "Scenario",
         "line": 39,
         "name": "Tentando entrar em filial inexistente",
@@ -282,7 +282,7 @@
             "name": "entra na pagina inicial",
             "result": {
               "status": "passed",
-              "duration": 232000000
+              "duration": 302000000
             }
           },
           {
@@ -292,7 +292,7 @@
             "name": "tenta entrar em uma filial inexistente",
             "result": {
               "status": "passed",
-              "duration": 647000000
+              "duration": 694000000
             }
           },
           {
@@ -302,7 +302,47 @@
             "name": "deve retornar para a pagina inicial",
             "result": {
               "status": "passed",
-              "duration": 5000000
+              "duration": 10000000
+            }
+          }
+        ]
+      },
+      {
+        "id": "testes-filial;encontrando-cnpj-na-api",
+        "keyword": "Scenario",
+        "line": 44,
+        "name": "Encontrando cnpj na API",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 45,
+            "name": "ao entrar no cadastro da filial",
+            "result": {
+              "status": "passed",
+              "duration": 1082000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Quando ",
+            "line": 46,
+            "name": "colocar um cnpj",
+            "result": {
+              "status": "passed",
+              "duration": 475000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Então ",
+            "line": 47,
+            "name": "deve receber um request de 200OK",
+            "result": {
+              "status": "passed",
+              "duration": 20000000
             }
           }
         ]
