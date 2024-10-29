@@ -1,4 +1,4 @@
-package triersistemas.estagio_back_end.repositorysTests;
+package triersistemas.estagio_back_end.repositoriesTests;
 
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;

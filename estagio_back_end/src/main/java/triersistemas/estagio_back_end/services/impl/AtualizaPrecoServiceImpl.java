@@ -14,7 +14,9 @@ import triersistemas.estagio_back_end.services.AtualizaPrecoService;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
@@ -30,8 +32,9 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
 
     @Override
     public List<?> atualizaPreco(AtualizaPrecoDto atualizaPrecoDto) {
-        var grupoProdutos = grupoProdutoRepository.buscarGrupoProduto(atualizaPrecoDto.grupoProdutoFilter(), atualizaPrecoDto.filialId());
-        var produtos = produtoRepository.buscarProduto(atualizaPrecoDto.produtoFilter(), atualizaPrecoDto.filialId());
+        var grupoProdutos = Optional.ofNullable(grupoProdutoRepository.buscarGrupoProduto(atualizaPrecoDto.grupoProdutoFilter(), atualizaPrecoDto.filialId())).orElse(List.of());
+        var produtos = Optional.ofNullable(produtoRepository.buscarProduto(atualizaPrecoDto.produtoFilter(), atualizaPrecoDto.filialId())).orElse(List.of());
+
         if (!atualizaPrecoDto.all()) {
             if (atualizaPrecoDto.isProduto()) {
                 produtos = produtos.stream().filter(produto -> atualizaPrecoDto.produtoId().contains(produto.getId())).toList();
@@ -40,8 +43,9 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
                 produtos = getProdutos(grupoProdutos);
             }
         }
-
-        var saved = produtoRepository.saveAll(atualiza(produtos, grupoProdutos, atualizaPrecoDto));
+        var produtosAtt = atualiza(produtos, grupoProdutos, atualizaPrecoDto);
+        produtosAtt.forEach(produto -> produto.setDataUltimaAtualizacaoPreco(LocalDate.now()));
+        var saved = produtoRepository.saveAll(produtosAtt);
 
         return saved.stream().map(ProdutoResponseDto::new).toList();
     }
