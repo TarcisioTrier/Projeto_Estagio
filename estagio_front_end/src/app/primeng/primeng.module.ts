@@ -23,6 +23,7 @@ import { PaginatorModule } from 'primeng/paginator';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TabViewModule } from 'primeng/tabview';
 
+
 @NgModule({
   declarations: [],
   imports: [

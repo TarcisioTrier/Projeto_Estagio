@@ -7,7 +7,15 @@ import { MessageService } from 'primeng/api';
 export class MessageHandleService {
   constructor(private messageService: MessageService) {}
 
-  showSuccessMessage(retorno: any) {
+  showSuccessMessage(string: any) {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Successo',
+      detail: string,
+    });
+  }
+
+  showCadastroMessage(retorno: any) {
     console.log(retorno);
     this.messageService.add({
       severity: 'success',
@@ -21,18 +29,18 @@ export class MessageHandleService {
       this.messageService.add({
         severity: 'error',
         summary: 'Erro',
-        detail: erro, 
+        detail: erro,
       });
       return;
     }
-    
+
     const error = erro?.error;
-  
+
     if (typeof error === 'string') {
       this.messageService.add({
         severity: 'error',
         summary: 'Erro',
-        detail: error, 
+        detail: error,
       });
     } else if (error && typeof error === 'object') {
       const erros = Object.values(error);

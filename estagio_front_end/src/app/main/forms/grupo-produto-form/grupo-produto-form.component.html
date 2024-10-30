@@ -1,0 +1,105 @@
+<div class="flex justify-content-center h-full flex-column">
+  <div class="formgrid p-fluid grid mx-5 my-2">
+    <div class="col-12 my-3">
+      <p-floatLabel>
+        <input
+          pInputText
+          id="nomeGrupo"
+          type="text"
+          [(ngModel)]="grupoProduto.nomeGrupo"
+        />
+        <label for="nomeGrupo">Nome do Grupo</label>
+      </p-floatLabel>
+    </div>
+    <div class="col-12 my-3 md:col-6">
+      <p-floatLabel>
+        <p-inputNumber
+          id="margemLucro"
+          inputId="minmaxfraction"
+          mode="decimal"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="5"
+          [showButtons]="true"
+          buttonLayout="horizontal"
+          [min]="0"
+          [max]="100"
+          suffix="%"
+          decrementButtonClass="p-button-danger"
+          incrementButtonClass="p-button-success"
+          incrementButtonIcon="pi pi-plus"
+          decrementButtonIcon="pi pi-minus"
+          [(ngModel)]="grupoProduto.margemLucro"
+        />
+        <label class="px-6" for="margemLucro">Margem de Lucro</label>
+      </p-floatLabel>
+    </div>
+
+    <div class="col-12 my-3 md:col-6">
+      <p-dropdown
+        [options]="tipoGrupoProduto"
+        [(ngModel)]="tipoGrupoProdutoSelecionado"
+        (ngModelChange)="cadastroTipoGrupo($event)"
+        optionLabel="label"
+        [showClear]="true"
+        placeholder="Tipo do Grupo de Produto"
+      >
+        <ng-template pTemplate="selectedItem">
+          <div style="width: 125px; height: fit-content">
+            {{ tipoGrupoProdutoSelecionado.label | titlecase }}
+          </div>
+        </ng-template>
+        <ng-template let-item pTemplate="item">
+          <div style="width: fit-content; height: fit-content; float: left">
+            {{ item.label | titlecase }}
+          </div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+    <div *ngIf="grupoProdutoPut"  class="col-12 my-3 sm:col-6"
+    style="display: flex; align-items: end; gap: 10px">
+      <p-dropdown
+      [options]="situacaoCadastro"
+      [(ngModel)]="grupoProduto.situacaoCadastro"
+      placeholder="Situacao Cadastro"[showClear]="true">
+      <ng-template let-item pTemplate="item">
+        <div style="width: fit-content; height: fit-content; float: left">
+          {{ item.label | titlecase }}
+        </div>
+      </ng-template>
+      <ng-template pTemplate="selectedItem">
+        <div style="width: 125px; height: fit-content">
+          {{ situacaoCadastro[grupoProduto.situacaoCadastro!].label | titlecase }}
+        </div>
+      </ng-template>
+
+
+      </p-dropdown>
+
+    </div>
+    <div
+      class="col-12 my-3 sm:col-6"
+      style="display: flex; align-items: end; gap: 10px"
+    >
+      <p-checkbox
+        [(ngModel)]="grupoProduto.atualizaPreco"
+        [binary]="true"
+        inputId="atualizaPreco"
+      />
+      <label for="atualizaPreco">Aceita Atualização de Preço?</label>
+    </div>
+    <p-toast></p-toast>
+    <div class="col-12 my-3 sm:col-6">
+      <p-button
+        label="Cadastrar"
+        icon="pi pi-check"
+        [loading]="loading"
+        [disabled]="
+          !grupoProduto.nomeGrupo ||
+          !grupoProduto.margemLucro ||
+          !tipoGrupoProdutoSelecionado
+        "
+        (onClick)="load()"
+      />
+    </div>
+  </div>
+</div>

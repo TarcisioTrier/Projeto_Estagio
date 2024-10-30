@@ -1,4 +1,4 @@
-import { SituacaoContrato } from './app-enums';
+import { SituacaoCadastro, SituacaoContrato } from './app-enums';
 import { Endereco, Filial } from './filial';
 import { Fornecedor } from './fornecedor';
 
@@ -64,7 +64,7 @@ export function cnpjtoFornecedor(cnpj: Cnpj): Fornecedor {
     cnpj: cnpj.CNPJ.toString(),
     telefone: cnpj.DDD + cnpj.TELEFONE,
     email: cnpj.EMAIL,
-    situacaoContrato: SituacaoContrato.ATIVO,
+    situacaoCadastro: SituacaoCadastro.ATIVO,
     disabled: {
       nomeFantasia: cnpj['NOME FANTASIA'] !== '',
       razaoSocial: cnpj['RAZAO SOCIAL'] !== '',

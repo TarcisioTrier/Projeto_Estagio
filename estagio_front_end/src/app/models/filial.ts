@@ -4,12 +4,12 @@ import { GrupoProduto } from "./grupo-produto";
 
 export interface Filial{
   id?: number,
-  nomeFantasia: string,
-  razaoSocial: string,
+  nomeFantasia?: string,
+  razaoSocial?: string,
   cnpj: string,
-  telefone: string,
-  email: string,
-  situacaoContrato: SituacaoContrato,
+  telefone?: string,
+  email?: string,
+  situacaoContrato?: SituacaoContrato,
   endereco?: Endereco,
   fornecedores?: Array<Fornecedor>,
   grupoProdutos?: Array<GrupoProduto>,
@@ -23,19 +23,19 @@ export interface Filial{
   }
   export interface Endereco{
     id?: number,
-    cep: string,
-    logradouro: string,
+    cep?: string,
+    logradouro?: string,
     numero?: number,
     complemento?: string,
-    bairro: string,
-    localidade: string,
-    estado: string
+    bairro?: string,
+    localidade?: string,
+    estado?: string
     disabled:{
-      logradouro:boolean,
-      numero:boolean,
-      complemento:boolean,
-      bairro:boolean,
-      localidade:boolean,
-      estado:boolean
+      logradouro?:boolean,
+      numero?:boolean,
+      complemento?:boolean,
+      bairro?:boolean,
+      localidade?:boolean,
+      estado?:boolean
     }
     }

@@ -5,6 +5,7 @@ import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { Filial } from '../../models/filial';
 import { HttpService } from '../../services/http/http.service';
 import { StylesService } from '../../services/styles.service';
+import { set } from 'lodash';
 
 @Component({
   selector: 'app-layout',
@@ -12,6 +13,21 @@ import { StylesService } from '../../services/styles.service';
   styleUrl: './layout.component.scss',
 })
 export class LayoutComponent implements OnInit {
+  click() {
+    const target = document.getElementsByClassName('click')[0] as HTMLElement;
+    target.classList.add('click-1');
+    setTimeout(() => {
+      target.classList.remove('click-1');
+      target.classList.add('click-2');
+      setTimeout(() => {
+        target.classList.remove('click-2');
+        target.classList.add('click-3');
+        setTimeout(() => {
+          target.classList.remove('click-3');
+        }, 50);
+      }, 50);
+    }, 50);
+  }
 
   localFilial?: Filial;
   filiaisFilter: Filial[] = [];
@@ -19,7 +35,7 @@ export class LayoutComponent implements OnInit {
   darkMode!: boolean;
   expanded = false;
   visible = false;
-  imagem = 'https://www.triersistemas.com.br/imagens/logo_topo.png';
+  imagem = 'src/assets/logo.png';
   items: MenuItem[] = [];
   activeIndex: number | null = null;
 
@@ -155,5 +171,4 @@ export class LayoutComponent implements OnInit {
       command: () => this.toggleMenu(),
     };
   }
-
 }

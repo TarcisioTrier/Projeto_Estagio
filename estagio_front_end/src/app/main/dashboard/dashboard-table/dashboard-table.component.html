@@ -1,0 +1,14 @@
+<p-tabView>
+  <p-tabPanel *ngIf="!filialId" header="Filial">
+    <app-dashboard-table-filial></app-dashboard-table-filial>
+  </p-tabPanel>
+  <p-tabPanel *ngIf="filialId" header="Fornecedor">
+    <app-dashboard-table-fornecedor></app-dashboard-table-fornecedor>
+  </p-tabPanel>
+  <p-tabPanel *ngIf="filialId" header="Produto">
+    <app-dashboard-table-produto></app-dashboard-table-produto>
+  </p-tabPanel>
+  <p-tabPanel *ngIf="filialId" header="Grupo Produto">
+    <app-dashboard-table-grupo-produto></app-dashboard-table-grupo-produto>
+  </p-tabPanel>
+</p-tabView>

@@ -5,7 +5,7 @@ import {
   HttpErrorResponse,
   HttpParams,
 } from '@angular/common/http';
-import { Injectable, Optional } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Observable, take, throwError } from 'rxjs';
 import { Fornecedor } from '../../models/fornecedor';
 import { catchError } from 'rxjs/operators';
@@ -18,8 +18,27 @@ import { AtualizaPreco } from '../../models/atualizapreco';
   providedIn: 'root',
 })
 export class HttpService {
+  getFornecedor(id: number) : Observable<Fornecedor> {
+    return this.http.get<Fornecedor>(`fornecedores/get/${id}`).pipe(take(1), catchError(this.handleError));
+  }
 
-  putAtualizacaoPreco(atualizacao: AtualizaPreco) {
+  editarProduto(produto: Produto) {
+    return this.http.put(`produto/put/${produto.id}`, produto).pipe(take(1), catchError(this.handleError));
+  }
+
+  editarGrupoProduto(grupoProduto: GrupoProduto) {
+    return this.http.put(`grupos-produtos/put/${grupoProduto.id}`, grupoProduto).pipe(take(1), catchError(this.handleError));
+  }
+
+  getProduto(produtoId: number): Observable<Produto> {
+    return this.http.get<Produto>(`produto/get/${produtoId}`).pipe(take(1), catchError(this.handleError));
+  }
+
+  getGrupoProduto(grupoProdutoId: number): Observable<GrupoProduto> {
+    return this.http.get<GrupoProduto>(`grupos-produtos/get/${grupoProdutoId}`).pipe(take(1), catchError(this.handleError));
+  }
+
+  putAtualizacaoPreco(atualizacao: AtualizaPreco){
     return this.http.put('atualiza/put', atualizacao).pipe(take(1),
       catchError(this.handleError));
   }
@@ -88,31 +107,9 @@ export class HttpService {
       .get('grupos-produtos/getAllFilter', { params: par })
       .pipe(take(1), catchError(this.handleError));
   }
-  getFilialbyId(id: number) {
-    return this.http.get(`filiais/get/${id}`).pipe(take(1));
+  getFilialbyId(id: number): Observable<Filial>{
+    return this.http.get<Filial>(`filiais/get/${id}`).pipe(take(1));
   }
-  // getFilialPaged(filialPage?: FilialPage) {
-  //   if (filialPage) {
-  //     let par = new HttpParams();
-  //     if (filialPage.size) {
-  //       par = par.set('size', filialPage.size);
-  //     }
-  //     if (filialPage.page) {
-  //       par = par.set('page', filialPage.page);
-  //     }
-  //     if (filialPage.nome) {
-  //       par = par.set('nome', filialPage.nome);
-  //     }
-  //     if (filialPage.cnpj) {
-  //       par = par.set('cnpj', filialPage.cnpj);
-  //     }
-  //     return this.http
-  //       .get('filiais/getAllPaged', { params: par })
-  //       .pipe(take(1));
-  //   } else {
-  //     return this.http.get('filiais/getAllPaged').pipe(take(1));
-  //   }
-  // }
   getFilialFiltered(nome: string) {
     return this.http
       .get(`filiais/getAllFilter`, { params: { nome: nome } })

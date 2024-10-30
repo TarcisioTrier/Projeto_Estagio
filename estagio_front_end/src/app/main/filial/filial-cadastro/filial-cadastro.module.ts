@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FilialCadastroComponent } from './filial-cadastro.component';
 import { FormsModule } from '@angular/forms';
 import { PrimengModule } from '../../../primeng/primeng.module';
+import { FormModule } from '../../forms/form.module';
 @NgModule({
   declarations: [
     FilialCadastroComponent
@@ -10,7 +11,8 @@ import { PrimengModule } from '../../../primeng/primeng.module';
   imports: [
     CommonModule,
     FormsModule,
-    PrimengModule
+    PrimengModule,
+    FormModule
   ],
   exports:[
     FilialCadastroComponent

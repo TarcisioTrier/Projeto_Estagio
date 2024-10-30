@@ -22,6 +22,7 @@ export interface Produto{
   disabled: {
     nome: boolean,
     descricao : boolean
-  }
+  },
+  editar?: boolean
   }
 

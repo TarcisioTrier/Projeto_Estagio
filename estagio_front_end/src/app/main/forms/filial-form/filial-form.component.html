@@ -1,0 +1,205 @@
+<div class="flex justify-content-center h-full flex-column">
+  <div class="formgrid p-fluid grid mx-5 my-2">
+    <div class="col-12 my-3">
+      <p-floatLabel>
+        <input
+          pInputText
+          id="nomeFantasia"
+          type="text"
+          [(ngModel)]="cadastroFilial.nomeFantasia"
+          [disabled]="cadastroFilial.disabled.nomeFantasia"
+          required
+        />
+        <label for="nomeFantasia">Nome Fantasia</label>
+      </p-floatLabel>
+    </div>
+    <div class="col-12 my-3 md:col-6">
+      <p-floatLabel>
+        <input
+          pInputText
+          id="razaoSocial"
+          type="text"
+          [(ngModel)]="cadastroFilial.razaoSocial"
+          [disabled]="cadastroFilial.disabled.razaoSocial"
+          required
+        />
+        <label for="razaoSocial">Razão Social</label>
+      </p-floatLabel>
+    </div>
+    <div class="col-12 my-3 md:col-6">
+      <p-floatLabel>
+        <p-inputMask
+          mask="99.999.999/9999-99"
+          id="cnpj"
+          [(ngModel)]="cadastroFilial.cnpj"
+          (ngModelChange)="cnpj()"
+          required
+        />
+        <label for="cnpj">CNPJ</label>
+      </p-floatLabel>
+    </div>
+    <div class="col-12 my-3 md:col-6">
+      <p-floatLabel>
+        <ng-container *ngIf="isValidFone(); else telefoneAlternativo">
+          <p-inputMask
+            mask="(99) 9999-99999"
+            id="telefone"
+            [autoClear]="false"
+            [(ngModel)]="cadastroFilial.telefone"
+            required
+          ></p-inputMask>
+        </ng-container>
+        <ng-template #telefoneAlternativo>
+          <p-inputMask
+            mask="(99) 99999-9999"
+            id="telefone"
+            [autoClear]="false"
+            [(ngModel)]="cadastroFilial.telefone"
+            required
+          ></p-inputMask>
+        </ng-template>
+        <label for="telefone">Telefone</label>
+      </p-floatLabel>
+    </div>
+    <div class="col-12 my-3 md:col-6">
+      <p-floatLabel>
+        <input
+          pInputText
+          id="email"
+          [(ngModel)]="cadastroFilial.email"
+          [disabled]="cadastroFilial.disabled.email"
+          required
+        />
+        <label for="email">Email</label>
+      </p-floatLabel>
+    </div>
+    <div class="col-12 my-3 md:col-6">
+      <p-dropdown
+        [options]="situacaoContrato"
+        [(ngModel)]="itemSelecionado"
+        (ngModelChange)="cadastroSituacao($event)"
+        optionLabel="label"
+        [showClear]="true"
+        placeholder="Situação do Contrato"
+      >
+        <ng-template pTemplate="selectedItem">
+          <div style="width: 125px; height: fit-content">
+            {{ itemSelecionado.label | titlecase }}
+          </div>
+        </ng-template>
+        <ng-template let-item pTemplate="item">
+          <div style="width: fit-content; height: fit-content; float: left">
+            {{ item.label | titlecase }}
+          </div>
+        </ng-template>
+      </p-dropdown>
+    </div>
+    <div class="col-12 my-3 md:col-6">
+      <p-floatLabel>
+        <p-inputMask
+          mask="99999-999"
+          id="cep"
+          [(ngModel)]="cadastroFilial.endereco!.cep"
+          (ngModelChange)="cep()"
+        />
+        <label for="cep">CEP</label>
+      </p-floatLabel>
+    </div>
+    <div class="col-12 my-3 md:col-6">
+      <p-floatLabel>
+        <input
+          pInputText
+          id="logradouro"
+          [(ngModel)]="cadastroFilial.endereco!.logradouro"
+          [disabled]="cadastroFilial.endereco!.disabled.logradouro!"
+        />
+        <label for="logradouro">Logradouro</label>
+      </p-floatLabel>
+    </div>
+    <div class="col-12 my-3 md:col-6">
+      <p-floatLabel>
+        <p-inputNumber
+          id="numero"
+          [useGrouping]="false"
+          mode="decimal"
+          [(ngModel)]="cadastroFilial.endereco!.numero"
+          [disabled]="cadastroFilial.endereco!.disabled.numero!"
+        />
+        <label for="numero">Numero</label>
+      </p-floatLabel>
+    </div>
+    <div class="col-12 my-3 md:col-6">
+      <p-floatLabel>
+        <input
+          pInputText
+          id="complemento"
+          [(ngModel)]="cadastroFilial.endereco!.complemento"
+          [disabled]="cadastroFilial.endereco!.disabled.complemento!"
+        />
+        <label for="complemento">Complemento</label>
+      </p-floatLabel>
+    </div>
+    <div class="col-12 my-3 md:col-6">
+      <p-floatLabel>
+        <input
+          pInputText
+          id="bairro"
+          [(ngModel)]="cadastroFilial.endereco!.bairro"
+          [disabled]="cadastroFilial.endereco!.disabled.bairro!"
+        />
+        <label for="bairro">Bairro</label>
+      </p-floatLabel>
+    </div>
+    <div class="col-12 my-3 md:col-6">
+      <p-floatLabel>
+        <input
+          pInputText
+          id="estado"
+          [(ngModel)]="cadastroFilial.endereco!.estado"
+          [disabled]="cadastroFilial.endereco!.disabled.estado!"
+        />
+        <label for="estado">Estado</label>
+      </p-floatLabel>
+    </div>
+    <div class="col-12 my-3 md:col-6">
+      <p-floatLabel>
+        <input
+          pInputText
+          id="cidade"
+          [(ngModel)]="cadastroFilial.endereco!.localidade"
+          [disabled]="cadastroFilial.endereco!.disabled.localidade!"
+        />
+        <label for="cidade">Cidade</label>
+      </p-floatLabel>
+    </div>
+
+    <p-toast></p-toast>
+    <div class="col my-3 sm:col md:col-7 lg:col-5 xl:col-3">
+      <p-button
+        label="Cadastrar"
+        icon="pi pi-check"
+        [loading]="loading"
+        [disabled]="
+          !(
+            cadastroFilial.nomeFantasia &&
+            cadastroFilial.razaoSocial &&
+            cadastroFilial.cnpj &&
+            cadastroFilial.telefone &&
+            cadastroFilial.email &&
+            itemSelecionado &&
+            !(
+              cadastroFilial.endereco!.cep &&
+              !(
+                cadastroFilial.endereco!.bairro &&
+                cadastroFilial.endereco!.estado &&
+                cadastroFilial.endereco!.localidade &&
+                cadastroFilial.endereco!.logradouro
+              )
+            )
+          )
+        "
+        (onClick)="load()"
+      />
+    </div>
+  </div>
+</div>

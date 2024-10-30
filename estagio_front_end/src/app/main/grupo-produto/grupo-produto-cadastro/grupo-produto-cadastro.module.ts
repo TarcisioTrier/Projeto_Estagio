@@ -4,6 +4,7 @@ import { GrupoProdutoCadastroComponent } from './grupo-produto-cadastro.componen
 import { PrimengModule } from '../../../primeng/primeng.module';
 import { HttpService } from '../../../services/http/http.service';
 import { MessageService } from 'primeng/api';
+import { FormModule } from '../../forms/form.module';
 
 
 
@@ -13,7 +14,8 @@ import { MessageService } from 'primeng/api';
   ],
   imports: [
     CommonModule,
-    PrimengModule
+    PrimengModule,
+    FormModule
   ],
   providers: [HttpService, MessageService],
   exports:[
