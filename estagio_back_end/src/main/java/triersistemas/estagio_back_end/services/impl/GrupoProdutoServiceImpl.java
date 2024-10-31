@@ -1,6 +1,5 @@
 package triersistemas.estagio_back_end.services.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -9,7 +8,6 @@ import triersistemas.estagio_back_end.dto.request.GrupoProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.GrupoProdutoResponseDto;
 import triersistemas.estagio_back_end.entity.GrupoProduto;
 import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
-import triersistemas.estagio_back_end.enuns.TipoGrupoProduto;
 import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.repository.GrupoProdutoRepository;
 import triersistemas.estagio_back_end.services.FilialService;
@@ -22,10 +20,10 @@ import java.util.Optional;
 public class GrupoProdutoServiceImpl implements GrupoProdutoService {
 
 
-    private GrupoProdutoRepository grupoProdutoRepository;
-    private FilialService filialService;
+    private final GrupoProdutoRepository grupoProdutoRepository;
+    private final FilialService filialService;
 
-    @Autowired
+
     public GrupoProdutoServiceImpl(GrupoProdutoRepository grupoProdutoRepository, FilialService filialService) {
         this.grupoProdutoRepository = grupoProdutoRepository;
         this.filialService = filialService;
@@ -34,7 +32,7 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
 
     @Override
     public GrupoProdutoResponseDto getGrupoProdutoById(Long id) {
-        var grupoProduto = grupoProdutoById(id);
+        var grupoProduto = findById(id);
         return new GrupoProdutoResponseDto(grupoProduto);
     }
 
@@ -48,7 +46,7 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
 
     @Override
     public GrupoProdutoResponseDto updateGrupoProduto(Long id, GrupoProdutoRequestDto grupoProdutoDto) {
-        var grupoProduto = grupoProdutoById(id);
+        var grupoProduto = findById(id);
         var filial = filialService.buscaFilialPorId(grupoProdutoDto.filialId());
         grupoProduto.alteraGrupoProduto(grupoProdutoDto, filial);
         var saved = this.grupoProdutoRepository.save(grupoProduto);
@@ -57,7 +55,7 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
 
     @Override
     public GrupoProdutoResponseDto deleteGrupoProduto(Long id) {
-        var grupoProduto = grupoProdutoById(id);
+        var grupoProduto = findById(id);
         this.grupoProdutoRepository.delete(grupoProduto);
         return new GrupoProdutoResponseDto(grupoProduto);
 
@@ -65,31 +63,25 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
 
     @Override
     public Page<GrupoProdutoResponseDto> getGrupoProdutoPaged(GrupoProdutoPagedRequestDto grupoProdutoDto, Long idFilial, Pageable pageable) {
-        return grupoProdutoRepository.buscarGrupoProduto(grupoProdutoDto,idFilial,pageable);
+        return grupoProdutoRepository.buscarGrupoProduto(grupoProdutoDto, idFilial, pageable);
     }
 
-    @Override
-    public GrupoProdutoResponseDto removeGrupoProduto(Long id) {
-       var grupoProduto =  grupoProdutoById(id);
-       grupoProduto.setSituacaoCadastro(SituacaoCadastro.INATIVO);
-        return new GrupoProdutoResponseDto(grupoProduto);
-    }
+
 
     @Override
-    public Optional<GrupoProduto> buscaGrupoProdutoPorId(Long id){
+    public Optional<GrupoProduto> buscaGrupoProdutoPorId(Long id) {
         return this.grupoProdutoRepository.findById(id);
     }
 
     @Override
-    public GrupoProduto grupoProdutoById(Long id){
-       return this.buscaGrupoProdutoPorId(id).orElseThrow(() -> new NotFoundException("Grupo de Produto não encontrado"));
+    public GrupoProduto findById(Long id) {
+        return this.buscaGrupoProdutoPorId(id).orElseThrow(() -> new NotFoundException("Grupo de Produto não encontrado"));
     }
 
     @Override
     public List<GrupoProdutoResponseDto> getGrupoProdutoFilter(String nomeGrupo, Long filialId) {
         return grupoProdutoRepository.buscarGrupoProduto(nomeGrupo, filialId);
     }
-
 
 
 }

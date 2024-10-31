@@ -2,8 +2,8 @@ package triersistemas.estagio_back_end.services.impl;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import triersistemas.estagio_back_end.dto.request.FilialRequestDto;
 import triersistemas.estagio_back_end.dto.request.FornecedorRequestDto;
 import triersistemas.estagio_back_end.dto.response.FornecedorResponseDto;
 import triersistemas.estagio_back_end.entity.Filial;
@@ -46,13 +46,9 @@ public class FornecedorServiceImpl implements FornecedorService {
         var fornecedor = findById(id);
         return new FornecedorResponseDto(fornecedor);
     }
-    @Override
-    public List<FornecedorResponseDto> getFornecedorFilter(String nome, Long filialId) {
-        return fornecedorRepository.buscarFornecedores(nome, filialId);
-    }
 
     @Override
-    public Page<FornecedorResponseDto> getFornecedorPaged(String nome, String cnpj, SituacaoCadastro situacaoCadastro, PageRequest of) {
+    public Page<FornecedorResponseDto> getFornecedorPaged(String nome, String cnpj, SituacaoCadastro situacaoCadastro, Pageable of) {
         return fornecedorRepository.buscarFornecedores(nome,cnpj,situacaoCadastro,of);
     }
 
@@ -71,10 +67,10 @@ public class FornecedorServiceImpl implements FornecedorService {
     }
 
     @Override
-    public void alteraSituacao(Long id) {
+    public FornecedorResponseDto deleteFornecedor(Long id) {
         Fornecedor fornecedor = findById(id);
-        fornecedor.alterarSituacao();
-        fornecedorRepository.save(fornecedor);
+        fornecedorRepository.delete(fornecedor);
+        return new FornecedorResponseDto(fornecedor);
     }
 
     private Fornecedor findById(Long id) {

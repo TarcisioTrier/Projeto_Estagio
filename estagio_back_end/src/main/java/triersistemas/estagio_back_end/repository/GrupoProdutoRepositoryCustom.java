@@ -13,8 +13,6 @@ import java.util.List;
 
 public interface GrupoProdutoRepositoryCustom {
 
-    List<GrupoProdutoResponseDto> getAllGrupoProdutoAlteraPreco();
-
     List<GrupoProduto> buscarGrupoProduto(GrupoProdutoPagedRequestDto grupoProdutoDto, Long filialId);
 
     List<GrupoProdutoResponseDto> buscarGrupoProduto(String nomeGrupo, Long filialId);

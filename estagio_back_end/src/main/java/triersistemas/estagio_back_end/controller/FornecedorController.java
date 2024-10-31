@@ -31,7 +31,7 @@ public class FornecedorController {
     public ResponseEntity<FornecedorResponseDto> getFornecedorById(@PathVariable Long id) {
         return ResponseEntity.ok(fornecedorService.getFornecedorById(id));
     }
-    //Todo: Atualizar metodo para receber filialId
+
     @GetMapping("/getAllPaged")
     public Page<FornecedorResponseDto> getFornecedorPaged(
             @RequestParam(defaultValue = "0") int page,
@@ -42,22 +42,15 @@ public class FornecedorController {
         return fornecedorService.getFornecedorPaged(nome, cnpj, situacaoCadastro, PageRequest.of(page, size));
     }
 
-    @GetMapping("/getAllFilter")
-    public List<FornecedorResponseDto> getFornecedorFilter(
-            @RequestParam(required = false) Long filialId,
-            @Valid @RequestParam(required = false) String nome) {
-        return fornecedorService.getFornecedorFilter(nome, filialId);
-    }
-
     @PutMapping("/update/{id}")
     public ResponseEntity<FornecedorResponseDto> updateFornecedor(@PathVariable Long id, @Valid @RequestBody FornecedorRequestDto fornecedorDto) {
         return ResponseEntity.ok(fornecedorService.updateFornecedor(id, fornecedorDto));
     }
 
     @DeleteMapping("/situacao/{id}")
-    public ResponseEntity<String> deleteFornecedor(@PathVariable Long id) {
-        fornecedorService.alteraSituacao(id);
-        return ResponseEntity.ok().body("situação alterada");
+    public ResponseEntity<FornecedorResponseDto> deleteFornecedor(@PathVariable Long id) {
+        fornecedorService.deleteFornecedor(id);
+        return ResponseEntity.ok(fornecedorService.deleteFornecedor(id));
     }
 
 }

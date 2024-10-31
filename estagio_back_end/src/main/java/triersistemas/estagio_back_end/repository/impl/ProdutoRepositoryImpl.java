@@ -37,15 +37,7 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
         BooleanBuilder builder = new BooleanBuilder();
         Optional.of(filialId).ifPresent(id -> builder.and(produto.filial.id.eq(id)));
         Optional.ofNullable(pagedDto).ifPresent(dto -> {
-            Optional.ofNullable(dto.nome()).ifPresent(nome -> builder.and(mapper(dto.filter().get("nome"), "nome", nome)));
-            Optional.ofNullable(dto.codigoBarras()).ifPresent(codigoBarras -> builder.and(mapper(dto.filter().get("codigoBarras"), "codigoBarras", codigoBarras)));
-            Optional.ofNullable(dto.descricao()).ifPresent(descricao -> builder.and(mapper(dto.filter().get("descricao"), "descricao", descricao)));
-            Optional.ofNullable(dto.tipoProduto()).ifPresent(tipoProduto -> builder.and(mapper("tipoProduto", tipoProduto)));
-            Optional.ofNullable(dto.apresentacao()).ifPresent(apresentacao -> builder.and(mapper("apresentacao", apresentacao)));
-            Optional.ofNullable(dto.margemLucro()).ifPresent(margemLucro -> builder.and(mapper(dto.filter().get("margemLucro"),"margemLucro", margemLucro)));
-            Optional.ofNullable(dto.atualizaPreco()).ifPresent(atualizaPreco -> builder.and(produto.atualizaPreco.eq(atualizaPreco)));
-            Optional.ofNullable(dto.valorProduto()).ifPresent(valorProduto -> builder.and(mapper(dto.filter().get("valorProduto"), "valorProduto", valorProduto)));
-            Optional.ofNullable(dto.valorVenda()).ifPresent(valorVenda -> builder.and(mapper(dto.filter().get("valorVenda"), "valorVenda", valorVenda)));
+            filtragem(builder, dto);
         });
         JPAQuery<Produto> query = new JPAQuery<>(em);
         return query.from(produto)
@@ -59,15 +51,7 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
         List<OrderSpecifier<?>> sort = new ArrayList<>();
         Optional.of(filialId).ifPresent(id -> builder.and(produto.filial.id.eq(id)));
         Optional.ofNullable(pagedDto).ifPresent(dto -> {
-            Optional.ofNullable(dto.nome()).ifPresent(nome -> builder.and(mapper(dto.filter().get("nome"), "nome", nome)));
-            Optional.ofNullable(dto.codigoBarras()).ifPresent(codigoBarras -> builder.and(mapper(dto.filter().get("codigoBarras"), "codigoBarras", codigoBarras)));
-            Optional.ofNullable(dto.descricao()).ifPresent(descricao -> builder.and(mapper(dto.filter().get("descricao"), "descricao", descricao)));
-            Optional.ofNullable(dto.tipoProduto()).ifPresent(tipoProduto -> builder.and(mapper("tipoProduto", tipoProduto)));
-            Optional.ofNullable(dto.apresentacao()).ifPresent(apresentacao -> builder.and(mapper("apresentacao", apresentacao)));
-            Optional.ofNullable(dto.margemLucro()).ifPresent(margemLucro -> builder.and(mapper(dto.filter().get("margemLucro"),"margemLucro", margemLucro)));
-            Optional.ofNullable(dto.atualizaPreco()).ifPresent(atualizaPreco -> builder.and(produto.atualizaPreco.eq(atualizaPreco)));
-            Optional.ofNullable(dto.valorProduto()).ifPresent(valorProduto -> builder.and(mapper(dto.filter().get("valorProduto"), "valorProduto", valorProduto)));
-            Optional.ofNullable(dto.valorVenda()).ifPresent(valorVenda -> builder.and(mapper(dto.filter().get("valorVenda"), "valorVenda", valorVenda)));
+            filtragem(builder, dto);
 
             Optional.ofNullable(dto.orderer()).ifPresent(orders -> {
                 if (orders.size() > 0) {
@@ -91,8 +75,6 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
                 .fetchCount();
         return new PageImpl<>(produtos, pageable, total);
     }
-
-
 
     private Predicate mapper(String matchMode, String item, BigDecimal field) {
         var path = Expressions.numberPath(BigDecimal.class, produto, item);
@@ -149,16 +131,15 @@ public class ProdutoRepositoryImpl implements ProdutoRepositoryCustom {
         }
     }
 
-
-    @Override
-    public List<ProdutoResponseDto> getAllProdutoAlteraPreco() {
-        JPAQuery<ProdutoResponseDto> query = new JPAQuery<>(em);
-
-        return query.select(Projections.constructor(ProdutoResponseDto.class, produto))
-                .from(produto)
-                .where(produto.atualizaPreco.isTrue())
-                .fetch();
+    private void filtragem(BooleanBuilder builder, ProdutoPagedRequestDto dto) {
+        Optional.ofNullable(dto.nome()).ifPresent(nome -> builder.and(mapper(dto.filter().get("nome"), "nome", nome)));
+        Optional.ofNullable(dto.codigoBarras()).ifPresent(codigoBarras -> builder.and(mapper(dto.filter().get("codigoBarras"), "codigoBarras", codigoBarras)));
+        Optional.ofNullable(dto.descricao()).ifPresent(descricao -> builder.and(mapper(dto.filter().get("descricao"), "descricao", descricao)));
+        Optional.ofNullable(dto.tipoProduto()).ifPresent(tipoProduto -> builder.and(mapper("tipoProduto", tipoProduto)));
+        Optional.ofNullable(dto.apresentacao()).ifPresent(apresentacao -> builder.and(mapper("apresentacao", apresentacao)));
+        Optional.ofNullable(dto.margemLucro()).ifPresent(margemLucro -> builder.and(mapper(dto.filter().get("margemLucro"),"margemLucro", margemLucro)));
+        Optional.ofNullable(dto.atualizaPreco()).ifPresent(atualizaPreco -> builder.and(produto.atualizaPreco.eq(atualizaPreco)));
+        Optional.ofNullable(dto.valorProduto()).ifPresent(valorProduto -> builder.and(mapper(dto.filter().get("valorProduto"), "valorProduto", valorProduto)));
+        Optional.ofNullable(dto.valorVenda()).ifPresent(valorVenda -> builder.and(mapper(dto.filter().get("valorVenda"), "valorVenda", valorVenda)));
     }
-
-
 }

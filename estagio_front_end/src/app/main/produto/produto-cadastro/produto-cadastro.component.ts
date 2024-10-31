@@ -70,7 +70,7 @@ export class ProdutoCadastroComponent {
           this.produto.disabled.nome = true;
           this.produto.disabled.descricao = true;
         },
-        error: (erro) => {
+        error: () => {
           this.messageHandle.showErrorMessage('codigo de barra não encontrado');
         },
       });

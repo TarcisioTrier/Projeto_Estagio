@@ -6,7 +6,6 @@ import triersistemas.estagio_back_end.dto.request.GrupoProdutoPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.GrupoProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.GrupoProdutoResponseDto;
 import triersistemas.estagio_back_end.entity.GrupoProduto;
-import triersistemas.estagio_back_end.enuns.TipoGrupoProduto;
 
 import java.util.List;
 import java.util.Optional;
@@ -20,11 +19,9 @@ public interface GrupoProdutoService {
 
     GrupoProdutoResponseDto deleteGrupoProduto(Long id);
 
-    GrupoProdutoResponseDto removeGrupoProduto(Long id);
-
     Optional<GrupoProduto> buscaGrupoProdutoPorId(Long id);
 
-    GrupoProduto grupoProdutoById(Long id);
+    GrupoProduto findById(Long id);
 
     List<GrupoProdutoResponseDto> getGrupoProdutoFilter(String nomeGrupo, Long filialId);
 

@@ -125,19 +125,6 @@ public class GrupoProdutoRepositoryImpl implements GrupoProdutoRepositoryCustom 
         }
     }
 
-
-    @Override
-    public List<GrupoProdutoResponseDto> getAllGrupoProdutoAlteraPreco() {
-        JPAQuery<GrupoProdutoResponseDto> query = new JPAQuery<>(em);
-
-        return query.select(Projections.constructor(GrupoProdutoResponseDto.class, grupoProduto))
-                .from(grupoProduto)
-                .where(grupoProduto.atualizaPreco.isTrue())
-                .fetch();
-    }
-
-
-
     @Override
     public List<GrupoProdutoResponseDto> buscarGrupoProduto(String nomeGrupo, Long filialId) {
         BooleanBuilder builder = new BooleanBuilder();
