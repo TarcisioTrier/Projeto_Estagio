@@ -15,6 +15,7 @@ import triersistemas.estagio_back_end.services.AtualizaPrecoService;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
@@ -29,7 +30,7 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
     }
 
     @Override
-    public List<?> atualizaPreco(AtualizaPrecoDto atualizaPrecoDto) {
+    public List<ProdutoResponseDto> atualizaPreco(AtualizaPrecoDto atualizaPrecoDto) {
         var grupoProdutos = grupoProdutoRepository.buscarGrupoProduto(atualizaPrecoDto.grupoProdutoFilter(), atualizaPrecoDto.filialId());
         var produtos = produtoRepository.buscarProduto(atualizaPrecoDto.produtoFilter(), atualizaPrecoDto.filialId());
         if (!atualizaPrecoDto.all()) {
@@ -94,7 +95,7 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
             produto.setMargemLucro(valor);
             produto.calculateValorVenda();
             return produto;
-        }).toList();
+        }).collect(Collectors.toList());
     }
 
 
