@@ -60,8 +60,4 @@ public class GrupoProdutoController {
         return ResponseEntity.ok(grupoProdutoService.deleteGrupoProduto(id));
     }
 
-    @DeleteMapping("/remove/{id}")
-    public ResponseEntity<GrupoProdutoResponseDto> removeGrupoProduto(@PathVariable Long id) {
-        return ResponseEntity.ok(grupoProdutoService.removeGrupoProduto(id));
-    }
 }

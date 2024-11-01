@@ -7,9 +7,6 @@ import triersistemas.estagio_back_end.dto.response.ProdutoResponseDto;
 import java.util.List;
 
 public interface AtualizaPrecoService {
-//    List<ProdutoResponseDto> alteraMargemProduto(AtualizaPrecoDto atualizaPreco);
 
-//    List<GrupoProdutoResponseDto> alteraMargemGrupoProduto(AtualizaPrecoDto atualizaProduto);
-
-    List<?> atualizaPreco(AtualizaPrecoDto dto);
+    List<ProdutoResponseDto> atualizaPreco(AtualizaPrecoDto dto);
 }

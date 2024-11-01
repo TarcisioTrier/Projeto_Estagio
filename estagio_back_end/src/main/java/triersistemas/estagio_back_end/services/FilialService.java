@@ -19,7 +19,7 @@ public interface FilialService {
 
     FilialResponseDto getFilialById(Long id);
 
-    List<FilialResponseDto> getAllFiliais();
+    List<FilialResponseDto> getAllFilial();
 
     Page<FilialResponseDto> getFilialFilter(String nome, String cnpj, Pageable pageable);
 
@@ -29,5 +29,5 @@ public interface FilialService {
 
     List<FilialResponseDto> getFilialFilter(String nome);
 
-    FilialResponseDto removeFilial(Long id);
+    FilialResponseDto inativaFilial(Long id);
 }

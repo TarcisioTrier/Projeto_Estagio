@@ -1,6 +1,5 @@
 package triersistemas.estagio_back_end.services.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,6 @@ import triersistemas.estagio_back_end.services.FilialService;
 import triersistemas.estagio_back_end.validators.CnpjValidator;
 import triersistemas.estagio_back_end.validators.EnderecosValidator;
 import triersistemas.estagio_back_end.validators.FoneValidator;
-import triersistemas.estagio_back_end.validators.Utils;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +26,7 @@ public class FilialServiceImpl implements FilialService {
     private final CnpjValidator cnpjValidator;
     private final FoneValidator foneValidator;
 
-    @Autowired
+
     public FilialServiceImpl(FilialRepository filialRepository,
                              EnderecosValidator enderecosValidator,
                              CnpjValidator cnpjValidator,
@@ -77,7 +75,7 @@ public class FilialServiceImpl implements FilialService {
     }
 
     @Override
-    public List<FilialResponseDto> getAllFiliais() {
+    public List<FilialResponseDto> getAllFilial() {
         var filial = filialRepository.findAll();
         return filial.stream().map(FilialResponseDto::new).toList();
     }
@@ -103,7 +101,7 @@ public class FilialServiceImpl implements FilialService {
     }
 
     @Override
-    public FilialResponseDto removeFilial(Long id) {
+    public FilialResponseDto inativaFilial(Long id) {
         var filial = findById(id);
         filial.setSituacaoContrato(SituacaoContrato.INATIVO);
         var saved = filialRepository.save(filial);

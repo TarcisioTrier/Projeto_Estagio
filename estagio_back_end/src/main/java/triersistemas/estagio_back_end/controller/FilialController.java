@@ -54,7 +54,7 @@ public class FilialController {
 
     @DeleteMapping("/remove/{id}")
     public ResponseEntity<FilialResponseDto> removeFilial(@PathVariable Long id) {
-        return ResponseEntity.ok(filialService.removeFilial(id));
+        return ResponseEntity.ok(filialService.inativaFilial(id));
     }
 
     @DeleteMapping("/delete/{id}")

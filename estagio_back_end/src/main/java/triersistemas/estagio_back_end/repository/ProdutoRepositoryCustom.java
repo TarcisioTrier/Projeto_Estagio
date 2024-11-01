@@ -9,7 +9,6 @@ import triersistemas.estagio_back_end.entity.Produto;
 import java.util.List;
 
 public interface ProdutoRepositoryCustom {
-    List<ProdutoResponseDto> getAllProdutoAlteraPreco();
 
     List<Produto> buscarProduto(ProdutoPagedRequestDto produtoPagedDto, Long filialId);
 

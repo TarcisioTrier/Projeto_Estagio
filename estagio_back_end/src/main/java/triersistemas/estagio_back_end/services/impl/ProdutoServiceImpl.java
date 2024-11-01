@@ -1,6 +1,5 @@
 package triersistemas.estagio_back_end.services.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,7 +24,7 @@ public class ProdutoServiceImpl implements ProdutoService {
     private final GrupoProdutoService grupoProdutoService;
     private final BarcodeValidator barcodeValidator;
 
-    @Autowired
+
     public ProdutoServiceImpl(ProdutoRepository produtoRepository, GrupoProdutoService grupoProdutoService, BarcodeValidator barcodeValidator) {
         this.produtoRepository = produtoRepository;
         this.grupoProdutoService = grupoProdutoService;
@@ -34,13 +33,13 @@ public class ProdutoServiceImpl implements ProdutoService {
 
     @Override
     public ProdutoResponseDto getProdutoById(Long id) {
-        var produto = produtoById(id);
+        var produto = findById(id);
         return new ProdutoResponseDto(produto);
     }
 
     @Override
     public ProdutoResponseDto addProduto(ProdutoRequestDto produtoDto) {
-        var grupoProduto = grupoProdutoService.grupoProdutoById(produtoDto.grupoProdutoId());
+        var grupoProduto = grupoProdutoService.findById(produtoDto.grupoProdutoId());
         barcodeValidator.validateBarcodePost(produtoDto.codigoBarras(), grupoProduto.getFilial().getId());
         var produto = new Produto(produtoDto, grupoProduto);
         var saved = produtoRepository.save(produto);
@@ -50,7 +49,9 @@ public class ProdutoServiceImpl implements ProdutoService {
     @Override
     public ProdutoResponseDto updateProduto(Long id, ProdutoRequestDto produtoDto) {
         var grupoProduto = grupoProdutoService.buscaGrupoProdutoPorId(produtoDto.grupoProdutoId());
-        var produto = produtoById(id);
+        Long filialId = grupoProduto.map(p -> p.getFilial().getId()).orElseThrow(() -> new NotFoundException("Grupo Produto não encontrado."));
+        var produto = findById(id);
+        barcodeValidator.validateBarcodeUpdate(produtoDto.codigoBarras(),id,filialId);
         produto.atualizaProduto(produtoDto, grupoProduto);
         var saved = produtoRepository.save(produto);
         return new ProdutoResponseDto(saved);
@@ -58,17 +59,9 @@ public class ProdutoServiceImpl implements ProdutoService {
 
     @Override
     public ProdutoResponseDto deleteProduto(Long id) {
-        var produto = produtoById(id);
+        var produto = findById(id);
         produtoRepository.delete(produto);
         return new ProdutoResponseDto(produto);
-    }
-
-    @Override
-    public ProdutoResponseDto removeProduto(Long id) {
-        var produto = produtoById(id);
-        produto.setSituacaoCadastro(SituacaoCadastro.INATIVO);
-        var saved = produtoRepository.save(produto);
-        return new ProdutoResponseDto(saved);
     }
 
     @Override
@@ -76,16 +69,12 @@ public class ProdutoServiceImpl implements ProdutoService {
         return produtoRepository.buscarProduto(pagedDto, filialId, pageable);
     }
 
-    @Override
-    public List<ProdutoResponseDto> getAllProdutoAlteraPreco() {
-        return produtoRepository.getAllProdutoAlteraPreco();
-    }
 
-    Optional<Produto> buscarProdutoPorId(Long id) {
+   private Optional<Produto> buscarProdutoPorId(Long id) {
         return produtoRepository.findById(id);
     }
 
-    Produto produtoById(Long id) {
+    private Produto findById(Long id) {
         return buscarProdutoPorId(id).orElseThrow(() -> new NotFoundException("Produto não encontrado"));
     }
 

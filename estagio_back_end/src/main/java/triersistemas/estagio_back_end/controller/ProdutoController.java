@@ -9,7 +9,10 @@ import org.springframework.web.bind.annotation.*;
 import triersistemas.estagio_back_end.dto.request.ProdutoPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.ProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.ProdutoResponseDto;
+import triersistemas.estagio_back_end.entity.Produto;
 import triersistemas.estagio_back_end.services.ProdutoService;
+
+import java.util.List;
 
 
 @RestController
@@ -31,7 +34,7 @@ public class ProdutoController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @RequestParam(required = false) Long filialId,
-            @RequestBody(required = false) ProdutoPagedRequestDto ProdutoPagedDto){
+            @RequestBody(required = false) ProdutoPagedRequestDto ProdutoPagedDto) {
         Pageable pageable = PageRequest.of(page, size);
         return produtoService.getProdutoPaged(ProdutoPagedDto, filialId, pageable);
     }
@@ -42,14 +45,10 @@ public class ProdutoController {
     }
 
     @PutMapping("/put/{id}")
-    public ResponseEntity<ProdutoResponseDto> putProduto(@PathVariable Long id,@Valid @RequestBody ProdutoRequestDto produtoDto) {
+    public ResponseEntity<ProdutoResponseDto> putProduto(@PathVariable Long id, @Valid @RequestBody ProdutoRequestDto produtoDto) {
         return ResponseEntity.ok(produtoService.updateProduto(id, produtoDto));
     }
 
-    @DeleteMapping("/remove/{id}")
-    public ResponseEntity<ProdutoResponseDto> removeProduto(@PathVariable Long id) {
-        return ResponseEntity.ok(produtoService.removeProduto(id));
-    }
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<ProdutoResponseDto> deleteProduto(@PathVariable Long id) {
         return ResponseEntity.ok(produtoService.deleteProduto(id));

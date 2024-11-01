@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
@@ -31,10 +31,9 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
     }
 
     @Override
-    public List<?> atualizaPreco(AtualizaPrecoDto atualizaPrecoDto) {
-        var grupoProdutos = Optional.ofNullable(grupoProdutoRepository.buscarGrupoProduto(atualizaPrecoDto.grupoProdutoFilter(), atualizaPrecoDto.filialId())).orElse(List.of());
-        var produtos = Optional.ofNullable(produtoRepository.buscarProduto(atualizaPrecoDto.produtoFilter(), atualizaPrecoDto.filialId())).orElse(List.of());
-
+    public List<ProdutoResponseDto> atualizaPreco(AtualizaPrecoDto atualizaPrecoDto) {
+        var grupoProdutos = grupoProdutoRepository.buscarGrupoProduto(atualizaPrecoDto.grupoProdutoFilter(), atualizaPrecoDto.filialId());
+        var produtos = produtoRepository.buscarProduto(atualizaPrecoDto.produtoFilter(), atualizaPrecoDto.filialId());
         if (!atualizaPrecoDto.all()) {
             if (atualizaPrecoDto.isProduto()) {
                 produtos = produtos.stream().filter(produto -> atualizaPrecoDto.produtoId().contains(produto.getId())).toList();
@@ -98,7 +97,7 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
             produto.setMargemLucro(valor);
             produto.calculateValorVenda();
             return produto;
-        }).toList();
+        }).collect(Collectors.toList());
     }
 
 
