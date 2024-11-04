@@ -18,6 +18,24 @@ import { AtualizaPreco } from '../../models/atualizapreco';
   providedIn: 'root',
 })
 export class HttpService {
+  maiorValorProdutoProdutos(filialId: number) : Observable<any> {
+    const pager: Pager = { page: 0, size: 10}
+    const produto:Produto ={
+      filialId: filialId,
+      filter: new Map<string,string>(),
+      disabled: {
+        nome: false,
+        descricao: false
+      },
+      orderer:[
+        {
+          field:"valorProduto",
+          order:-1
+        }
+      ]
+    }
+    return this.getProdutoPaged(pager,produto);
+  }
 
   filialId(){
     const data = sessionStorage.getItem('filial');
@@ -27,7 +45,7 @@ export class HttpService {
     return undefined;
   }
 
-  getTop10Produtos(filialId: number): Observable<any> {
+  maiorValorVendaProdutos(filialId: number): Observable<any> {
     const pager: Pager = { page: 0, size: 10}
     const produto:Produto ={
       filialId: filialId,

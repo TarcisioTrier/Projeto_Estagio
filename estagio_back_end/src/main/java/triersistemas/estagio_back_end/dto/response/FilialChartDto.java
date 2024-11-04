@@ -7,7 +7,8 @@ public record FilialChartDto(
         Integer produtos,
         Integer gruposProduto,
         Integer fornecedores,
-        ProdutoResponseDto produtoMaisCaro
+        ProdutoResponseDto maiorValorVenda,
+        ProdutoResponseDto maiorValorProduto
 
 ) {
     public FilialChartDto(Filial filial) {
@@ -16,7 +17,8 @@ public record FilialChartDto(
                 filial.getProdutos().size(),
                 filial.getGrupoProdutos().size(),
                 filial.getFornecedores().size(),
-                filial.getProdutos().stream().max((p1, p2) -> p1.getValorVenda().compareTo(p2.getValorVenda())).map(ProdutoResponseDto::new).orElse(null)
+                filial.getProdutos().stream().max((p1, p2) -> p1.getValorVenda().compareTo(p2.getValorVenda())).map(ProdutoResponseDto::new).orElse(null),
+                filial.getProdutos().stream().max((p1,p2)-> p1.getValorProduto().compareTo(p2.getValorProduto())).map(ProdutoResponseDto::new).orElse(null)
         );
     }
 

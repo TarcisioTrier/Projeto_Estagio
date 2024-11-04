@@ -13,13 +13,13 @@ export class AtualizacaoPrecoComponent {
     { label: 'Grupo de Produto', value: false },
   ];
   atualizaRequest(atualizacao: AtualizaPreco) {
+    console.log(atualizacao)
     this.http.putAtualizacaoPreco(atualizacao).subscribe({
       next: (data) => {
         this.messageHandle.showSuccessMessage(
           'Atualização realizada com sucesso'
         );
         console.log(data);
-        window.location.reload();
       },
       error: (erro) => {
         let error = erro.error;

@@ -32,7 +32,13 @@
     <p-chart
       type="bar"
       responsive="true"
-      [data]="maisCaroFilial"
+      [data]="maiorValorVendaFilial"
+      [options]="moneyOptions"
+    />
+    <p-chart
+      type="bar"
+      responsive="true"
+      [data]="maiorValorProdutoFilial"
       [options]="moneyOptions"
     />
   </div>
@@ -50,7 +56,13 @@
     <p-chart
       type="bar"
       responsive="true"
-      [data]="maisCaroOfFilial"
+      [data]="maiorValorVendaOfFilial"
+      [options]="moneyOptions"
+    />
+    <p-chart
+      type="bar"
+      responsive="true"
+      [data]="maiorValorProdutoOfFilial"
       [options]="moneyOptions"
     />
   </div>
