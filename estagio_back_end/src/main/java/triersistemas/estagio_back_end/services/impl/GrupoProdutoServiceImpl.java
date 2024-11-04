@@ -75,13 +75,6 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
     }
 
     @Override
-    public GrupoProdutoResponseDto removeGrupoProduto(Long id) {
-       var grupoProduto =  grupoProdutoById(id);
-       grupoProduto.setSituacaoCadastro(SituacaoCadastro.INATIVO);
-        return new GrupoProdutoResponseDto(grupoProduto);
-    }
-
-    @Override
     public Optional<GrupoProduto> buscaGrupoProdutoPorId(Long id) {
         return this.grupoProdutoRepository.findById(id);
     }

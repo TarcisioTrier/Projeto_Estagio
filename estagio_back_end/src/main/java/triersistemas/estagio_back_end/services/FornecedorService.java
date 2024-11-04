@@ -19,7 +19,5 @@ public interface FornecedorService {
 
     FornecedorResponseDto updateFornecedor(Long id, @Valid FornecedorRequestDto requestDto);
 
-    List<FornecedorResponseDto> getFornecedorFilter(@Valid String nome, Long filialId);
-
     Page<FornecedorResponseDto> getFornecedorPaged(@Valid Long filialId, FornecedorPagedRequestDto fornecedorDto, PageRequest of);
 }

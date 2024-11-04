@@ -110,6 +110,7 @@ public class FilialServiceImpl implements FilialService {
         return new FilialResponseDto(saved);
     }
 
+
     @Override
     public Page<FilialResponseDto> getFilialFPaged(FilialPagedRequestDto filialDto, Pageable pageable) {
         return filialRepository.buscarFiliais(filialDto, pageable);

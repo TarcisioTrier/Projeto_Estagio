@@ -32,7 +32,6 @@ public interface FilialService {
     List<FilialResponseDto> getFilialFilter(String nome);
 
     FilialResponseDto inativaFilial(Long id);
-    FilialResponseDto removeFilial(Long id);
 
     Page<FilialResponseDto> getFilialFPaged(FilialPagedRequestDto filialDto, Pageable pageable);
 
