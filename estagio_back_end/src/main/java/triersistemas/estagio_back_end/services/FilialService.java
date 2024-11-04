@@ -33,7 +33,7 @@ public interface FilialService {
 
     FilialResponseDto inativaFilial(Long id);
 
-    Page<FilialResponseDto> getFilialFPaged(FilialPagedRequestDto filialDto, Pageable pageable);
+    Page<FilialResponseDto> getFilialPaged(FilialPagedRequestDto filialDto, Pageable pageable);
 
     List<FilialChartDto> getChart();
 }

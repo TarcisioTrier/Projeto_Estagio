@@ -44,6 +44,10 @@ export class HttpService {
     return filial.id;
     return undefined;
   }
+  filial(){
+    const data = sessionStorage.getItem('filial');
+    return data ? JSON.parse(data) : undefined;
+  }
 
   maiorValorVendaProdutos(filialId: number): Observable<any> {
     const pager: Pager = { page: 0, size: 10}

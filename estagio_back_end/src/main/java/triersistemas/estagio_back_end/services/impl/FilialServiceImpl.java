@@ -112,7 +112,7 @@ public class FilialServiceImpl implements FilialService {
 
 
     @Override
-    public Page<FilialResponseDto> getFilialFPaged(FilialPagedRequestDto filialDto, Pageable pageable) {
+    public Page<FilialResponseDto> getFilialPaged(FilialPagedRequestDto filialDto, Pageable pageable) {
         return filialRepository.buscarFiliais(filialDto, pageable);
     }
 

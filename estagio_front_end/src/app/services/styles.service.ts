@@ -6,7 +6,6 @@ import { Theme } from '../models/app-enums';
   providedIn: 'root',
 })
 export class StylesService {
-  isDarkMode = true;
   #document = inject(DOCUMENT);
 
   constructor() {
@@ -17,24 +16,35 @@ export class StylesService {
     const linkElement = this.#document.getElementById(
       'app-theme'
     ) as HTMLLinkElement;
-    this.isDarkMode = linkElement.href.includes('dark');
+    if (this.isDarkModeEnabled()) {
+      linkElement.href = Theme.DARK;
+    } else {
+      linkElement.href = Theme.LIGHT;
+    }
   }
 
   toggleLightDark() {
     const linkElement = this.#document.getElementById(
       'app-theme'
     ) as HTMLLinkElement;
-
-    if (this.isDarkMode) {
+    if (this.isDarkModeEnabled()) {
       linkElement.href = Theme.LIGHT;
-      this.isDarkMode = false;
+      sessionStorage.setItem('darkTheme', "false");
     } else {
       linkElement.href = Theme.DARK;
-      this.isDarkMode = true;
+      sessionStorage.setItem('darkTheme', "true");
     }
+    console.log(sessionStorage.getItem('darkTheme'));
   }
 
   isDarkModeEnabled(): boolean {
-    return this.isDarkMode;
+    const data = sessionStorage.getItem('darkTheme');
+    if(data == "true")
+    return true;
+  return false;
+  }
+
+  systemIsDark(): string{
+    return window.matchMedia('(prefers-color-scheme: dark)').matches.toString();
   }
 }

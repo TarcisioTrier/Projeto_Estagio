@@ -15,7 +15,6 @@ export class AppComponent implements OnInit {
   ) {}
   ngOnInit() {
     this.primengConfig.ripple = true;
-    this.styleService.toggleLightDark();
   }
 
   title = 'estagio_front_end';

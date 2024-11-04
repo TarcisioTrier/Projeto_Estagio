@@ -45,7 +45,7 @@ public class FilialController {
             @RequestParam(defaultValue = "10") int size,
              @RequestBody(required = false) FilialPagedRequestDto filialDto) {
         Pageable pageable = PageRequest.of(page, size);
-        return filialService.getFilialFPaged(filialDto, pageable);
+        return filialService.getFilialPaged(filialDto, pageable);
     }
 
     @GetMapping("/getAllFilter")

@@ -29,7 +29,7 @@ export class LayoutComponent implements OnInit {
     }, 50);
   }
 
-  localFilial?: Filial;
+  localFilial?: any;
   filiaisFilter: Filial[] = [];
   selectedItem: any;
   darkMode!: boolean;
@@ -46,15 +46,19 @@ export class LayoutComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.darkMode = this.styleService.isDarkMode;
-    const data = sessionStorage.getItem('filial');
-    this.localFilial = data ? JSON.parse(data) : undefined;
+    this.localFilial = this.http.filial()
     this.menuItem();
+    const data = sessionStorage.getItem('darkTheme');
+    console.log(data);
+    if(data == undefined){
+      sessionStorage.setItem('darkTheme', this.styleService.systemIsDark());
+    }
+    this.darkMode = this.styleService.isDarkModeEnabled();
+
   }
 
   saveFilial(filial: Filial) {
-    this.localFilial = filial;
-    console.log(this.http.filialId);
+    this.localFilial = {id: filial.id, nomeFantasia: filial.nomeFantasia};
     sessionStorage.setItem('filial', JSON.stringify(this.localFilial));
     this.menuItem();
     this.visible = false;
@@ -70,7 +74,6 @@ export class LayoutComponent implements OnInit {
     let query = event.query;
     this.http.getFilialFiltered(query).subscribe((filial) => {
       this.filiaisFilter = Object.values(filial);
-      console.log(this.filiaisFilter);
     });
   }
 
@@ -93,12 +96,13 @@ export class LayoutComponent implements OnInit {
 
   toggleMode() {
     this.styleService.toggleLightDark();
-    this.darkMode = this.styleService.isDarkMode;
+    this.darkMode = this.styleService.isDarkModeEnabled();
     if (this.darkMode) {
       document.body.classList.add('dark');
     } else {
       document.body.classList.remove('dark');
     }
+    window.location.reload();
   }
 
   toggleMenu() {

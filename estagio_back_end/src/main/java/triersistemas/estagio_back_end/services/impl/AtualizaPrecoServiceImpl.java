@@ -63,10 +63,8 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
 
     private List<Produto> atualizaPrecoProduto(List<Produto> produtos, AtualizaPrecoDto atualizaPrecoDto) {
         produtos = atualizavel(produtos);
+     return atualizaValor(produtos, atualizaPrecoDto);
 
-        if (atualizaPrecoDto.atualizaPreco() == AtualizaPrecoEnum.VALOR_PRODUTO || atualizaPrecoDto.atualizaPreco() == AtualizaPrecoEnum.VALOR_VENDA)
-            return atualizaValor(produtos, atualizaPrecoDto);
-        throw new NotFoundException("Tipo de atualização não encontrado");
 
     }
 

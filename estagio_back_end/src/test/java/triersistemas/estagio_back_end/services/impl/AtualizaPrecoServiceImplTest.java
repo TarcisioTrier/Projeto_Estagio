@@ -663,6 +663,7 @@ class AtualizaPrecoServiceImplTest {
         return produto;
     }
 
+
     private List<BigDecimal> expectedValue(String valorP1, String valorP2) {
         return List.of(new BigDecimal(valorP1), new BigDecimal(valorP2));
     }
