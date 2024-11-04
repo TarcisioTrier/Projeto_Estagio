@@ -5,14 +5,13 @@ import { FilialCadastroComponent } from './filial-cadastro/filial-cadastro.compo
 import { FilialListagemComponent } from './filial-listagem/filial-listagem.component';
 
 const routes: Routes = [
-  {path:'', component:FilialComponent},
-  {path:'cadastro', component:FilialCadastroComponent},
-  {path:'listagem', component:FilialListagemComponent}
-
+  { path: '', component: FilialComponent },
+  { path: 'cadastro', component: FilialCadastroComponent },
+  { path: 'listagem', component: FilialListagemComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class FilialRoutingModule { }
+export class FilialRoutingModule {}

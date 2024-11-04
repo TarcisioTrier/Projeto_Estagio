@@ -22,6 +22,9 @@ import { TableModule } from 'primeng/table';
 import { PaginatorModule } from 'primeng/paginator';
 import { SelectButtonModule } from 'primeng/selectbutton';
 import { TabViewModule } from 'primeng/tabview';
+import { MultiSelectModule } from 'primeng/multiselect';
+import { ChartModule } from 'primeng/chart';
+import { SplitterModule } from 'primeng/splitter';
 
 @NgModule({
   declarations: [],
@@ -49,9 +52,12 @@ import { TabViewModule } from 'primeng/tabview';
     TableModule,
     PaginatorModule,
     SelectButtonModule,
-    TabViewModule
+    TabViewModule,
+    MultiSelectModule,
+    ChartModule,
+    SplitterModule,
   ],
-  exports:[
+  exports: [
     MenuModule,
     MenubarModule,
     TieredMenuModule,
@@ -74,7 +80,10 @@ import { TabViewModule } from 'primeng/tabview';
     TableModule,
     PaginatorModule,
     SelectButtonModule,
-    TabViewModule
-  ]
+    TabViewModule,
+    MultiSelectModule,
+    ChartModule,
+    SplitterModule,
+  ],
 })
-export class PrimengModule { }
+export class PrimengModule {}

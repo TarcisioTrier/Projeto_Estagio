@@ -4,11 +4,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import triersistemas.estagio_back_end.dto.request.FornecedorPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.FornecedorRequestDto;
 import triersistemas.estagio_back_end.dto.response.FornecedorResponseDto;
 import triersistemas.estagio_back_end.entity.Filial;
 import triersistemas.estagio_back_end.entity.Fornecedor;
-import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
 import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.repository.FornecedorRepository;
 import triersistemas.estagio_back_end.services.FilialService;
@@ -48,8 +48,8 @@ public class FornecedorServiceImpl implements FornecedorService {
     }
 
     @Override
-    public Page<FornecedorResponseDto> getFornecedorPaged(String nome, String cnpj, SituacaoCadastro situacaoCadastro, Pageable of) {
-        return fornecedorRepository.buscarFornecedores(nome,cnpj,situacaoCadastro,of);
+    public Page<FornecedorResponseDto> getFornecedorPaged(Long filialId, FornecedorPagedRequestDto fornecedorDto, PageRequest of) {
+        return fornecedorRepository.buscarFornecedores(filialId, fornecedorDto, of);
     }
 
     @Override

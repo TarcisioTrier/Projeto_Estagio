@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import triersistemas.estagio_back_end.dto.request.GrupoProdutoPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.GrupoProdutoRequestDto;
+import triersistemas.estagio_back_end.dto.response.GrupoProdutoChartDto;
 import triersistemas.estagio_back_end.dto.response.GrupoProdutoResponseDto;
 import triersistemas.estagio_back_end.entity.GrupoProduto;
 import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
@@ -66,7 +67,19 @@ public class GrupoProdutoServiceImpl implements GrupoProdutoService {
         return grupoProdutoRepository.buscarGrupoProduto(grupoProdutoDto, idFilial, pageable);
     }
 
+    @Override
+    public List<GrupoProdutoChartDto> getProdutos(Long id) {
+        var filial = filialService.findById(id);
+        List<GrupoProduto> gruposProduto = filial.getGrupoProdutos();
+        return gruposProduto.stream().map(GrupoProdutoChartDto::new).toList();
+    }
 
+    @Override
+    public GrupoProdutoResponseDto removeGrupoProduto(Long id) {
+       var grupoProduto =  grupoProdutoById(id);
+       grupoProduto.setSituacaoCadastro(SituacaoCadastro.INATIVO);
+        return new GrupoProdutoResponseDto(grupoProduto);
+    }
 
     @Override
     public Optional<GrupoProduto> buscaGrupoProdutoPorId(Long id) {

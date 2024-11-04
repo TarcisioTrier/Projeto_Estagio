@@ -3,7 +3,9 @@ package triersistemas.estagio_back_end.services.impl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import triersistemas.estagio_back_end.dto.request.FilialPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.FilialRequestDto;
+import triersistemas.estagio_back_end.dto.response.FilialChartDto;
 import triersistemas.estagio_back_end.dto.response.FilialResponseDto;
 import triersistemas.estagio_back_end.entity.Filial;
 import triersistemas.estagio_back_end.enuns.SituacaoContrato;
@@ -106,6 +108,20 @@ public class FilialServiceImpl implements FilialService {
         filial.setSituacaoContrato(SituacaoContrato.INATIVO);
         var saved = filialRepository.save(filial);
         return new FilialResponseDto(saved);
+    }
+
+    @Override
+    public Page<FilialResponseDto> getFilialFPaged(FilialPagedRequestDto filialDto, Pageable pageable) {
+        return filialRepository.buscarFiliais(filialDto, pageable);
+    }
+
+    @Override
+    public List<FilialChartDto> getChart() {
+        List<Filial> filiais = filialRepository.findAll();
+        if (!filiais.isEmpty()) {
+            return filiais.stream().map(FilialChartDto::new).toList();
+        }
+        return List.of();
     }
 
     private void validateFilial(FilialRequestDto requestDto) {

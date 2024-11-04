@@ -1,4 +1,4 @@
 export interface Pager {
-  page?: number,
-  size?: number
+  page?: number;
+  size?: number;
 }

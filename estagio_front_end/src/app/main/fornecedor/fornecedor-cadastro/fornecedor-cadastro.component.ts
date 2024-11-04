@@ -1,101 +1,33 @@
-import { Component } from '@angular/core';
-import { SituacaoContrato } from '../../../models/app-enums';
-import {
-  Cnpj,
-  cnpjtoFornecedor,
-  validateCnpj,
-  validateCnpjField,
-} from '../../../models/externalapi';
+import { Component, OnInit } from '@angular/core';
 import { Fornecedor } from '../../../models/fornecedor';
 import { HttpService } from '../../../services/http/http.service';
 import { MessageHandleService } from '../../../services/message-handle.service';
-import { debounce, first, take } from 'lodash';
 
 @Component({
   selector: 'app-fornecedor-cadastro',
   templateUrl: './fornecedor-cadastro.component.html',
   styleUrl: './fornecedor-cadastro.component.scss',
 })
-export class FornecedorCadastroComponent {
-  loading = false;
-
-  fornecedor: Fornecedor = {
-    cnpj: '',
-    telefone: '',
-    disabled: {
-      nomeFantasia: false,
-      razaoSocial: false,
-      email: false,
-    },
-  };
-
-  situacaoCadastroSelecionado: any;
-  situacaoContrato = Object.keys(SituacaoContrato)
-    .filter((key) => isNaN(Number(key)))
-    .map((status, index) => ({
-      label: status.replace(/_/g, ' '),
-      value: index,
-    }));
-
-  constructor(
-    private http: HttpService,
-    private messageHandler: MessageHandleService
-  ) {}
-
-  load() {
-    this.loading = true;
-    const data = sessionStorage.getItem('filial');
-    const localFilial = data ? JSON.parse(data) : undefined;
-    this.fornecedor.filialId = localFilial.id;
-
-    this.http.postFornecedor(this.fornecedor).subscribe({
+export class FornecedorCadastroComponent implements OnInit {
+  fornecedor!: Fornecedor;
+  load(fornecedor: Fornecedor) {
+    this.http.postFornecedor(fornecedor).subscribe({
       next: (retorno) => {
-        this.messageHandler.showSuccessMessage(retorno);
+        this.messageHandler.showCadastroMessage(retorno);
       },
       error: (erro) => {
         this.messageHandler.showErrorMessage(erro);
       },
     });
-    this.loading = false;
   }
-
-  cnpj  = debounce(() =>{
-    const cnpj = this.fornecedor.cnpj.replace(/[_./-]/g, '');
-    console.log(cnpj);
-
-    if (cnpj.length == 0) {
-      this.enableFieldsCnpj();
-    }
-
-    if (validateCnpj(cnpj)) {
-      this.http.buscaCNPJ(cnpj).subscribe({
-        next: (obj: Cnpj) => {
-          if (obj && obj.error) {
-            this.messageHandler.showErrorMessage(obj.error);
-          } else {
-            this.fornecedor = cnpjtoFornecedor(obj); 
-          }
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
-    } else {
-      validateCnpjField(cnpj);
-    }
-  },1000)
-  
-
-  enableFieldsCnpj() {
-    this.fornecedor.disabled.nomeFantasia = false;
-    this.fornecedor.disabled.razaoSocial = false;
-    this.fornecedor.disabled.email = false;
-  }
-
-  isFoneValid(): boolean {
-    return this.fornecedor.telefone.replace(/[_]/g, '').length < 15;
-  }
-  cadastroSituacao(event: any) {
-    this.fornecedor.situacaoContrato = event.value;
+  constructor(
+    private http: HttpService,
+    private messageHandler: MessageHandleService
+  ) {}
+  ngOnInit(): void {
+    this.http.getFornecedor(1).subscribe((data) => {
+      this.fornecedor = data;
+      console.log(this.fornecedor);
+    });
   }
 }

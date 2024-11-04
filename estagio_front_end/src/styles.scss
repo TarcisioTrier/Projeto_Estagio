@@ -1,6 +1,3 @@
-app-root *{
-  transition: all 0.1s ease-out;
-}
 html{
   height: 100%;
 }
@@ -14,3 +11,34 @@ body{
 p-columnfilterformelement {
   width: 100%;
 }
+* {
+  cursor: url('./assets/cursor/rato\ \(1\).svg'), auto;
+}
+input:hover, textarea:hover, select:hover {
+  cursor: url('./assets/cursor/mouse-de-computador.svg'), auto !important;
+}
+
+.click-1 *{
+  cursor: url('./assets/cursor/clicando_1.svg'), auto !important;
+}
+
+.click-2 *{
+  cursor: url('./assets/cursor/clicando_2.svg'), auto !important;
+}
+
+.click-3 *{
+  cursor: url('./assets/cursor/clique_1.svg'), auto !important;
+}
+
+.click-1 {
+  cursor: url('./assets/cursor/clicando_1.svg'), auto !important;
+}
+
+.click-2 {
+  cursor: url('./assets/cursor/clicando_2.svg'), auto !important;
+}
+
+.click-3 {
+  cursor: url('./assets/cursor/clique_1.svg'), auto !important;
+}
+

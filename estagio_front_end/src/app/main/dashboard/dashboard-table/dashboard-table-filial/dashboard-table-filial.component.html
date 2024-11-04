@@ -1,0 +1,69 @@
+<p-table
+  [value]="filiais"
+  [lazy]="true"
+  [paginator]="true"
+  [rows]="rows"
+  [totalRecords]="totalFiliais"
+  [columns]="selectedColumns"
+  sortMode="multiple"
+  [rowsPerPageOptions]="[5, 10, 20]"
+  (onLazyLoad)="load($event)"
+>
+  <ng-template pTemplate="caption">
+    <p-multiSelect
+      display="chip"
+      [options]="cols"
+      [(ngModel)]="selectedColumns"
+      optionLabel="header"
+      selectedItemsLabel="{0} columns selected"
+      [style]="{ 'min-width': '200px' }"
+      placeholder="Choose Columns"
+    />
+  </ng-template>
+  <ng-template pTemplate="header" let-columns>
+    <tr>
+      <th *ngFor="let col of columns" [pSortableColumn]="col.field">
+        {{ col.header }} <p-sortIcon [field]="col.field"></p-sortIcon>
+      </th>
+      <th></th>
+    </tr>
+    <tr>
+      <th *ngFor="let col of columns">
+        <p-columnFilter
+          type="text"
+          [field]="col.field"
+          [ariaLabel]="col.header"
+        >
+        </p-columnFilter>
+      </th>
+      <th>Editar</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-item let-columns="columns">
+    <tr>
+      <td *ngFor="let col of columns">
+        {{ itemField(item, col.field) }}
+      </td>
+      <td>
+        <p-button
+          type="button"
+          icon="pi pi-pencil"
+          class="p-button-rounded p-button-success"
+          (click)="editFilial(item)"
+        ></p-button>
+        <p-dialog
+          header="Editar Filial"
+          [(visible)]="item.edit"
+          [modal]="true"
+          [resizable]="false"
+          [baseZIndex]="10000"
+        >
+          <app-filial-form
+            [filialPut]="item"
+            (filialChange)="change($event)"
+          ></app-filial-form>
+        </p-dialog>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

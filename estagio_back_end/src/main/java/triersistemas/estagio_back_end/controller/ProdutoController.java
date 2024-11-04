@@ -39,6 +39,7 @@ public class ProdutoController {
         return produtoService.getProdutoPaged(ProdutoPagedDto, filialId, pageable);
     }
 
+
     @PostMapping("/post")
     public ResponseEntity<ProdutoResponseDto> postProduto(@Valid @RequestBody ProdutoRequestDto produtoDto) {
         return ResponseEntity.ok(produtoService.addProduto(produtoDto));

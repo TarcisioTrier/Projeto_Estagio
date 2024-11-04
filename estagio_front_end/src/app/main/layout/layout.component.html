@@ -1,4 +1,4 @@
-<div>
+<div class="click" (click)="click()">
   <p-toolbar>
     <ng-template pTemplate="start">
       <div class="flex flex-row justify-content-center align-items-center">
@@ -10,7 +10,7 @@
           (mouseleave)="hoverTest($event, false)"
           (click)="toggleMenu()"
         ></i>
-        <img [src]="imagem" />
+        <img src="../../../assets/logo_topo.png" />
       </div>
     </ng-template>
 

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import triersistemas.estagio_back_end.dto.request.GrupoProdutoPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.GrupoProdutoRequestDto;
+import triersistemas.estagio_back_end.dto.response.GrupoProdutoChartDto;
 import triersistemas.estagio_back_end.dto.response.GrupoProdutoResponseDto;
 import triersistemas.estagio_back_end.enuns.TipoGrupoProduto;
 import triersistemas.estagio_back_end.services.GrupoProdutoService;
@@ -36,6 +37,11 @@ public class GrupoProdutoController {
             @RequestBody (required = false)GrupoProdutoPagedRequestDto grupoProdutoDto){
         Pageable pageable = PageRequest.of(page, size);
         return grupoProdutoService.getGrupoProdutoPaged(grupoProdutoDto, filialId, pageable);
+    }
+
+    @GetMapping("/getProdutos/{id}")
+    public List<GrupoProdutoChartDto> getProdutos(@PathVariable Long id){
+        return grupoProdutoService.getProdutos(id);
     }
 
     @GetMapping("/getAllFilter")

@@ -1,4 +1,4 @@
-import { SituacaoContrato } from './app-enums';
+import { SituacaoCadastro, SituacaoContrato } from './app-enums';
 import { Endereco, Filial } from './filial';
 import { Fornecedor } from './fornecedor';
 
@@ -49,12 +49,27 @@ export function cnpjToFilial(cnpj: Cnpj): Filial {
     telefone: cnpj.DDD + cnpj.TELEFONE,
     email: cnpj.EMAIL,
     situacaoContrato: SituacaoContrato.ATIVO,
+    endereco: cnpjToEndereco(cnpj),
     disabled: {
       nomeFantasia: cnpj['NOME FANTASIA'] !== '',
       razaoSocial: cnpj['RAZAO SOCIAL'] !== '',
       email: cnpj.EMAIL !== '',
     },
   };
+}
+
+export function objectFix(object: any, event: any): any {
+  Object.keys(event.filters).forEach((element: string) => {
+    object[element] = event.filters[element].value;
+    if (
+      event.filters[element].value === null ||
+      event.filters[element].value === undefined ||
+      event.filters[element].value === ''
+    )
+      return;
+    object.filter![element] = event.filters[element].matchMode;
+  });
+  return object;
 }
 
 export function cnpjtoFornecedor(cnpj: Cnpj): Fornecedor {
@@ -64,7 +79,7 @@ export function cnpjtoFornecedor(cnpj: Cnpj): Fornecedor {
     cnpj: cnpj.CNPJ.toString(),
     telefone: cnpj.DDD + cnpj.TELEFONE,
     email: cnpj.EMAIL,
-    situacaoContrato: SituacaoContrato.ATIVO,
+    situacaoCadastro: SituacaoCadastro.ATIVO,
     disabled: {
       nomeFantasia: cnpj['NOME FANTASIA'] !== '',
       razaoSocial: cnpj['RAZAO SOCIAL'] !== '',
