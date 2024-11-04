@@ -94,7 +94,6 @@ class FilialServiceImplTest {
             doReturn(filial).when(filialRepository).save(filialArgumentCaptor.capture());
             doReturn(enderecos).when(enderecosValidator).validateEndereco(requestDto.endereco());
             doNothing().when(foneValidator).validateFone(requestDto.telefone());
-            doNothing().when(cnpjValidator).validateCnpj(requestDto.cnpj());
             doNothing().when(cnpjValidator).validateCnpjPostFilial(requestDto.cnpj());
 
             var actual = filialService.addFilial(requestDto);
@@ -110,7 +109,6 @@ class FilialServiceImplTest {
             verify(filialRepository, times(1)).save(filialArgumentCaptor.capture());
             verify(enderecosValidator, times(1)).validateEndereco(requestDto.endereco());
             verify(foneValidator, times(1)).validateFone(requestDto.telefone());
-            verify(cnpjValidator, times(1)).validateCnpj(requestDto.cnpj());
             verify(cnpjValidator, times(1)).validateCnpjPostFilial(requestDto.cnpj());
         }
     }

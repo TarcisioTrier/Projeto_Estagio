@@ -141,7 +141,7 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
 
     private static BigDecimal valorCalculo(Boolean isPercentual, Boolean isRelativo, BigDecimal valorOriginal, BigDecimal valor) {
         if (isPercentual) {
-            return valorCalculoRelativo(isRelativo, valorOriginal.multiply(percent(valor)), valorOriginal.multiply(percent(valor)));
+            return valorCalculoRelativo(isRelativo, valorOriginal.multiply(BigDecimal.ONE.add(percent(valor))), valorOriginal.multiply(percent(valor)));
         }
         return valorCalculoRelativo(isRelativo, valorOriginal.add(valor), valor);
     }

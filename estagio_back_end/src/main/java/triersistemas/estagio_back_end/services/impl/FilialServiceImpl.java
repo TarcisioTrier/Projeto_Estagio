@@ -109,7 +109,6 @@ public class FilialServiceImpl implements FilialService {
     }
 
     private void validateFilial(FilialRequestDto requestDto) {
-        cnpjValidator.validateCnpj(requestDto.cnpj());
         cnpjValidator.validateCnpjPostFilial(requestDto.cnpj());
         foneValidator.validateFone(requestDto.telefone());
     }
