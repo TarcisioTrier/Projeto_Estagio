@@ -15,6 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import triersistemas.estagio_back_end.dto.request.FornecedorPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.FornecedorRequestDto;
 import triersistemas.estagio_back_end.dto.response.FornecedorResponseDto;
 import triersistemas.estagio_back_end.entity.Filial;
@@ -26,6 +27,7 @@ import triersistemas.estagio_back_end.validators.CnpjValidator;
 import triersistemas.estagio_back_end.validators.FoneValidator;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -215,23 +217,25 @@ class FornecedorServiceImplTest {
         @Test
         @DisplayName("Deve retornar fornecedores que batem com o nome,cnpj e situação cadastro dados, usando Pageable")
         void getFornecedorPagedTest_V2() {
-            Pageable pageable = PageRequest.of(0, 5);
+            PageRequest pageable = PageRequest.of(0, 5);
+            FornecedorPagedRequestDto fornecedorPaged = new FornecedorPagedRequestDto("nome", null, "52.353.295/0001-83",null, null, SituacaoCadastro.ATIVO,List.of(), Map.of());
             String cnpj = "52.353.295/0001-83";
             String name = "Nome";
+            Long filialId = 1L;
             SituacaoCadastro situacaoCadastro = SituacaoCadastro.ATIVO;
 
             FornecedorResponseDto responseDto = new FornecedorResponseDto(fornecedor);
             Page<FornecedorResponseDto> expected = new PageImpl<>(List.of(responseDto));
 
-            doReturn(new PageImpl<>(List.of(responseDto))).when(fornecedorRepository).buscarFornecedores(name, cnpj, situacaoCadastro, pageable);
+            doReturn(new PageImpl<>(List.of(responseDto))).when(fornecedorRepository).buscarFornecedores(filialId, fornecedorPaged,pageable);
 
-            Page<FornecedorResponseDto> actual = fornecedorService.getFornecedorPaged(name, cnpj, situacaoCadastro, pageable);
+            Page<FornecedorResponseDto> actual = fornecedorService.getFornecedorPaged(filialId, fornecedorPaged,pageable);
 
             assertEquals(expected.getTotalElements(), actual.getTotalElements());
             assertEquals(expected.getTotalPages(), actual.getTotalPages());
             assertEquals(expected.getContent().getFirst(), actual.getContent().getFirst());
 
-            verify(fornecedorRepository, times(1)).buscarFornecedores(name, cnpj, situacaoCadastro, pageable);
+            verify(fornecedorRepository, times(1)).buscarFornecedores(filialId, fornecedorPaged,pageable);
         }
     }
 }
