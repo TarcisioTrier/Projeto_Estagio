@@ -57,7 +57,7 @@ class CnpjValidatorImplTest {
             var cnpj = "30.860.615/0001-59";
 
             doReturn(Optional.of(filial)).when(filialRepository).findByCnpj(cnpj);
-            
+
         }
     }
     @Nested
