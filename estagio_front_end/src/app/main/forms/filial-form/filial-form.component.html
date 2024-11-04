@@ -76,15 +76,16 @@
     <div class="col-12 my-3 md:col-6">
       <p-dropdown
         [options]="situacaoContrato"
-        [(ngModel)]="itemSelecionado"
-        (ngModelChange)="cadastroSituacao($event)"
-        optionLabel="label"
+        [(ngModel)]="cadastroFilial.situacaoContrato"
         [showClear]="true"
         placeholder="Situação do Contrato"
       >
         <ng-template pTemplate="selectedItem">
           <div style="width: 125px; height: fit-content">
-            {{ itemSelecionado.label | titlecase }}
+            {{
+              situacaoContrato[cadastroFilial.situacaoContrato!].label
+                | titlecase
+            }}
           </div>
         </ng-template>
         <ng-template let-item pTemplate="item">
@@ -173,7 +174,6 @@
       </p-floatLabel>
     </div>
 
-    <p-toast></p-toast>
     <div class="col my-3 sm:col md:col-7 lg:col-5 xl:col-3">
       <p-button
         label="Cadastrar"
@@ -186,7 +186,7 @@
             cadastroFilial.cnpj &&
             cadastroFilial.telefone &&
             cadastroFilial.email &&
-            itemSelecionado &&
+            cadastroFilial.situacaoContrato !== undefined &&
             !(
               cadastroFilial.endereco!.cep &&
               !(

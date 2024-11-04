@@ -2,7 +2,9 @@ package triersistemas.estagio_back_end.services;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import triersistemas.estagio_back_end.dto.request.FilialPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.FilialRequestDto;
+import triersistemas.estagio_back_end.dto.response.FilialChartDto;
 import triersistemas.estagio_back_end.dto.response.FilialResponseDto;
 import triersistemas.estagio_back_end.entity.Filial;
 
@@ -30,4 +32,8 @@ public interface FilialService {
     List<FilialResponseDto> getFilialFilter(String nome);
 
     FilialResponseDto removeFilial(Long id);
+
+    Page<FilialResponseDto> getFilialFPaged(FilialPagedRequestDto filialDto, Pageable pageable);
+
+    List<FilialChartDto> getChart();
 }

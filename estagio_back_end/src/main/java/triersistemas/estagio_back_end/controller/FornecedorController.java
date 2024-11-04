@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import triersistemas.estagio_back_end.dto.request.FornecedorPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.FornecedorRequestDto;
 import triersistemas.estagio_back_end.dto.response.FornecedorResponseDto;
 import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
@@ -32,14 +33,13 @@ public class FornecedorController {
         return ResponseEntity.ok(fornecedorService.getFornecedorById(id));
     }
     //Todo: Atualizar metodo para receber filialId
-    @GetMapping("/getAllPaged")
+    @PutMapping("/getAllPaged")
     public Page<FornecedorResponseDto> getFornecedorPaged(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @Valid @RequestParam(required = false) String nome,
-            @Valid @RequestParam(required = false) String cnpj,
-            @RequestParam(required = false) SituacaoCadastro situacaoCadastro) {
-        return fornecedorService.getFornecedorPaged(nome, cnpj, situacaoCadastro, PageRequest.of(page, size));
+            @Valid @RequestParam(required = false) Long filialId,
+            @RequestBody(required = false) FornecedorPagedRequestDto fornecedorDto) {
+        return fornecedorService.getFornecedorPaged(filialId, fornecedorDto, PageRequest.of(page, size));
     }
 
     @GetMapping("/getAllFilter")

@@ -1,28 +1,31 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { enumToArray, TipoGrupo, AtualizaPrecoEnum } from '../../../models/app-enums';
+import {
+  enumToArray,
+  TipoGrupo,
+  AtualizaPrecoEnum,
+} from '../../../models/app-enums';
 import { AtualizaPreco } from '../../../models/atualizapreco';
 import { GrupoProduto } from '../../../models/grupo-produto';
 import { HttpService } from '../../../services/http/http.service';
-import { MessageHandleService } from '../../../services/message-handle.service';
 
 @Component({
   selector: 'app-atualizacao-preco-grupo-produto',
   templateUrl: './atualizacao-preco-grupo-produto.component.html',
-  styleUrl: './atualizacao-preco-grupo-produto.component.scss'
+  styleUrl: './atualizacao-preco-grupo-produto.component.scss',
 })
-export class AtualizacaoPrecoGrupoProdutoComponent implements OnInit{
+export class AtualizacaoPrecoGrupoProdutoComponent implements OnInit {
   @Output() close = new EventEmitter();
   atualizarPreco() {
     this.atualizacao.valor = this.valor;
-      if (this.selectedGrupoProdutos) {
-        this.atualizacao.grupoProdutoId = this.selectedGrupoProdutos.map(
-          (grupoProduto) => grupoProduto.id!
-        );
-      }
-      if (this.atualizacao.all) {
-        this.atualizacao.grupoProdutoFilter = this.grupoProdutoFilter;
-      }
-      this.close.emit(this.atualizacao);
+    if (this.selectedGrupoProdutos) {
+      this.atualizacao.grupoProdutoId = this.selectedGrupoProdutos.map(
+        (grupoProduto) => grupoProduto.id!
+      );
+    }
+    if (this.atualizacao.all) {
+      this.atualizacao.grupoProdutoFilter = this.grupoProdutoFilter;
+    }
+    this.close.emit(this.atualizacao);
   }
   selectedGrupoProdutos!: GrupoProduto[];
   produtosOptions: any[] = [
@@ -38,7 +41,7 @@ export class AtualizacaoPrecoGrupoProdutoComponent implements OnInit{
     isPercentual: false,
   };
   grupoProdutos!: GrupoProduto[];
-  rows!: number;
+  rows: number = 10;
   totalGrupoProdutos!: number;
   grupoProdutoFilter!: GrupoProduto;
   tipoGrupoOptions: any[] = enumToArray(TipoGrupo);
@@ -46,18 +49,7 @@ export class AtualizacaoPrecoGrupoProdutoComponent implements OnInit{
   tipoAtualizacaoOptions = enumToArray(AtualizaPrecoEnum);
   last: any;
   loadGrupoProdutos(event: any) {
-    Object.keys(event.filters).forEach((element: string) => {
-      if (
-        event.filters[element].value === null ||
-        event.filters[element].value === undefined ||
-        event.filters[element].value === ''
-      ){
-        return;
-      }else{
-        (this.grupoProdutoFilter as any)[element] = event.filters[element].value;
-        (this.grupoProdutoFilter as any).filter![element] = event.filters[element].matchMode;
-      }
-    });
+    this.grupoProdutoFilter = objectFix(this.grupoProdutoFilter, event);
     this.grupoProdutoFilter.orderer = event.multiSortMeta;
     const page = event.first! / event.rows!;
     this.rows = event.rows!;
@@ -71,15 +63,12 @@ export class AtualizacaoPrecoGrupoProdutoComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    const data = sessionStorage.getItem('filial');
-    const filial = data ? JSON.parse(data) : undefined;
     const pager = {};
-    this.atualizacao.filialId = filial.id!;
+    this.atualizacao.filialId = this.http.filialId();
     this.grupoProdutoFilter = {
-      filialId: filial.id!,
+      filialId: this.http.filialId(),
       filter: new Map<string, string>(),
     };
-
     this.http
       .getGrupoProdutoPaged(pager, this.grupoProdutoFilter)
       .subscribe((data) => {
@@ -89,9 +78,18 @@ export class AtualizacaoPrecoGrupoProdutoComponent implements OnInit{
   produtoChange(value: number) {
     this.atualizacao.isProduto = value === 0;
   }
-  constructor(
-    private http: HttpService
-  ) {}
+  constructor(private http: HttpService) {}
 }
-
-
+function objectFix(object: any, event: any): any {
+  Object.keys(event.filters).forEach((element: string) => {
+    object[element] = event.filters[element].value;
+    if (
+      event.filters[element].value === null ||
+      event.filters[element].value === undefined ||
+      event.filters[element].value === ''
+    )
+      return;
+    object.filter![element] = event.filters[element].matchMode;
+  });
+  return object;
+}

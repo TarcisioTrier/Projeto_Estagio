@@ -15,7 +15,7 @@ public record FilialPagedRequestDto(
         String email,
         SituacaoContrato situacaoContrato,
         EnderecosDto endereco,
-        List<Orderer> order,
+        List<Orderer> orderer,
         Map<String, String> filter
 ) {
 }

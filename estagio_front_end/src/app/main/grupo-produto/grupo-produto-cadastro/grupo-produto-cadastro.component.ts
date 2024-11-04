@@ -6,11 +6,10 @@ import { MessageHandleService } from '../../../services/message-handle.service';
 @Component({
   selector: 'app-grupo-produto-cadastro',
   templateUrl: './grupo-produto-cadastro.component.html',
-  styleUrl: './grupo-produto-cadastro.component.scss'
+  styleUrl: './grupo-produto-cadastro.component.scss',
 })
 export class GrupoProdutoCadastroComponent {
-
-  load(grupoProduto:GrupoProduto){
+  load(grupoProduto: GrupoProduto) {
     this.http.postGrupoProduto(grupoProduto).subscribe({
       next: (retorno) => {
         this.messageHandle.showCadastroMessage(retorno);
@@ -24,5 +23,4 @@ export class GrupoProdutoCadastroComponent {
     private http: HttpService,
     private messageHandle: MessageHandleService
   ) {}
-
 }

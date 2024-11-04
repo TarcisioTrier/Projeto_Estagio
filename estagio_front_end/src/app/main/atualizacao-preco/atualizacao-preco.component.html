@@ -1,10 +1,14 @@
 <div class="m-5">
   <p-tabView>
     <p-tabPanel header="Produto">
-      <app-atualizacao-preco-produto (close)="atualizaRequest($event)"></app-atualizacao-preco-produto>
+      <app-atualizacao-preco-produto
+        (close)="atualizaRequest($event)"
+      ></app-atualizacao-preco-produto>
     </p-tabPanel>
     <p-tabPanel header="Grupo Produto">
-      <app-atualizacao-preco-grupo-produto (close)="atualizaRequest($event)"></app-atualizacao-preco-grupo-produto>
+      <app-atualizacao-preco-grupo-produto
+        (close)="atualizaRequest($event)"
+      ></app-atualizacao-preco-grupo-produto>
     </p-tabPanel>
   </p-tabView>
 </div>

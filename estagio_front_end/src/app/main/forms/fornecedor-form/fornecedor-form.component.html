@@ -79,7 +79,9 @@
       >
         <ng-template pTemplate="selectedItem">
           <div style="width: 125px; height: fit-content">
-            {{ situacaoCadastro[fornecedor.situacaoCadastro!].label | titlecase }}
+            {{
+              situacaoCadastro[fornecedor.situacaoCadastro!].label | titlecase
+            }}
           </div>
         </ng-template>
         <ng-template let-item pTemplate="item">
@@ -89,7 +91,6 @@
         </ng-template>
       </p-dropdown>
     </div>
-    <p-toast></p-toast>
     <div class="col my-3 sm:col md:col-6 lg:col-5 xl:col-4">
       <p-button
         label="Cadastrar"

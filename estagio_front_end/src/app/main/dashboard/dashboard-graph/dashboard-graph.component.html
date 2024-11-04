@@ -1,0 +1,57 @@
+<div class="grid" *ngIf="!filialId">
+  <div class="col-6">
+    <p-tabView>
+      <p-tabPanel header="Produtos">
+        <p-chart
+          type="pie"
+          responsive="true"
+          [data]="produtosFilais"
+          [options]="options"
+        />
+      </p-tabPanel>
+      <p-tabPanel header="Grupos de Produto">
+        <p-chart
+          type="pie"
+          responsive="true"
+          [data]="gruposProdutoFiliais"
+          [options]="options"
+        />
+      </p-tabPanel>
+      <p-tabPanel header="Fornecedores">
+        <p-chart
+          type="pie"
+          responsive="true"
+          [data]="fornecedoresFiliais"
+          [options]="options"
+        />
+      </p-tabPanel>
+    </p-tabView>
+  </div>
+
+  <div class="col-6">
+    <p-chart
+      type="bar"
+      responsive="true"
+      [data]="maisCaroFilial"
+      [options]="moneyOptions"
+    />
+  </div>
+</div>
+<div class="grid" *ngIf="filialId">
+  <div class="col-6">
+    <p-chart
+      responsive="true"
+      type="pie"
+      [data]="produtosGrupos"
+      [options]="options"
+    />
+  </div>
+  <div class="col-6">
+    <p-chart
+      type="bar"
+      responsive="true"
+      [data]="maisCaroOfFilial"
+      [options]="moneyOptions"
+    />
+  </div>
+</div>

@@ -1,8 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Produto } from '../../../models/produto';
 import { HttpService } from '../../../services/http/http.service';
 import { MessageHandleService } from '../../../services/message-handle.service';
-
 
 @Component({
   selector: 'app-produto-cadastro',
@@ -10,9 +9,8 @@ import { MessageHandleService } from '../../../services/message-handle.service';
   styleUrl: './produto-cadastro.component.scss',
 })
 export class ProdutoCadastroComponent {
-
   load(produto: Produto) {
-      produto.grupoProdutoId = produto.grupoProduto!.id;
+    produto.grupoProdutoId = produto.grupoProduto!.id;
     this.http.postProduto(produto).subscribe({
       next: (retorno) => {
         this.messageHandle.showCadastroMessage(retorno);

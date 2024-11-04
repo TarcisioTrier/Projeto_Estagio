@@ -1,13 +1,5 @@
-import { AtualizaPrecoEnum } from './../../models/app-enums';
-import { Component, OnInit } from '@angular/core';
-import { Produto } from '../../models/produto';
-import { GrupoProduto } from '../../models/grupo-produto';
+import { Component } from '@angular/core';
 import { HttpService } from '../../services/http/http.service';
-import {
-  enumToArray,
-  TipoGrupo,
-  TipoProduto,
-} from '../../models/app-enums';
 import { AtualizaPreco } from '../../models/atualizapreco';
 import { MessageHandleService } from '../../services/message-handle.service';
 @Component({
@@ -23,7 +15,9 @@ export class AtualizacaoPrecoComponent {
   atualizaRequest(atualizacao: AtualizaPreco) {
     this.http.putAtualizacaoPreco(atualizacao).subscribe({
       next: (data) => {
-        this.messageHandle.showSuccessMessage("Atualização realizada com sucesso");
+        this.messageHandle.showSuccessMessage(
+          'Atualização realizada com sucesso'
+        );
         console.log(data);
         window.location.reload();
       },
@@ -33,7 +27,7 @@ export class AtualizacaoPrecoComponent {
           this.messageHandle.showErrorMessage(error);
         } else {
           this.messageHandle.showErrorMessage('Erro ao atualizar');
-            console.log(erro);
+          console.log(erro);
         }
       },
     });
@@ -44,4 +38,3 @@ export class AtualizacaoPrecoComponent {
     private messageHandle: MessageHandleService
   ) {}
 }
-

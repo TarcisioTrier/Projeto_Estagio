@@ -54,11 +54,16 @@ export class LayoutComponent implements OnInit {
 
   saveFilial(filial: Filial) {
     this.localFilial = filial;
+    console.log(this.http.filialId);
     sessionStorage.setItem('filial', JSON.stringify(this.localFilial));
     this.menuItem();
     this.visible = false;
     this.selectedItem = undefined;
-    this.router.navigate(['']);
+    if (this.router.url == '/') {
+      window.location.reload();
+    } else {
+      this.router.navigate(['/inicial']);
+    }
   }
 
   filterItems(event: AutoCompleteCompleteEvent) {

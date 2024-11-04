@@ -1,30 +1,32 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-import { enumToArray, TipoProduto, AtualizaPrecoEnum } from '../../../models/app-enums';
+import {
+  enumToArray,
+  TipoProduto,
+  AtualizaPrecoEnum,
+} from '../../../models/app-enums';
 import { AtualizaPreco } from '../../../models/atualizapreco';
 import { Produto } from '../../../models/produto';
 import { HttpService } from '../../../services/http/http.service';
-import { MessageHandleService } from '../../../services/message-handle.service';
 
 @Component({
   selector: 'app-atualizacao-preco-produto',
   templateUrl: './atualizacao-preco-produto.component.html',
-  styleUrl: './atualizacao-preco-produto.component.scss'
+  styleUrl: './atualizacao-preco-produto.component.scss',
 })
-export class AtualizacaoPrecoProdutoComponent implements OnInit{
-
+export class AtualizacaoPrecoProdutoComponent implements OnInit {
   @Output() close = new EventEmitter();
 
   atualizarPreco() {
     this.atualizacao.valor = this.valor;
-      if (this.selectedProdutos) {
-        this.atualizacao.produtoId = this.selectedProdutos.map(
-          (produto) => produto.id!
-        );
-      }
-      if (this.atualizacao.all) {
-        this.atualizacao.produtoFilter = this.produtoFilter;
-      }
-      this.close.emit(this.atualizacao);
+    if (this.selectedProdutos) {
+      this.atualizacao.produtoId = this.selectedProdutos.map(
+        (produto) => produto.id!
+      );
+    }
+    if (this.atualizacao.all) {
+      this.atualizacao.produtoFilter = this.produtoFilter;
+    }
+    this.close.emit(this.atualizacao);
   }
   selectedProdutos!: Produto[];
   produtosOptions: any[] = [
@@ -57,19 +59,17 @@ export class AtualizacaoPrecoProdutoComponent implements OnInit{
       next: (data) => {
         this.produtos = data.content;
         this.produtos.forEach((produto) => {
-          produto.editar = false;
+          produto.edit = false;
         });
         this.totalProdutos = data.totalElements;
       },
     });
   }
   ngOnInit(): void {
-    const data = sessionStorage.getItem('filial');
-    const filial = data ? JSON.parse(data) : undefined;
     const pager = {};
-    this.atualizacao.filialId = filial.id!;
+    this.atualizacao.filialId = this.http.filialId();
     this.produtoFilter = {
-      filialId: filial.id!,
+      filialId: this.http.filialId(),
       filter: new Map<string, string>(),
       disabled: {
         nome: false,
@@ -80,14 +80,13 @@ export class AtualizacaoPrecoProdutoComponent implements OnInit{
       this.totalProdutos = data.totalElements;
       this.produtos = data.content;
       this.produtos.forEach((produto) => {
-        produto.editar = false;
+        produto.edit = false;
       });
       this.rows = data.size;
     });
   }
   constructor(
-    private http: HttpService,
-    private messageHandle: MessageHandleService
+    private http: HttpService
   ) {}
 }
 
@@ -104,4 +103,3 @@ function objectFix(object: any, event: any): any {
   });
   return object;
 }
-

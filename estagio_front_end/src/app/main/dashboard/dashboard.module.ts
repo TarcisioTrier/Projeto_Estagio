@@ -9,6 +9,8 @@ import { DashboardTableGrupoProdutoComponent } from './dashboard-table/dashboard
 import { DashboardTableFilialComponent } from './dashboard-table/dashboard-table-filial/dashboard-table-filial.component';
 import { DashboardTableFornecedorComponent } from './dashboard-table/dashboard-table-fornecedor/dashboard-table-fornecedor.component';
 import { PrimengModule } from '../../primeng/primeng.module';
+import { FormModule } from '../forms/form.module';
+import { DashboardGraphComponent } from './dashboard-graph/dashboard-graph.component';
 
 
 @NgModule({
@@ -19,11 +21,13 @@ import { PrimengModule } from '../../primeng/primeng.module';
     DashboardTableGrupoProdutoComponent,
     DashboardTableFilialComponent,
     DashboardTableFornecedorComponent,
+    DashboardGraphComponent,
   ],
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    PrimengModule
+    PrimengModule,
+    FormModule
   ]
 })
 export class DashboardModule { }

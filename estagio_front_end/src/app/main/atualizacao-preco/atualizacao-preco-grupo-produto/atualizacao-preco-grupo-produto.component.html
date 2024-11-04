@@ -1,175 +1,190 @@
-
-  <p-table
-    [value]="grupoProdutos"
-    [lazy]="true"
-    [paginator]="true"
-    [rows]="rows"
-    [(selection)]="selectedGrupoProdutos"
-    [totalRecords]="totalGrupoProdutos"
-    [rowsPerPageOptions]="[5, 10, 20]"
-    sortMode="multiple"
-    (onLazyLoad)="loadGrupoProdutos($event)"
-  >
+<p-table
+  [value]="grupoProdutos"
+  [lazy]="true"
+  [paginator]="true"
+  [rows]="rows"
+  [(selection)]="selectedGrupoProdutos"
+  [totalRecords]="totalGrupoProdutos"
+  [rowsPerPageOptions]="[5, 10, 20]"
+  sortMode="multiple"
+  (onLazyLoad)="loadGrupoProdutos($event)"
+>
   <ng-template pTemplate="caption">
-  <div class="flex flex-row">
-    <p-floatLabel>
-      <p-dropdown
-        [options]="tipoAtualizacaoOptions"
-        [(ngModel)]="atualizacao.atualizaPreco"
-        [showClear]="true"
-        placeholder="Metodo de Atualização"
-      >
-        <ng-template let-item pTemplate="item">
-          {{ item.label | titlecase }}
-        </ng-template>
-        <ng-template pTemplate="selectedItem">
-          <div style="width: 125px; height: fit-content">
-            {{ this.tipoAtualizacaoOptions[this.atualizacao.atualizaPreco!].label | titlecase }}
-          </div>
-        </ng-template>
-      </p-dropdown>
-    </p-floatLabel>
-    <div>
-      <p-button *ngIf="atualizacao.isRelativo" label="Relativo" (onClick)="atualizacao.isRelativo = !atualizacao.isRelativo"/>
-      <p-button *ngIf="!atualizacao.isRelativo" label="Absoluto" severity="secondary" (onClick)="atualizacao.isRelativo = !atualizacao.isRelativo"/>
-    </div>
-    <p-floatLabel>
-      <p-inputNumber
-        *ngIf="!atualizacao.isPercentual && atualizacao.atualizaPreco != 0"
-        [(ngModel)]="atualizacao.valor"
-        inputId="valor"
-        mode="currency"
-        currency="BRL"
-        [minFractionDigits]="2"
-        [maxFractionDigits]="2"
-      />
-      <p-inputNumber
-        *ngIf="atualizacao.isPercentual && atualizacao.atualizaPreco != 0"
-        [(ngModel)]="atualizacao.valor"
-        inputId="valor"
-        mode="decimal"
-        suffix="%"
-        [minFractionDigits]="2"
-        [maxFractionDigits]="2"/>
-        <p-inputNumber
-        *ngIf="atualizacao.isRelativo && atualizacao.atualizaPreco == 0"
-        [(ngModel)]="atualizacao.valor"
-        inputId="valor"
-        mode="decimal"
-        suffix="%"
-        [minFractionDigits]="2"
-        [maxFractionDigits]="2"
-        [min]="-100"
-        [max]="100"
-        />
-        <p-inputNumber
-        *ngIf="!atualizacao.isRelativo && atualizacao.atualizaPreco == 0"
-        [(ngModel)]="atualizacao.valor"
-        inputId="valor"
-        mode="decimal"
-        suffix="%"
-        [minFractionDigits]="2"
-        [maxFractionDigits]="2"
-        [min]="0"
-        [max]="100"
-        />
-      <label for="valor">Valor</label>
-    </p-floatLabel>
     <div class="flex flex-row">
-      <p-button *ngIf="atualizacao.isPercentual || atualizacao.atualizaPreco == 0" (onClick)="atualizacao.isPercentual = !atualizacao.isPercentual">%</p-button>
-      <p-button *ngIf="!atualizacao.isPercentual && atualizacao.atualizaPreco != 0" (onClick)="atualizacao.isPercentual = !atualizacao.isPercentual">R$</p-button>
-      <p-button
-      label="Atualizar Preço"
-      icon="pi pi-refresh"
-      (onClick)="atualizarPreco()"
-    />
+      <p-floatLabel>
+        <p-dropdown
+          [options]="tipoAtualizacaoOptions"
+          [(ngModel)]="atualizacao.atualizaPreco"
+          [showClear]="true"
+          placeholder="Metodo de Atualização"
+        >
+          <ng-template let-item pTemplate="item">
+            {{ item.label | titlecase }}
+          </ng-template>
+          <ng-template pTemplate="selectedItem">
+            <div style="width: 125px; height: fit-content">
+              {{
+                this.tipoAtualizacaoOptions[this.atualizacao.atualizaPreco!]
+                  .label | titlecase
+              }}
+            </div>
+          </ng-template>
+        </p-dropdown>
+      </p-floatLabel>
+      <div>
+        <p-button
+          *ngIf="atualizacao.isRelativo"
+          label="Relativo"
+          (onClick)="atualizacao.isRelativo = !atualizacao.isRelativo"
+        />
+        <p-button
+          *ngIf="!atualizacao.isRelativo"
+          label="Absoluto"
+          severity="secondary"
+          (onClick)="atualizacao.isRelativo = !atualizacao.isRelativo"
+        />
+      </div>
+      <p-floatLabel>
+        <p-inputNumber
+          *ngIf="!atualizacao.isPercentual && atualizacao.atualizaPreco != 0"
+          [(ngModel)]="atualizacao.valor"
+          inputId="valor"
+          mode="currency"
+          currency="BRL"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+        />
+        <p-inputNumber
+          *ngIf="atualizacao.isPercentual && atualizacao.atualizaPreco != 0"
+          [(ngModel)]="atualizacao.valor"
+          inputId="valor"
+          mode="decimal"
+          suffix="%"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+        />
+        <p-inputNumber
+          *ngIf="atualizacao.isRelativo && atualizacao.atualizaPreco == 0"
+          [(ngModel)]="atualizacao.valor"
+          inputId="valor"
+          mode="decimal"
+          suffix="%"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+          [min]="-100"
+          [max]="100"
+        />
+        <p-inputNumber
+          *ngIf="!atualizacao.isRelativo && atualizacao.atualizaPreco == 0"
+          [(ngModel)]="atualizacao.valor"
+          inputId="valor"
+          mode="decimal"
+          suffix="%"
+          [minFractionDigits]="2"
+          [maxFractionDigits]="2"
+          [min]="0"
+          [max]="100"
+        />
+        <label for="valor">Valor</label>
+      </p-floatLabel>
+      <div class="flex flex-row">
+        <p-button
+          *ngIf="atualizacao.isPercentual || atualizacao.atualizaPreco == 0"
+          (onClick)="atualizacao.isPercentual = !atualizacao.isPercentual"
+          >%</p-button
+        >
+        <p-button
+          *ngIf="!atualizacao.isPercentual && atualizacao.atualizaPreco != 0"
+          (onClick)="atualizacao.isPercentual = !atualizacao.isPercentual"
+          >R$</p-button
+        >
+        <p-button
+          label="Atualizar Preço"
+          icon="pi pi-refresh"
+          (onClick)="atualizarPreco()"
+        />
+      </div>
     </div>
-
-  </div>
-</ng-template>
-    <ng-template pTemplate="header">
-      <tr>
-        <th>
-          <p-checkbox
+  </ng-template>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>
+        <p-checkbox
           [(ngModel)]="atualizacao.all"
           [binary]="true"
           inputId="binary"
-          label="Todos" />
-        </th>
-        <th>
-          <p-columnFilter
-            type="text"
-            field="nomeGrupo"
-            ariaLabel="Filter Nome Grupo"
-          />
-        </th>
-        <th>
-          <p-columnFilter
-            type="numeric"
-            field="margemLucro"
-            ariaLabel="Filter Margem Lucro"
-          />
-        </th>
-        <th>
-          <p-columnFilter
-            field="tipoGrupo"
-            matchMode="equals"
-            [showMenu]="false"
-            ><ng-template
-              pTemplate="filter"
-              let-tipoGrupo
-              let-filter="filterCallback"
+          label="Todos"
+        />
+      </th>
+      <th>
+        <p-columnFilter
+          type="text"
+          field="nomeGrupo"
+          ariaLabel="Filter Nome Grupo"
+        />
+      </th>
+      <th>
+        <p-columnFilter
+          type="numeric"
+          field="margemLucro"
+          ariaLabel="Filter Margem Lucro"
+        />
+      </th>
+      <th>
+        <p-columnFilter field="tipoGrupo" matchMode="equals" [showMenu]="false"
+          ><ng-template
+            pTemplate="filter"
+            let-tipoGrupo
+            let-filter="filterCallback"
+          >
+            <p-dropdown
+              [ngModel]="tipoGrupo"
+              [options]="tipoGrupoOptions"
+              (onChange)="filter($event.value)"
+              placeholder="Escolha um"
+              [showClear]="true"
             >
-              <p-dropdown
-                [ngModel]="tipoGrupo"
-                [options]="tipoGrupoOptions"
-                (onChange)="filter($event.value)"
-                placeholder="Escolha um"
-                [showClear]="true"
-              >
-                <ng-template let-option pTemplate="item">
-                  {{ option.label }}
-                </ng-template>
-              </p-dropdown>
-            </ng-template>
-          </p-columnFilter>
-        </th>
-        <th>
-          <p-columnFilter
-            type="boolean"
-            field="atualizaPreco"
-            ariaLabel="Filter Atualiza Preço"
-          />
-        </th>
-      </tr>
-      <tr>
-        <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
-        <th pSortableColumn="nomeGrupo">
-          Nome<p-sortIcon field="nomeGrupo" />
-        </th>
-        <th pSortableColumn="margemLucro">
-          Margem de Lucro<p-sortIcon field="margemLucro" />
-        </th>
-        <th pSortableColumn="tipoGrupo">
-          Tipo Grupo Produto<p-sortIcon field="tipoGrupo" />
-        </th>
-        <th pSortableColumn="atualizaPreco">
-          Atualiza Preço<p-sortIcon field="atualizaPreco" />
-        </th>
-      </tr>
-    </ng-template>
-    <ng-template pTemplate="body" let-item>
-      <tr>
-        <td>
-          <p-tableCheckbox [value]="item" />
-        </td>
-        <td>{{ item.nomeGrupo }}</td>
-        <td>{{ item.margemLucro }}%</td>
-        <td>{{ item.tipoGrupo }}</td>
-        <td>
-          <i class="pi pi-check" *ngIf="item.atualizaPreco"></i>
-          <i class="pi pi-times" *ngIf="!item.atualizaPreco"></i>
-        </td>
-      </tr>
-    </ng-template>
-  </p-table>
+              <ng-template let-option pTemplate="item">
+                {{ option.label }}
+              </ng-template>
+            </p-dropdown>
+          </ng-template>
+        </p-columnFilter>
+      </th>
+      <th>
+        <p-columnFilter
+          type="boolean"
+          field="atualizaPreco"
+          ariaLabel="Filter Atualiza Preço"
+        />
+      </th>
+    </tr>
+    <tr>
+      <th style="width: 4rem"><p-tableHeaderCheckbox /></th>
+      <th pSortableColumn="nomeGrupo">Nome<p-sortIcon field="nomeGrupo" /></th>
+      <th pSortableColumn="margemLucro">
+        Margem de Lucro<p-sortIcon field="margemLucro" />
+      </th>
+      <th pSortableColumn="tipoGrupo">
+        Tipo Grupo Produto<p-sortIcon field="tipoGrupo" />
+      </th>
+      <th pSortableColumn="atualizaPreco">
+        Atualiza Preço<p-sortIcon field="atualizaPreco" />
+      </th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-item>
+    <tr>
+      <td>
+        <p-tableCheckbox [value]="item" />
+      </td>
+      <td>{{ item.nomeGrupo }}</td>
+      <td>{{ item.margemLucro }}%</td>
+      <td>{{ item.tipoGrupo }}</td>
+      <td>
+        <i class="pi pi-check" *ngIf="item.atualizaPreco"></i>
+        <i class="pi pi-times" *ngIf="!item.atualizaPreco"></i>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>

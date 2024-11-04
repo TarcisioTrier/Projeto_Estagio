@@ -1,6 +1,23 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-import { enumToArray, SituacaoCadastro, SituacaoContrato } from '../../../models/app-enums';
-import { validateCnpj, Cnpj, cnpjtoFornecedor, validateCnpjField } from '../../../models/externalapi';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  OnInit,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
+import {
+  enumToArray,
+  SituacaoCadastro,
+  SituacaoContrato,
+} from '../../../models/app-enums';
+import {
+  validateCnpj,
+  Cnpj,
+  cnpjtoFornecedor,
+  validateCnpjField,
+} from '../../../models/externalapi';
 import { Fornecedor } from '../../../models/fornecedor';
 import { HttpService } from '../../../services/http/http.service';
 import { MessageHandleService } from '../../../services/message-handle.service';
@@ -9,7 +26,7 @@ import { debounce } from 'lodash';
 @Component({
   selector: 'app-fornecedor-form',
   templateUrl: './fornecedor-form.component.html',
-  styleUrl: './fornecedor-form.component.scss'
+  styleUrl: './fornecedor-form.component.scss',
 })
 export class FornecedorFormComponent implements OnChanges {
   @Input() fornecedorPut!: Fornecedor;
@@ -28,43 +45,39 @@ export class FornecedorFormComponent implements OnChanges {
 
   situacaoCadastro = enumToArray(SituacaoCadastro);
 
-    constructor(
-      private http: HttpService,
-      private messageHandler: MessageHandleService
-    ) {}
+  constructor(
+    private http: HttpService,
+    private messageHandler: MessageHandleService
+  ) {}
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes);
-    if(this.fornecedorPut !== undefined){
-    const situacaoCadastro = Object.values(SituacaoCadastro);
-    this.fornecedor = {
-      cnpj: this.fornecedorPut.cnpj,
-      telefone: this.fornecedorPut.telefone,
-      nomeFantasia: this.fornecedorPut.nomeFantasia,
-      razaoSocial: this.fornecedorPut.razaoSocial,
-      email: this.fornecedorPut.email,
-      situacaoCadastro: situacaoCadastro.indexOf(this.fornecedorPut.situacaoCadastro!),
-      disabled: {
-        nomeFantasia: false,
-        razaoSocial: false,
-        email: false,
-      },
-    };
-    console.log(this.fornecedor);
-  }
+    if (this.fornecedorPut !== undefined) {
+      const situacaoCadastro = Object.values(SituacaoCadastro);
+      this.fornecedor = {
+        cnpj: this.fornecedorPut.cnpj,
+        telefone: this.fornecedorPut.telefone,
+        nomeFantasia: this.fornecedorPut.nomeFantasia,
+        razaoSocial: this.fornecedorPut.razaoSocial,
+        email: this.fornecedorPut.email,
+        situacaoCadastro: situacaoCadastro.indexOf(
+          this.fornecedorPut.situacaoCadastro!
+        ),
+        disabled: {
+          nomeFantasia: false,
+          razaoSocial: false,
+          email: false,
+        },
+      };
+    }
   }
 
   load() {
     this.loading = true;
-    const data = sessionStorage.getItem('filial');
-    const localFilial = data ? JSON.parse(data) : undefined;
-    this.fornecedor.filialId = localFilial.id;
     this.fornecedorPutChange.emit(this.fornecedor);
     this.loading = false;
   }
 
-  cnpj  = debounce(() =>{
-    const cnpj = this.fornecedor.cnpj.replace(/[_./-]/g, '');
-    console.log(cnpj);
+  cnpj = debounce(() => {
+    const cnpj = this.fornecedor.cnpj!.replace(/[_./-]/g, '');
 
     if (cnpj.length == 0) {
       this.enableFieldsCnpj();
@@ -86,8 +99,7 @@ export class FornecedorFormComponent implements OnChanges {
     } else {
       validateCnpjField(cnpj);
     }
-  },1000)
-
+  }, 1000);
 
   enableFieldsCnpj() {
     this.fornecedor.disabled.nomeFantasia = false;
@@ -96,6 +108,6 @@ export class FornecedorFormComponent implements OnChanges {
   }
 
   isFoneValid(): boolean {
-    return this.fornecedor.telefone.replace(/[_]/g, '').length < 15;
+    return this.fornecedor.telefone!.replace(/[_]/g, '').length < 15;
   }
 }

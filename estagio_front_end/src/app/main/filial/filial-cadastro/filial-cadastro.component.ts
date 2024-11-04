@@ -1,20 +1,8 @@
 import { MessageHandleService } from './../../../services/message-handle.service';
-import { Endereco } from './../../../models/filial';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Filial } from '../../../models/filial';
-import { SituacaoContrato } from '../../../models/app-enums';
 import { HttpService } from '../../../services/http/http.service';
-import {
-  Cep,
-  cepToEndereco,
-  Cnpj,
-  cnpjToEndereco,
-  cnpjToFilial,
-  cnpjEnderecoDisabler,
-  validateCnpj,
-} from '../../../models/externalapi';
 import { MessageService } from 'primeng/api';
-import { debounce } from 'lodash';
 
 @Component({
   selector: 'app-filial-cadastro',

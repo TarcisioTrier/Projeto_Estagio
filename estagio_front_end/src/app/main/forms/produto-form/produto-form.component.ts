@@ -1,7 +1,12 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { debounce } from 'lodash';
-import { SituacaoCadastro, Apresentacao, TipoProduto, enumToArray } from '../../../models/app-enums';
+import {
+  SituacaoCadastro,
+  Apresentacao,
+  TipoProduto,
+  enumToArray,
+} from '../../../models/app-enums';
 import { verificaBarcode } from '../../../models/externalapi';
 import { GrupoProduto } from '../../../models/grupo-produto';
 import { Produto } from '../../../models/produto';
@@ -12,10 +17,9 @@ import { DropdownChangeEvent } from 'primeng/dropdown';
 @Component({
   selector: 'app-produto-form',
   templateUrl: './produto-form.component.html',
-  styleUrl: './produto-form.component.scss'
+  styleUrl: './produto-form.component.scss',
 })
 export class ProdutoFormComponent implements OnInit {
-
   @Input() produtoPut?: Produto;
   loading = false;
   @Output() produtoChange = new EventEmitter<Produto>();
@@ -27,33 +31,35 @@ export class ProdutoFormComponent implements OnInit {
     private messageHandle: MessageHandleService
   ) {}
   ngOnInit(): void {
-    if(this.produtoPut !== undefined){
+    if (this.produtoPut !== undefined) {
       const tipoProduto = Object.values(TipoProduto);
       const apresentacao = Object.values(Apresentacao);
       const situacaoCadastro = Object.values(SituacaoCadastro);
-          this.produto = {
-            id: this.produtoPut.id,
-            nome: this.produtoPut.nome,
-            descricao: this.produtoPut.descricao,
-            tipoProduto:tipoProduto.indexOf(this.produtoPut.tipoProduto!) ,
-            grupoProdutoId: this.produtoPut.grupoProdutoId,
-            codigoBarras: this.produtoPut.codigoBarras,
-            margemLucro: this.produtoPut.margemLucro,
-            atualizaPreco: this.produtoPut.atualizaPreco,
-            valorProduto: this.produtoPut.valorProduto,
-            apresentacao: apresentacao.indexOf(this.produtoPut.apresentacao!),
-            situacaoCadastro: situacaoCadastro.indexOf(this.produtoPut.situacaoCadastro!),
-            disabled: {
-              nome: false,
-              descricao: false,
-            },
-          }
-          this.http.getGrupoProduto(this.produtoPut.grupoProdutoId!).subscribe({
-            next: (data) => {
-              this.produto.grupoProduto = data;
-            }
-          });
-    }else{
+      this.produto = {
+        id: this.produtoPut.id,
+        nome: this.produtoPut.nome,
+        descricao: this.produtoPut.descricao,
+        tipoProduto: tipoProduto.indexOf(this.produtoPut.tipoProduto!),
+        grupoProdutoId: this.produtoPut.grupoProdutoId,
+        codigoBarras: this.produtoPut.codigoBarras,
+        margemLucro: this.produtoPut.margemLucro,
+        atualizaPreco: this.produtoPut.atualizaPreco,
+        valorProduto: this.produtoPut.valorProduto,
+        apresentacao: apresentacao.indexOf(this.produtoPut.apresentacao!),
+        situacaoCadastro: situacaoCadastro.indexOf(
+          this.produtoPut.situacaoCadastro!
+        ),
+        disabled: {
+          nome: false,
+          descricao: false,
+        },
+      };
+      this.http.getGrupoProduto(this.produtoPut.grupoProdutoId!).subscribe({
+        next: (data) => {
+          this.produto.grupoProduto = data;
+        },
+      });
+    } else {
       this.produto = {
         codigoBarras: '',
         descricao: '',
@@ -70,6 +76,8 @@ export class ProdutoFormComponent implements OnInit {
 
   load() {
     this.loading = true;
+    this.produto.grupoProdutoId = this.produto.grupoProduto?.id;
+    console.log(this.produto);
     this.produtoChange.emit(this.produto);
     this.loading = false;
   }
@@ -95,9 +103,7 @@ export class ProdutoFormComponent implements OnInit {
   }, 300);
 
   filterItems(event: AutoCompleteCompleteEvent) {
-    const data = sessionStorage.getItem('filial');
-    const localFilial = data ? JSON.parse(data) : undefined;
-    this.http.getGrupoProdutoAllFilter(localFilial.id, event.query).subscribe({
+    this.http.getGrupoProdutoAllFilter(this.http.filialId(), event.query).subscribe({
       next: (list) => {
         this.grupoProdutoFilter = Object.values(list);
       },
