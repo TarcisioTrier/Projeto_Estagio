@@ -87,7 +87,6 @@ class FornecedorServiceImplTest {
 
             doReturn(filial).when(filialService).findById(requestDto.filialId());
             doReturn(fornecedor).when(fornecedorRepository).save(fornecedorArgumentCaptor.capture());
-            doNothing().when(cnpjValidator).validateCnpj(requestDto.cnpj());
             doNothing().when(cnpjValidator).validateCnpjPostFornecedor(requestDto.cnpj());
             doNothing().when(foneValidator).validateFone(requestDto.telefone());
 
@@ -103,7 +102,6 @@ class FornecedorServiceImplTest {
 
             verify(filialService, times(1)).findById(requestDto.filialId());
             verify(fornecedorRepository, times(1)).save(fornecedor);
-            verify(cnpjValidator, times(1)).validateCnpj(requestDto.cnpj());
             verify(cnpjValidator, times(1)).validateCnpjPostFornecedor(requestDto.cnpj());
             verify(foneValidator, times(1)).validateFone(requestDto.telefone());
 

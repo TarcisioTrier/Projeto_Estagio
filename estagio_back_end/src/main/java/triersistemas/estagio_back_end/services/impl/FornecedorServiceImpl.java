@@ -78,7 +78,6 @@ public class FornecedorServiceImpl implements FornecedorService {
     }
 
     private void validateFornecedor(FornecedorRequestDto requestDto) {
-        cnpjValidator.validateCnpj(requestDto.cnpj());
         cnpjValidator.validateCnpjPostFornecedor(requestDto.cnpj());
         foneValidator.validateFone(requestDto.telefone());
     }
