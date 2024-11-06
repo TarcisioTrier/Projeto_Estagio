@@ -47,9 +47,8 @@ public class FornecedorController {
         return ResponseEntity.ok(fornecedorService.updateFornecedor(id, fornecedorDto));
     }
 
-    @DeleteMapping("/situacao/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<FornecedorResponseDto> deleteFornecedor(@PathVariable Long id) {
-        fornecedorService.deleteFornecedor(id);
         return ResponseEntity.ok(fornecedorService.deleteFornecedor(id));
     }
 

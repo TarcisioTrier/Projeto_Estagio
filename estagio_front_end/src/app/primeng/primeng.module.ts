@@ -25,6 +25,7 @@ import { TabViewModule } from 'primeng/tabview';
 import { MultiSelectModule } from 'primeng/multiselect';
 import { ChartModule } from 'primeng/chart';
 import { SplitterModule } from 'primeng/splitter';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @NgModule({
   declarations: [],
@@ -56,6 +57,7 @@ import { SplitterModule } from 'primeng/splitter';
     MultiSelectModule,
     ChartModule,
     SplitterModule,
+    ConfirmDialogModule
   ],
   exports: [
     MenuModule,
@@ -84,6 +86,7 @@ import { SplitterModule } from 'primeng/splitter';
     MultiSelectModule,
     ChartModule,
     SplitterModule,
+    ConfirmDialogModule
   ],
 })
 export class PrimengModule {}

@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 
 import { FilialRoutingModule } from './filial-routing.module';
 import { FilialComponent } from './filial.component';
-import { FilialCadastroModule } from './filial-cadastro/filial-cadastro.module';
-import { FilialListagemModule } from './filial-listagem/filial-listagem.module';
+import { FormModule } from '../forms/form.module';
+import { MessageService } from 'primeng/api';
+import { HttpService } from '../../services/http/http.service';
 
 
 @NgModule({
@@ -14,8 +15,8 @@ import { FilialListagemModule } from './filial-listagem/filial-listagem.module';
   imports: [
     CommonModule,
     FilialRoutingModule,
-    FilialCadastroModule,
-    FilialListagemModule
-  ]
+    FormModule
+  ],
+  providers: [HttpService, MessageService],
 })
 export class FilialModule { }

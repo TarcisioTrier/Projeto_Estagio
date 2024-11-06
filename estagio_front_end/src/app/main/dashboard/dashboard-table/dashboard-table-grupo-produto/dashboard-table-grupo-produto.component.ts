@@ -4,6 +4,7 @@ import { objectFix } from '../../../../models/externalapi';
 import { HttpService } from '../../../../services/http/http.service';
 import { MessageHandleService } from '../../../../services/message-handle.service';
 import { enumToArray, TipoGrupo } from '../../../../models/app-enums';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-dashboard-table-grupo-produto',
@@ -11,6 +12,34 @@ import { enumToArray, TipoGrupo } from '../../../../models/app-enums';
   styleUrl: './dashboard-table-grupo-produto.component.scss',
 })
 export class DashboardTableGrupoProdutoComponent {
+
+  lastEvent:any;
+  remove(event: Event, item: any) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Você tem certeza que deseja deletar ' + item.nomeGrupo + ' ?',
+      header: 'Deletar',
+      icon: 'pi pi-info-circle',
+      acceptButtonStyleClass:"p-button-danger p-button-text",
+              rejectButtonStyleClass:"p-button-text p-button-text",
+              acceptIcon:"none",
+              rejectIcon:"none",
+              accept: () => {
+                this.http.removerGrupoProduto(item.id).subscribe({
+                  next: (data) =>{
+                    this.messageHandler.showSuccessMessage( data.nomeGrupo + ' foi removido com sucesso.');
+                    this.load(this.lastEvent)
+                  },
+                  error: (error)=>{
+                    this.messageHandler.showErrorMessage(error.error);
+                  }
+                })
+            },
+            reject: () => {
+              this.messageHandler.showErrorMessage('Remoção cancelada');
+            }
+    })
+  }
   enumOptions(): any[] {
     return enumToArray(TipoGrupo);
   }
@@ -30,7 +59,7 @@ export class DashboardTableGrupoProdutoComponent {
   change(grupoProduto: GrupoProduto) {
     this.http.editarGrupoProduto(grupoProduto).subscribe({
       next: (retorno) => {
-        this.messageHandler.showCadastroMessage(retorno);
+        this.messageHandler.showSuccessMessage("Grupo de Produto Atualizado com Sucesso");
       },
       error: (erro) => {
         this.messageHandler.showErrorMessage(erro);
@@ -49,13 +78,9 @@ export class DashboardTableGrupoProdutoComponent {
     { field: 'atualizaPreco', header: 'Atualização de Preço' },
   ];
 
-  selectedColumns = [
-    { field: 'nomeGrupo', header: 'Nome Do Grupo Produto' },
-    { field: 'tipoGrupo', header: 'Tipo de Grupo Produto' },
-    { field: 'margemLucro', header: 'Margem de Lucro' },
-    { field: 'atualizaPreco', header: 'Atualização de Preço' },
-  ];
+  selectedColumns = this.cols;
   load(event: any) {
+    this.lastEvent = { ...event };
     this.grupoProdutoFilter = objectFix(this.grupoProdutoFilter, event);
     this.grupoProdutoFilter.orderer = event.multiSortMeta;
     const page = event.first! / event.rows!;
@@ -93,6 +118,7 @@ export class DashboardTableGrupoProdutoComponent {
   }
   constructor(
     private http: HttpService,
-    private messageHandler: MessageHandleService
+    private messageHandler: MessageHandleService,
+    private confirmationService: ConfirmationService
   ) {}
 }

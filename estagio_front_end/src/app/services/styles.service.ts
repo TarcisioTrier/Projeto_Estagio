@@ -23,18 +23,19 @@ export class StylesService {
     }
   }
 
-  toggleLightDark() {
+  toggleLightDark(): boolean {
     const linkElement = this.#document.getElementById(
       'app-theme'
     ) as HTMLLinkElement;
     if (this.isDarkModeEnabled()) {
       linkElement.href = Theme.LIGHT;
       sessionStorage.setItem('darkTheme', "false");
+      return false;
     } else {
       linkElement.href = Theme.DARK;
       sessionStorage.setItem('darkTheme', "true");
+      return true;
     }
-    console.log(sessionStorage.getItem('darkTheme'));
   }
 
   isDarkModeEnabled(): boolean {

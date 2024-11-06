@@ -49,12 +49,16 @@ export class LayoutComponent implements OnInit {
     this.localFilial = this.http.filial()
     this.menuItem();
     const data = sessionStorage.getItem('darkTheme');
-    console.log(data);
     if(data == undefined){
       sessionStorage.setItem('darkTheme', this.styleService.systemIsDark());
+      window.location.reload();
     }
     this.darkMode = this.styleService.isDarkModeEnabled();
-
+    if (this.darkMode) {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
   }
 
   saveFilial(filial: Filial) {
@@ -81,7 +85,7 @@ export class LayoutComponent implements OnInit {
     sessionStorage.removeItem('filial');
     this.localFilial = undefined;
     this.menuItem();
-    this.router.navigate(['/filial/cadastro']);
+    this.router.navigate(['/filial']);
   }
 
   hoverTest(event: Event, hover: boolean) {
@@ -95,8 +99,7 @@ export class LayoutComponent implements OnInit {
   }
 
   toggleMode() {
-    this.styleService.toggleLightDark();
-    this.darkMode = this.styleService.isDarkModeEnabled();
+    this.darkMode = this.styleService.toggleLightDark();
     if (this.darkMode) {
       document.body.classList.add('dark');
     } else {
@@ -128,43 +131,21 @@ export class LayoutComponent implements OnInit {
       this.items.push({
         label: 'Filiais',
         routerLink: 'filial',
-        items: [
-          this.createMenuItem('Cadastro de Filiais', 'filial/cadastro'),
-          this.createMenuItem('Listagem de Filiais', 'filial/listagem'),
-        ],
       });
     } else {
       this.items.push({
         label: 'Grupo de Produto',
         routerLink: 'grupo-de-produto',
-        items: [
-          this.createMenuItem(
-            'Cadastro de grupo de produtos',
-            'grupo-de-produto/cadastro'
-          ),
-          this.createMenuItem(
-            'Listagem de grupo de produtos',
-            'grupo-de-produto/listagem'
-          ),
-        ],
       });
 
       this.items.push({
         label: 'Fornecedor',
         routerLink: 'fornecedor',
-        items: [
-          this.createMenuItem('Cadastro de fornecedor', 'fornecedor/cadastro'),
-          this.createMenuItem('Listagem de fornecedor', 'fornecedor/listagem'),
-        ],
       });
 
       this.items.push({
         label: 'Produto',
         routerLink: 'produto',
-        items: [
-          this.createMenuItem('Cadastro de Produto', 'produto/cadastro'),
-          this.createMenuItem('Listagem de Produto', 'produto/listagem'),
-        ],
       });
       this.items.push({
         label: 'Atualização de Preço',

@@ -21,8 +21,9 @@
             "line": 7,
             "name": "ao entrar no cadastro da filial",
             "result": {
-              "status": "passed",
-              "duration": 1174000000
+              "status": "failed",
+              "duration": 5786000000,
+              "error_message": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `#pn_id_5_1_0 > .p-menuitem-content > .p-menuitem-link`, but never found it.\n    at Context.eval (cypress/support/page/filial.page.js:16:5)"
             }
           },
           {
@@ -31,8 +32,7 @@
             "line": 8,
             "name": "preencher os dados e pressionar para cadastrar",
             "result": {
-              "status": "passed",
-              "duration": 4418000000
+              "status": "skipped"
             }
           },
           {
@@ -41,8 +41,7 @@
             "line": 9,
             "name": "valida o cadastro",
             "result": {
-              "status": "passed",
-              "duration": 338000000
+              "status": "skipped"
             }
           }
         ]
@@ -61,8 +60,8 @@
             "line": 12,
             "name": "ao entrar no cadastro da filial",
             "result": {
-              "status": "passed",
-              "duration": 1037000000
+              "status": "failed",
+              "error_message": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `#pn_id_5_1_header > .p-panelmenu-header-content > .p-panelmenu-header-action`, but never found it.\n    at Context.eval (cypress/support/page/filial.page.js:13:5)"
             }
           },
           {
@@ -71,8 +70,7 @@
             "line": 13,
             "name": "tenta cadastrar cnpj ja cadastrado",
             "result": {
-              "status": "passed",
-              "duration": 2501000000
+              "status": "skipped"
             }
           },
           {
@@ -81,8 +79,7 @@
             "line": 14,
             "name": "lanca mensagem de erro CNPJ já cadastrado em outra empresa",
             "result": {
-              "status": "passed",
-              "duration": 9000000
+              "status": "skipped"
             }
           }
         ]
@@ -101,8 +98,8 @@
             "line": 17,
             "name": "ao entrar no cadastro da filial",
             "result": {
-              "status": "passed",
-              "duration": 1042000000
+              "status": "failed",
+              "error_message": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `#pn_id_5_1_header > .p-panelmenu-header-content > .p-panelmenu-header-action`, but never found it.\n    at Context.eval (cypress/support/page/filial.page.js:13:5)"
             }
           },
           {
@@ -111,8 +108,7 @@
             "line": 18,
             "name": "tenta cadastrar cnpj invalido",
             "result": {
-              "status": "passed",
-              "duration": 2410000000
+              "status": "skipped"
             }
           },
           {
@@ -121,8 +117,7 @@
             "line": 19,
             "name": "invalida cadastro cnpj invalido",
             "result": {
-              "status": "passed",
-              "duration": 8000000
+              "status": "skipped"
             }
           }
         ]
@@ -141,8 +136,8 @@
             "line": 22,
             "name": "ao entrar no cadastro da filial",
             "result": {
-              "status": "passed",
-              "duration": 1016000000
+              "status": "failed",
+              "error_message": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `#pn_id_5_1_0 > .p-menuitem-content > .p-menuitem-link`, but never found it.\n    at Context.eval (cypress/support/page/filial.page.js:16:5)"
             }
           },
           {
@@ -151,8 +146,7 @@
             "line": 23,
             "name": "botao de cadatro desabilitado",
             "result": {
-              "status": "passed",
-              "duration": 49000000
+              "status": "skipped"
             }
           }
         ]
@@ -172,7 +166,7 @@
             "name": "ao entrar em uma filial",
             "result": {
               "status": "passed",
-              "duration": 776000000
+              "duration": 1406000000
             }
           },
           {
@@ -182,7 +176,7 @@
             "name": "aparece a filial que entrou",
             "result": {
               "status": "passed",
-              "duration": 9000000
+              "duration": 10000000
             }
           }
         ]
@@ -202,7 +196,7 @@
             "name": "ao entrar em uma filial",
             "result": {
               "status": "passed",
-              "duration": 791000000
+              "duration": 1523000000
             }
           },
           {
@@ -212,7 +206,7 @@
             "name": "clicar para sair",
             "result": {
               "status": "passed",
-              "duration": 271000000
+              "duration": 433000000
             }
           },
           {
@@ -221,8 +215,8 @@
             "line": 32,
             "name": "deve voltar para o cadastro",
             "result": {
-              "status": "passed",
-              "duration": 10000000
+              "status": "failed",
+              "error_message": "AssertionError: Timed out retrying after 4000ms: expected 'http://localhost:4200/filial' to equal 'http://localhost:4200/filial/cadastro'\n    + expected - actual\n\n    -'http://localhost:4200/filial'\n    +'http://localhost:4200/filial/cadastro'\n\n    at Context.eval (cypress/support/step-definitions/filial.cy.js:29:11)\n    at Context.resolveAndRunStepDefinition (node_modules/cypress-cucumber-preprocessor/lib/resolveStepDefinition.js:193:0)\n    at Context.eval (node_modules/cypress-cucumber-preprocessor/lib/createTestFromScenario.js:27:0)"
             }
           }
         ]
@@ -242,7 +236,7 @@
             "name": "ao entrar em uma filial",
             "result": {
               "status": "passed",
-              "duration": 786000000
+              "duration": 1410000000
             }
           },
           {
@@ -252,7 +246,7 @@
             "name": "clica no menu de opcoes",
             "result": {
               "status": "passed",
-              "duration": 199000000
+              "duration": 291000000
             }
           },
           {
@@ -261,8 +255,8 @@
             "line": 37,
             "name": "deve aparecer as opcoes",
             "result": {
-              "status": "passed",
-              "duration": 19000000
+              "status": "failed",
+              "error_message": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `#pn_id_6_1_header > .p-panelmenu-header-content > .p-panelmenu-header-action`, but never found it.\n    at Context.eval (cypress/support/step-definitions/filial.cy.js:41:4)\n    at Context.resolveAndRunStepDefinition (node_modules/cypress-cucumber-preprocessor/lib/resolveStepDefinition.js:193:0)\n    at Context.eval (node_modules/cypress-cucumber-preprocessor/lib/createTestFromScenario.js:27:0)"
             }
           }
         ]
@@ -282,7 +276,7 @@
             "name": "entra na pagina inicial",
             "result": {
               "status": "passed",
-              "duration": 302000000
+              "duration": 476000000
             }
           },
           {
@@ -292,7 +286,7 @@
             "name": "tenta entrar em uma filial inexistente",
             "result": {
               "status": "passed",
-              "duration": 694000000
+              "duration": 1054000000
             }
           },
           {
@@ -302,7 +296,7 @@
             "name": "deve retornar para a pagina inicial",
             "result": {
               "status": "passed",
-              "duration": 10000000
+              "duration": 12000000
             }
           }
         ]
@@ -321,8 +315,8 @@
             "line": 45,
             "name": "ao entrar no cadastro da filial",
             "result": {
-              "status": "passed",
-              "duration": 1082000000
+              "status": "failed",
+              "error_message": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `#pn_id_5_1_header > .p-panelmenu-header-content > .p-panelmenu-header-action`, but never found it.\n    at Context.eval (cypress/support/page/filial.page.js:13:5)"
             }
           },
           {
@@ -331,8 +325,7 @@
             "line": 46,
             "name": "colocar um cnpj",
             "result": {
-              "status": "passed",
-              "duration": 475000000
+              "status": "skipped"
             }
           },
           {
@@ -341,8 +334,7 @@
             "line": 47,
             "name": "deve receber um request de 200OK",
             "result": {
-              "status": "passed",
-              "duration": 20000000
+              "status": "skipped"
             }
           }
         ]

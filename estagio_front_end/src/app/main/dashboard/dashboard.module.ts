@@ -11,6 +11,7 @@ import { DashboardTableFornecedorComponent } from './dashboard-table/dashboard-t
 import { PrimengModule } from '../../primeng/primeng.module';
 import { FormModule } from '../forms/form.module';
 import { DashboardGraphComponent } from './dashboard-graph/dashboard-graph.component';
+import { ConfirmationService } from 'primeng/api';
 
 
 @NgModule({
@@ -28,6 +29,7 @@ import { DashboardGraphComponent } from './dashboard-graph/dashboard-graph.compo
     DashboardRoutingModule,
     PrimengModule,
     FormModule
-  ]
+  ],
+  providers:[ConfirmationService]
 })
 export class DashboardModule { }

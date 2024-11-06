@@ -10,7 +10,7 @@ export interface Filial {
   telefone?: string;
   email?: string;
   situacaoContrato?: SituacaoContrato;
-  endereco: Endereco;
+  endereco?: Endereco;
   edit?: boolean;
   fornecedores?: Array<Fornecedor>;
   grupoProdutos?: Array<GrupoProduto>;

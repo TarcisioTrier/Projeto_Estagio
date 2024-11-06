@@ -41,6 +41,7 @@ public class FilialServiceImpl implements FilialService {
 
     @Override
     public FilialResponseDto addFilial(FilialRequestDto filialDto) {
+        cnpjValidator.validateCnpjPostFilial(filialDto.cnpj());
         validateFilial(filialDto);
         var filial = new Filial(filialDto);
         Optional.ofNullable(filialDto.endereco()).map(enderecosValidator::validateEndereco).ifPresent(filial::setEndereco);
@@ -126,7 +127,6 @@ public class FilialServiceImpl implements FilialService {
     }
 
     private void validateFilial(FilialRequestDto requestDto) {
-        cnpjValidator.validateCnpjPostFilial(requestDto.cnpj());
         foneValidator.validateFone(requestDto.telefone());
     }
 

@@ -4,6 +4,7 @@ import { Filial } from '../../../../models/filial';
 import { HttpService } from '../../../../services/http/http.service';
 import { MessageHandleService } from '../../../../services/message-handle.service';
 import { Fornecedor } from '../../../../models/fornecedor';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-dashboard-table-fornecedor',
@@ -11,13 +12,41 @@ import { Fornecedor } from '../../../../models/fornecedor';
   styleUrl: './dashboard-table-fornecedor.component.scss',
 })
 export class DashboardTableFornecedorComponent {
+  lastEvent:any;
+  remove(event: Event, item: any) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Você tem certeza que deseja deletar ' + item.nomeFantasia + ' ?',
+      header: 'Deletar',
+      icon: 'pi pi-info-circle',
+      acceptButtonStyleClass:"p-button-danger p-button-text",
+              rejectButtonStyleClass:"p-button-text p-button-text",
+              acceptIcon:"none",
+              rejectIcon:"none",
+              accept: () => {
+                this.http.removerFornecedor(item.id).subscribe({
+                  next: (data) =>{
+                    this.messageHandler.showSuccessMessage( data.nomeFantasia + ' foi removido com sucesso.');
+                    this.load(this.lastEvent)
+                  },
+                  error: (error)=>{
+                    this.messageHandler.showErrorMessage(error.error);
+                  }
+                })
+            },
+            reject: () => {
+              this.messageHandler.showErrorMessage('Remoção cancelada');
+            }
+    })
+  }
   editFornecedor(item: any) {
     item.edit = true;
   }
   change(fornecedor: Fornecedor) {
+    fornecedor.filialId = this.http.filialId();
     this.http.putForncedor(fornecedor).subscribe({
       next: (retorno) => {
-        this.messageHandler.showCadastroMessage(retorno);
+        this.messageHandler.showSuccessMessage("Fornecedor Atualizado com Sucesso");
       },
       error: (erro) => {
         this.messageHandler.showErrorMessage(erro);
@@ -37,14 +66,9 @@ export class DashboardTableFornecedorComponent {
     { field: 'cnpj', header: 'CNPJ' },
   ];
 
-  selectedColumns = [
-    { field: 'nomeFantasia', header: 'Nome Fantasia' },
-    { field: 'razaoSocial', header: 'Razão Social' },
-    { field: 'email', header: 'Email' },
-    { field: 'telefone', header: 'Telefone' },
-    { field: 'cnpj', header: 'CNPJ' },
-  ];
+  selectedColumns = this.cols;
   load(event: any) {
+    this.lastEvent = { ...event };
     this.fornecedorFilter = objectFix(this.fornecedorFilter, event);
     this.fornecedorFilter.orderer = event.multiSortMeta;
     const page = event.first! / event.rows!;
@@ -87,6 +111,7 @@ export class DashboardTableFornecedorComponent {
   }
   constructor(
     private http: HttpService,
-    private messageHandler: MessageHandleService
+    private messageHandler: MessageHandleService,
+    private confirmationService: ConfirmationService
   ) {}
 }
