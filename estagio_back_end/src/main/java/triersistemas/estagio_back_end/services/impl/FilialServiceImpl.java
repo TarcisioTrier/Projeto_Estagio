@@ -98,14 +98,6 @@ public class FilialServiceImpl implements FilialService {
         return filialRepository.buscarFiliais(nome);
     }
 
-    @Override
-    public FilialResponseDto inativaFilial(Long id) {
-        var filial = findById(id);
-        filial.setSituacaoContrato(SituacaoContrato.INATIVO);
-        var saved = filialRepository.save(filial);
-        return new FilialResponseDto(saved);
-    }
-
 
     @Override
     public Page<FilialResponseDto> getFilialPaged(FilialPagedRequestDto filialDto, Pageable pageable) {
