@@ -21,46 +21,53 @@ public class CnpjValidatorImpl implements CnpjValidator {
         this.filialRepository = filialRepository;
     }
 
-    public void validateCnpj(String cnpj) {
-        cnpj = cnpj.replaceAll("[^0-9]", "");
-        if (!isCNPJ(cnpj)) {
-            throw new InvalidCnpjException("CNPJ inválido");
-        }
-    }
-
-    public void validateCnpjUpdateFornecedor(String cnpj, Long id) {
-        Optional<Fornecedor> fornecedorExistente = fornecedorRepository.findByCnpj(cnpj);
-        if (fornecedorExistente.isPresent() && !fornecedorExistente.get().getId().equals(id)) {
-            throw new InvalidCnpjException("CNPJ já cadastrado em outra empresa.");
-        }
-    }
-
+    @Override
     public void validateCnpjUpdateFilial(String cnpj, Long id) {
+        validateCnpj(cnpj);
         Optional<Filial> filialExistente = filialRepository.findByCnpj(cnpj);
         if (filialExistente.isPresent() && !filialExistente.get().getId().equals(id)) {
             throw new InvalidCnpjException("CNPJ já cadastrado em outra empresa.");
         }
     }
 
+    @Override
     public void validateCnpjPostFilial(String cnpj) {
+        validateCnpj(cnpj);
         Optional<Filial> filialExistente = filialRepository.findByCnpj(cnpj);
         if (filialExistente.isPresent()) {
             throw new InvalidCnpjException("CNPJ já cadastrado em outra empresa.");
         }
     }
 
+    @Override
     public void validateCnpjPostFornecedor(String cnpj) {
+        validateCnpj(cnpj);
         Optional<Fornecedor> fornecedorExistente = fornecedorRepository.findByCnpj(cnpj);
         if (fornecedorExistente.isPresent()) {
-            throw new InvalidCnpjException("CNPJ já cadastrado em outra empresa.");
+            throw new InvalidCnpjException("CNPJ de fornecedor já cadastrado nesta empresa.");
         }
     }
 
-    private static boolean isCNPJ(String CNPJ) {
+    @Override
+    public void validateCnpjUpdateFornecedor(String cnpj, Long id) {
+        validateCnpj(cnpj);
+        Optional<Fornecedor> fornecedorExistente = fornecedorRepository.findByCnpj(cnpj);
+        if (fornecedorExistente.isPresent() && !fornecedorExistente.get().getId().equals(id)) {
+            throw new InvalidCnpjException("CNPJ de fornecedor já cadastrado nesta empresa.");
+        }
+    }
+
+    private void validateCnpj(String cnpj) {
+        cnpj = cnpj.replaceAll("[^0-9]", "");
+        if (!isCNPJ(cnpj)) {
+            throw new InvalidCnpjException("CNPJ inválido.");
+        }
+    }
+
+    private boolean isCNPJ(String CNPJ) {
 
         if (CNPJ.length() != 14)
             return false;
-
 
         char dig13, dig14;
         int sm = 0, r, peso = 2;

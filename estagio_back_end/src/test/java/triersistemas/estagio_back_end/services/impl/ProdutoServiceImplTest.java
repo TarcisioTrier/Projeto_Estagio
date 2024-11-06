@@ -1,5 +1,6 @@
 package triersistemas.estagio_back_end.services.impl;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -12,367 +13,217 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import triersistemas.estagio_back_end.dto.request.ProdutoPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.ProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.ProdutoResponseDto;
+import triersistemas.estagio_back_end.entity.Filial;
 import triersistemas.estagio_back_end.entity.GrupoProduto;
 import triersistemas.estagio_back_end.entity.Produto;
 import triersistemas.estagio_back_end.enuns.Apresentacao;
 import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
 import triersistemas.estagio_back_end.enuns.TipoProduto;
-import triersistemas.estagio_back_end.exceptions.NotFoundException;
 import triersistemas.estagio_back_end.repository.ProdutoRepository;
 import triersistemas.estagio_back_end.services.GrupoProdutoService;
+import triersistemas.estagio_back_end.validators.BarcodeValidator;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class ProdutoServiceImplTest {
 
     @Mock
-    private ProdutoRepository produtoRepository;
+    ProdutoRepository produtoRepository;
 
     @Mock
-    private GrupoProdutoService grupoProdutoService;
+    GrupoProdutoService grupoProdutoService;
+
+    @Mock
+    BarcodeValidator barcodeValidator;
 
     @InjectMocks
-    private ProdutoServiceImpl produtoService;
+    ProdutoServiceImpl produtoService;
+
+    private ProdutoRequestDto requestDto;
+    private final GrupoProduto grupoProduto = new GrupoProduto();
+    private final Filial filial = new Filial();
+    private Produto produto;
+    private final Long grupoProdutoId = 1L;
+    private final Long produtoId = 1L;
+    private final Long filialId = 1L;
 
     @Captor
-    private ArgumentCaptor<Produto> produtoArgumentCaptor;
+    ArgumentCaptor<Produto> produtoArgumentCaptor;
 
+    @BeforeEach
+    void setUp() {
+        filial.setId(filialId);
+        grupoProduto.setId(grupoProdutoId);
+        grupoProduto.setFilial(filial);
+
+        requestDto = new ProdutoRequestDto(
+                "3123122313121",
+                "Nome",
+                "Descrição",
+                grupoProduto.getId(),
+                TipoProduto.GENERICO,
+                Apresentacao.INJETAVEL,
+                BigDecimal.TEN,
+                true,
+                BigDecimal.TEN,
+                SituacaoCadastro.ATIVO);
+
+        produto = new Produto(requestDto,grupoProduto);
+    }
 
     @Nested
-    class addProduto {
+    class addProdutoTest {
 
         @Test
-        @DisplayName("Should save produto with success")
-        void shouldSaveProdutoWithSuccess() {
-            // Arrange
-            var grupoProduto = new GrupoProduto();
-            grupoProduto.setId(1L);
+        @DisplayName("Deve retornar um produtoResponse e salva no banco, com os dados preenchidos")
+        void addProdutoTest_V1() {
 
-            var input = new ProdutoRequestDto(
-                    "123456789",
-                    "Produto Test",
-                    "Descrição do Produto",
+            doReturn(grupoProduto).when(grupoProdutoService).findById(grupoProdutoId);
+            doNothing().when(barcodeValidator).validateBarcodePost(requestDto.codigoBarras(), grupoProduto.getFilial().getId());
+            doAnswer(capture -> {
+                Produto produtoCaptured = capture.getArgument(0);
+                produtoCaptured.calculateValorVenda();
+                return produtoCaptured;
+            }).when(produtoRepository).save(produtoArgumentCaptor.capture());
+
+            var actual = produtoService.addProduto(requestDto);
+            var expected = new ProdutoResponseDto(produtoArgumentCaptor.getValue());
+
+            assertNotNull(actual);
+            assertEquals(expected, actual);
+            assertEquals(new BigDecimal("11.11"), actual.valorVenda());
+
+            verify(grupoProdutoService, times(1)).findById(grupoProdutoId);
+            verify(produtoRepository, times(1)).save(produtoArgumentCaptor.capture());
+            verify(barcodeValidator, times(1)).validateBarcodePost(requestDto.codigoBarras(), grupoProduto.getFilial().getId());
+        }
+    }
+
+    @Nested
+    class updateProdutoTest {
+
+        @Test
+        @DisplayName("Deve retornar um produtoResponse e atualizar o banco de dados")
+        void updateProdutoTest_V1() {
+
+            var newRequestDto = new ProdutoRequestDto(
+                    "3123122313121",
+                    "Nome Update",
+                    "Descrição Update",
                     grupoProduto.getId(),
-                    TipoProduto.OFICINAL,
-                    Apresentacao.GOTAS,
-                    BigDecimal.valueOf(0.2),
+                    TipoProduto.GENERICO,
+                    Apresentacao.INJETAVEL,
+                    BigDecimal.ONE,
                     true,
                     BigDecimal.TEN,
-                    SituacaoCadastro.ATIVO
-            );
+                    SituacaoCadastro.ATIVO);
 
-            var produto = new Produto();
-            produto.setId(1L);
-            produto.setCodigoBarras(input.codigoBarras());
-            produto.setNome(input.nome());
-            produto.setDescricao(input.descricao());
-            produto.setGrupoProduto(grupoProduto);
-            produto.setTipoProduto(input.tipoProduto());
-            produto.setApresentacao(input.apresentacao());
-            produto.setMargemLucro(input.margemLucro());
-            produto.setAtualizaPreco(input.atualizaPreco());
-            produto.setValorProduto(input.valorProduto());
-            produto.setSituacaoCadastro(input.situacaoCadastro());
-            produto.setDataUltimaAtualizacaoPreco(LocalDate.now());
+            doReturn(Optional.of(grupoProduto)).when(grupoProdutoService).buscaGrupoProdutoPorId(grupoProdutoId);
+            doReturn(Optional.of(produto)).when(produtoRepository).findById(produtoId);
+            doNothing().when(barcodeValidator).validateBarcodeUpdate(newRequestDto.codigoBarras(), produtoId, filialId);
+            doReturn(produto).when(produtoRepository).save(produtoArgumentCaptor.capture());
 
-            when(grupoProdutoService.grupoProdutoById(grupoProduto.getId())).thenReturn(grupoProduto);
-            when(produtoRepository.save(any(Produto.class))).thenReturn(produto);
+            var actual = produtoService.updateProduto(produtoId, newRequestDto);
+            var expected = new ProdutoResponseDto(produtoArgumentCaptor.getValue());
 
-            // Act
-            var result = produtoService.addProduto(input);
+            assertNotNull(actual);
+            assertEquals(expected, actual);
+            assertEquals(new BigDecimal("10.10"), actual.valorVenda());
 
-            // Assert
-            assertNotNull(result);
-            assertEquals(1L, result.id());
-            assertEquals(input.codigoBarras(), result.codigoBarras());
-            assertEquals(input.nome(), result.nome());
-            assertEquals(input.descricao(), result.descricao());
-            assertEquals(input.grupoProdutoId(), result.grupoProdutoId());
-            assertEquals(input.tipoProduto(), result.tipoProduto());
-            assertEquals(input.apresentacao(), result.apresentacao());
-            assertEquals(input.margemLucro(), result.margemLucro());
-            assertEquals(input.atualizaPreco(), result.atualizaPreco());
-            assertEquals(input.valorProduto(), result.valorProduto());
-            assertEquals(input.situacaoCadastro(), result.situacaoCadastro());
-            assertNotNull(result.dataUltimaAtualizacaoPreco());
-
-            verify(grupoProdutoService, times(1)).grupoProdutoById(grupoProduto.getId());
-            verify(produtoRepository, times(1)).save(any(Produto.class));
+            verify(grupoProdutoService, times(1)).buscaGrupoProdutoPorId(grupoProdutoId);
+            verify(produtoRepository, times(1)).findById(produtoId);
+            verify(barcodeValidator).validateBarcodeUpdate(newRequestDto.codigoBarras(), produtoId, filialId);
+            verify(produtoRepository, times(1)).save(produtoArgumentCaptor.capture());
         }
     }
 
     @Nested
-    class getProdutoById {
+    class deleteProdutoTest {
 
         @Test
-        @DisplayName("Should get Produto with valid id")
-        void shouldGetProdutoWithValidId() {
-            // Arrange
-            var grupoProduto = new GrupoProduto();
-            grupoProduto.setId(1L);
+        @DisplayName("Deve deletar e retornar um produtoResponse encontrado pelo id")
+        void deleteProdutoTest_V1() {
 
-            var produto = new Produto();
-            produto.setId(1L);
-            produto.setGrupoProduto(grupoProduto);
+            doReturn(Optional.of(produto)).when(produtoRepository).findById(produtoId);
+            doNothing().when(produtoRepository).delete(produtoArgumentCaptor.capture());
 
-            when(produtoRepository.findById(1L)).thenReturn(Optional.of(produto));
+            var actual = produtoService.deleteProduto(produtoId);
+            var expected = new ProdutoResponseDto(produtoArgumentCaptor.getValue());
 
-            // Act
-            var result = produtoService.getProdutoById(1L);
+            assertEquals(expected,actual);
 
-            // Assert
-            assertNotNull(result);
-            assertEquals(1L, result.id());
-            verify(produtoRepository, times(1)).findById(1L);
+            verify(produtoRepository,times(1)).findById(produtoId);
+            verify(produtoRepository,times(1)).delete(produtoArgumentCaptor.capture());
         }
 
-        @Test
-        @DisplayName("Should throw NotFoundException with invalid id")
-        void shouldThrowNotFoundExceptionWithInvalidId() {
-            // Arrange
-            Long id = 1L;
-            when(produtoRepository.findById(id)).thenReturn(Optional.empty());
 
-            // Act & Assert
-            assertThrows(NotFoundException.class, () -> produtoService.getProdutoById(id));
-            verify(produtoRepository, times(1)).findById(1L);
+    }
+
+    @Nested
+    class getProdutoByIdTest{
+
+        @Test
+        @DisplayName("Deve retornar um produto pelo id")
+        void getProdutoByIdTest_V1() {
+
+            doReturn(Optional.of(produto)).when(produtoRepository).findById(produtoId);
+
+            var actual = produtoService.getProdutoById(produtoId);
+            var expected = new ProdutoResponseDto(produto);
+
+            assertNotNull(actual);
+            assertEquals(expected,actual);
+
+            verify(produtoRepository,times(1)).findById(produtoId);
         }
     }
 
     @Nested
-    class updateProduto {
+    class getProdutoPagedTest{
 
         @Test
-        @DisplayName("Should update Produto with valid id")
-        void shouldUpdateProdutoWithValidId() {
-            // Arrange
-            var grupoProduto = new GrupoProduto();
-            grupoProduto.setId(1L);
+        @DisplayName("Deve retornar produtos que batem com o requestDto, usando Pageable")
+        void getProdutoPagedTest_V1() {
 
-            var produto = new Produto();
-            produto.setId(1L);
-            produto.setGrupoProduto(grupoProduto);
+            Pageable pageable = PageRequest.of(0, 5);
+            var newRequestDto = new ProdutoPagedRequestDto(
+                    produtoId,
+                    null,
+                    "Nome",
+                    "Descrição",
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null,
+                    null);
 
-            var inputDto = new ProdutoRequestDto(
-                    "987654321",
-                    "Produto Updated",
-                    "Descrição Atualizada",
-                    grupoProduto.getId(),
-                    TipoProduto.OFICINAL,
-                    Apresentacao.GOTAS,
-                    BigDecimal.valueOf(0.25),
-                    false,
-                    BigDecimal.valueOf(15.0),
-                    SituacaoCadastro.ATIVO
-            );
+            var responseDto = new ProdutoResponseDto(produto);
+            Page<ProdutoResponseDto> expected = new PageImpl<>(List.of(responseDto));
 
-            when(produtoRepository.findById(1L)).thenReturn(Optional.of(produto));
-            when(grupoProdutoService.grupoProdutoById(inputDto.grupoProdutoId())).thenReturn(grupoProduto);
-            when(produtoRepository.save(any(Produto.class))).thenReturn(produto);
+            doReturn(new PageImpl<>(List.of(responseDto))).when(produtoRepository).buscarProduto(newRequestDto,filialId,pageable);
 
-            // Act
-            var result = produtoService.updateProduto(1L, inputDto);
+            Page<ProdutoResponseDto> actual = produtoService.getProdutoPaged(newRequestDto,filialId,pageable);
 
-            // Assert
-            assertNotNull(result);
-            assertEquals(1L, result.id());
-            assertEquals(inputDto.codigoBarras(), result.codigoBarras());
-            assertEquals(inputDto.nome(), result.nome());
-            assertEquals(inputDto.descricao(), result.descricao());
-            assertEquals(inputDto.grupoProdutoId(), result.grupoProdutoId());
-            assertEquals(inputDto.tipoProduto(), result.tipoProduto());
-            assertEquals(inputDto.apresentacao(), result.apresentacao());
-            assertEquals(inputDto.margemLucro(), result.margemLucro());
-            assertEquals(inputDto.atualizaPreco(), result.atualizaPreco());
-            assertEquals(inputDto.valorProduto(), result.valorProduto());
-            assertEquals(inputDto.situacaoCadastro(), result.situacaoCadastro());
-
-            verify(produtoRepository, times(1)).findById(1L);
-            verify(grupoProdutoService, times(1)).grupoProdutoById(inputDto.grupoProdutoId());
-            verify(produtoRepository, times(1)).save(any(Produto.class));
-        }
-    }
-
-    @Nested
-    class deleteProdutoById {
-
-        @Test
-        @DisplayName("Should delete Produto with valid id")
-        void shouldDeleteProdutoWithValidId() {
-
-            // Arrange
-            var grupoProduto = new GrupoProduto();
-            grupoProduto.setId(1L);
-            Long id = 1L;
-            var produto = new Produto();
-            produto.setId(id);
-            produto.setGrupoProduto(grupoProduto);
-            when(produtoRepository.findById(id)).thenReturn(Optional.of(produto));
-
-            // Act
-            var result = produtoService.deleteProduto(id);
-
-            // Assert
-            assertNotNull(result);
-            assertEquals(id, result.id());
-            verify(produtoRepository, times(1)).findById(id);
-            verify(produtoRepository, times(1)).delete(produto);
-        }
-    }
-
-    @Nested
-    class getProdutoFilter {
-
-        @Test
-        @DisplayName("Should return filtered Produto page")
-        void shouldReturnFilteredProdutoPage() {
-            // Arrange
-            String nome = "Test";
-            TipoProduto tipo = TipoProduto.PERFUMARIA;
-            Long grupoProdutoId = 1L;
-            PageRequest pageable = PageRequest.of(0, 10);
-
-            List<ProdutoResponseDto> produtoList = Arrays.asList(
-                    new ProdutoResponseDto(
-                            1L,
-                            "123456789",
-                            "Test Product 1",
-                            "Description 1",
-                            grupoProdutoId,
-                            TipoProduto.PERFUMARIA,
-                            Apresentacao.LIQUIDO,
-                            BigDecimal.valueOf(0.2),
-                            true,
-                            BigDecimal.valueOf(10.0),
-                            BigDecimal.valueOf(12.0),
-                            LocalDate.now(),
-                            SituacaoCadastro.ATIVO
-                    ),
-                    new ProdutoResponseDto(
-                            2L,
-                            "987654321",
-                            "Test Product 2",
-                            "Description 2",
-                            grupoProdutoId,
-                            TipoProduto.REFERENCIA,
-                            Apresentacao.GOTAS,
-                            BigDecimal.valueOf(0.25),
-                            false,
-                            BigDecimal.valueOf(20.0),
-                            BigDecimal.valueOf(25.0),
-                            LocalDate.now(),
-                            SituacaoCadastro.ATIVO
-                    )
-            );
-            Page<ProdutoResponseDto> expectedPage = new PageImpl<>(produtoList, pageable, produtoList.size());
-
-            when(produtoRepository.buscarProduto(nome, tipo, grupoProdutoId, pageable)).thenReturn(expectedPage);
-
-            // Act
-            Page<ProdutoResponseDto> result = produtoService.getProdutoPaged(nome, tipo, grupoProdutoId, pageable);
-
-            // Assert
-            assertNotNull(result);
-            assertEquals(expectedPage.getTotalElements(), result.getTotalElements());
-            assertEquals(expectedPage.getContent().size(), result.getContent().size());
-            assertEquals(expectedPage.getNumber(), result.getNumber());
-            assertEquals(expectedPage.getSize(), result.getSize());
-
-            ProdutoResponseDto firstItem = result.getContent().getFirst();
-            assertEquals(1L, firstItem.id());
-            assertEquals("123456789", firstItem.codigoBarras());
-            assertEquals("Test Product 1", firstItem.nome());
-            assertEquals("Description 1", firstItem.descricao());
-            assertEquals(grupoProdutoId, firstItem.grupoProdutoId());
-            assertEquals(TipoProduto.PERFUMARIA, firstItem.tipoProduto());
-            assertEquals(Apresentacao.LIQUIDO, firstItem.apresentacao());
-            assertEquals(BigDecimal.valueOf(0.2), firstItem.margemLucro());
-            assertTrue(firstItem.atualizaPreco());
-            assertEquals(BigDecimal.valueOf(10.0), firstItem.valorProduto());
-            assertEquals(BigDecimal.valueOf(12.0), firstItem.valorVenda());
-            assertEquals(SituacaoCadastro.ATIVO, firstItem.situacaoCadastro());
-            assertNotNull(firstItem.dataUltimaAtualizacaoPreco());
-
-            verify(produtoRepository, times(1)).buscarProduto(nome, tipo, grupoProdutoId, pageable);
-        }
-    }
-
-    @Nested
-    class alteraProdutoById {
-
-        @Test
-        @DisplayName("Should change situaçãoCadastro to ativo status with valid id")
-        void shouldChangeSituacaoCadastroToAtivoStatusWithValidId() {
-            // Arrange
-            var grupoProduto = new GrupoProduto();
-            grupoProduto.setId(1L);
-            Long id = 1L;
-            var produto = new Produto();
-            produto.setId(id);
-            produto.setSituacaoCadastro(SituacaoCadastro.INATIVO);
-            produto.setGrupoProduto(grupoProduto);
-
-            when(produtoRepository.findById(id)).thenReturn(Optional.of(produto));
-            when(produtoRepository.save(any(Produto.class))).thenReturn(produto);
-
-            // Act
-            var result = produtoService.removeProduto(id);
-
-            // Assert
-            assertNotNull(result);
-            assertEquals(SituacaoCadastro.INATIVO, result.situacaoCadastro());
-            verify(produtoRepository, times(1)).findById(id);
-            verify(produtoRepository, times(1)).save(produto);
-        }
-
-        @Test
-        @DisplayName("Should change situaçãoCadastro to inativo status with valid id")
-        void shouldChangeSituacaoCadastroToInativoStatusWithValidId() {
-
-            // Arrange
-            var grupoProduto = new GrupoProduto();
-            grupoProduto.setId(1L);
-            Long id = 1L;
-            var produto = new Produto();
-            produto.setId(id);
-            produto.setSituacaoCadastro(SituacaoCadastro.ATIVO);
-            produto.setGrupoProduto(grupoProduto);
-
-            when(produtoRepository.findById(id)).thenReturn(Optional.of(produto));
-            when(produtoRepository.save(any(Produto.class))).thenReturn(produto);
-
-            // Act
-            var result = produtoService.removeProduto(id);
-
-            // Assert
-            assertNotNull(result);
-            assertEquals(SituacaoCadastro.INATIVO, result.situacaoCadastro());
-            verify(produtoRepository, times(1)).findById(id);
-            verify(produtoRepository, times(1)).save(produto);
-        }
-
-        @Test
-        @DisplayName("Should throw NotFoundException when produto not found")
-        void shouldThrowNotFoundExceptionWhenProdutoNotFound() {
-            // Arrange
-            Long id = 1L;
-            when(produtoRepository.findById(id)).thenReturn(Optional.empty());
-
-            // Act & Assert
-            assertThrows(NotFoundException.class, () -> produtoService.removeProduto(id));
-            verify(produtoRepository, times(1)).findById(id);
-            verify(produtoRepository, never()).save(any(Produto.class));
+            assertEquals(expected.getTotalElements(), actual.getTotalElements());
+            assertEquals(expected.getTotalPages(), actual.getTotalPages());
+            assertEquals(expected.getContent().getFirst(), actual.getContent().getFirst());
         }
     }
 }
+

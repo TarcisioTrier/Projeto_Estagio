@@ -1,8 +1,7 @@
 package triersistemas.estagio_back_end.dto;
 
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import triersistemas.estagio_back_end.dto.request.GrupoProdutoPagedRequestDto;
+import triersistemas.estagio_back_end.dto.request.ProdutoPagedRequestDto;
 import triersistemas.estagio_back_end.enuns.AtualizaPrecoEnum;
 
 import java.math.BigDecimal;
@@ -17,6 +16,8 @@ public record AtualizaPrecoDto(
         Boolean isRelativo,
         BigDecimal valor,
         Boolean isPercentual,
-        AtualizaPrecoEnum atualizaPreco
+        AtualizaPrecoEnum atualizaPreco,
+        ProdutoPagedRequestDto produtoFilter,
+        GrupoProdutoPagedRequestDto grupoProdutoFilter
 ) {
 }

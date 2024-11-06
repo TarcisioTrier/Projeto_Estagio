@@ -3,8 +3,10 @@ package triersistemas.estagio_back_end.controller;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import triersistemas.estagio_back_end.dto.request.FornecedorPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.FornecedorRequestDto;
 import triersistemas.estagio_back_end.dto.response.FornecedorResponseDto;
 import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
@@ -32,21 +34,14 @@ public class FornecedorController {
         return ResponseEntity.ok(fornecedorService.getFornecedorById(id));
     }
 
-    @GetMapping("/getAllPaged")
+    @PutMapping("/getAllPaged")
     public Page<FornecedorResponseDto> getFornecedorPaged(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @Valid @RequestParam(required = false) String nome,
-            @Valid @RequestParam(required = false) String cnpj,
-            @RequestParam(required = false) SituacaoCadastro situacaoCadastro) {
-        return fornecedorService.getFornecedorPaged(nome, cnpj, situacaoCadastro, PageRequest.of(page, size));
-    }
-
-    @GetMapping("/getAllFilter")
-    public List<FornecedorResponseDto> getFornecedorFilter(
-            @RequestParam(required = false) Long filialId,
-            @Valid @RequestParam(required = false) String nome) {
-        return fornecedorService.getFornecedorFilter(nome, filialId);
+            @Valid @RequestParam(required = false) Long filialId,
+            @RequestBody(required = false) FornecedorPagedRequestDto fornecedorDto) {
+        Pageable pageable = PageRequest.of(page, size);
+        return fornecedorService.getFornecedorPaged(filialId, fornecedorDto, pageable);
     }
 
     @PutMapping("/update/{id}")
@@ -54,10 +49,9 @@ public class FornecedorController {
         return ResponseEntity.ok(fornecedorService.updateFornecedor(id, fornecedorDto));
     }
 
-    @DeleteMapping("/situacao/{id}")
-    public ResponseEntity<String> deleteFornecedor(@PathVariable Long id) {
-        fornecedorService.alteraSituacao(id);
-        return ResponseEntity.ok().body("situação alterada");
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<FornecedorResponseDto> deleteFornecedor(@PathVariable Long id) {
+        return ResponseEntity.ok(fornecedorService.deleteFornecedor(id));
     }
 
 }

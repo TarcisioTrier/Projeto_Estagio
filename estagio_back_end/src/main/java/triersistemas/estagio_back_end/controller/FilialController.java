@@ -1,12 +1,16 @@
 package triersistemas.estagio_back_end.controller;
 
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import triersistemas.estagio_back_end.dto.request.FilialPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.FilialRequestDto;
+import triersistemas.estagio_back_end.dto.response.FilialChartDto;
 import triersistemas.estagio_back_end.dto.response.FilialResponseDto;
 import triersistemas.estagio_back_end.services.FilialService;
 
@@ -21,6 +25,8 @@ public class FilialController {
     public FilialController(FilialService filialService) {
         this.filialService = filialService;
     }
+    private static final Logger logger = LoggerFactory.getLogger(FilialController.class);
+
 
     @PostMapping("/post")
     public ResponseEntity<FilialResponseDto> postFilial(@Valid @RequestBody FilialRequestDto filialDto) {
@@ -32,14 +38,18 @@ public class FilialController {
         return ResponseEntity.ok(filialService.getFilialById(id));
     }
 
-    @GetMapping("/getAllPaged")
-    public Page<FilialResponseDto> getFilialFilter(
+    @GetMapping("/getChart")
+    public ResponseEntity<List<FilialChartDto>> getFilialChart() {
+        return ResponseEntity.ok(filialService.getChart());
+    }
+
+    @PutMapping("/getAllPaged")
+    public Page<FilialResponseDto> getFilialPaged(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @Valid @RequestParam(required = false) String nome,
-            @Valid @RequestParam(required = false) String cnpj) {
+             @RequestBody(required = false) FilialPagedRequestDto filialDto) {
         Pageable pageable = PageRequest.of(page, size);
-        return filialService.getFilialFilter(nome, cnpj, pageable);
+        return filialService.getFilialPaged(filialDto, pageable);
     }
 
     @GetMapping("/getAllFilter")
@@ -50,11 +60,6 @@ public class FilialController {
     @PutMapping("/update/{id}")
     public ResponseEntity<FilialResponseDto> updateFilial(@PathVariable Long id, @Valid @RequestBody FilialRequestDto filialDto) {
         return ResponseEntity.ok(filialService.updateFilial(id, filialDto));
-    }
-
-    @DeleteMapping("/remove/{id}")
-    public ResponseEntity<FilialResponseDto> removeFilial(@PathVariable Long id) {
-        return ResponseEntity.ok(filialService.removeFilial(id));
     }
 
     @DeleteMapping("/delete/{id}")

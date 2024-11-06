@@ -1,10 +1,11 @@
 package triersistemas.estagio_back_end.services.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import triersistemas.estagio_back_end.dto.request.FilialPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.FilialRequestDto;
+import triersistemas.estagio_back_end.dto.response.FilialChartDto;
 import triersistemas.estagio_back_end.dto.response.FilialResponseDto;
 import triersistemas.estagio_back_end.entity.Filial;
 import triersistemas.estagio_back_end.enuns.SituacaoContrato;
@@ -14,7 +15,6 @@ import triersistemas.estagio_back_end.services.FilialService;
 import triersistemas.estagio_back_end.validators.CnpjValidator;
 import triersistemas.estagio_back_end.validators.EnderecosValidator;
 import triersistemas.estagio_back_end.validators.FoneValidator;
-import triersistemas.estagio_back_end.validators.Utils;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,7 +28,7 @@ public class FilialServiceImpl implements FilialService {
     private final CnpjValidator cnpjValidator;
     private final FoneValidator foneValidator;
 
-    @Autowired
+
     public FilialServiceImpl(FilialRepository filialRepository,
                              EnderecosValidator enderecosValidator,
                              CnpjValidator cnpjValidator,
@@ -41,8 +41,8 @@ public class FilialServiceImpl implements FilialService {
 
     @Override
     public FilialResponseDto addFilial(FilialRequestDto filialDto) {
-        validateFilial(filialDto);
         cnpjValidator.validateCnpjPostFilial(filialDto.cnpj());
+        validateFilial(filialDto);
         var filial = new Filial(filialDto);
         Optional.ofNullable(filialDto.endereco()).map(enderecosValidator::validateEndereco).ifPresent(filial::setEndereco);
         var saved = filialRepository.save(filial);
@@ -78,14 +78,9 @@ public class FilialServiceImpl implements FilialService {
     }
 
     @Override
-    public List<FilialResponseDto> getAllFiliais() {
+    public List<FilialResponseDto> getAllFilial() {
         var filial = filialRepository.findAll();
         return filial.stream().map(FilialResponseDto::new).toList();
-    }
-
-    @Override
-    public Page<FilialResponseDto> getFilialFilter(String nome, String cnpj, Pageable pageable) {
-        return filialRepository.buscarFiliais(nome, cnpj, pageable);
     }
 
     @Override
@@ -104,15 +99,29 @@ public class FilialServiceImpl implements FilialService {
     }
 
     @Override
-    public FilialResponseDto removeFilial(Long id) {
+    public FilialResponseDto inativaFilial(Long id) {
         var filial = findById(id);
         filial.setSituacaoContrato(SituacaoContrato.INATIVO);
         var saved = filialRepository.save(filial);
         return new FilialResponseDto(saved);
     }
 
+
+    @Override
+    public Page<FilialResponseDto> getFilialPaged(FilialPagedRequestDto filialDto, Pageable pageable) {
+        return filialRepository.buscarFiliais(filialDto, pageable);
+    }
+
+    @Override
+    public List<FilialChartDto> getChart() {
+        List<Filial> filiais = filialRepository.findAll();
+        if (!filiais.isEmpty()) {
+            return filiais.stream().map(FilialChartDto::new).toList();
+        }
+        return List.of();
+    }
+
     private void validateFilial(FilialRequestDto requestDto) {
-        cnpjValidator.validateCnpj(requestDto.cnpj());
         foneValidator.validateFone(requestDto.telefone());
     }
 

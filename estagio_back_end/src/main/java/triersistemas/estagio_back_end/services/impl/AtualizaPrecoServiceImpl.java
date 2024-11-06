@@ -8,34 +8,34 @@ import triersistemas.estagio_back_end.entity.Produto;
 import triersistemas.estagio_back_end.enuns.AtualizaPrecoEnum;
 import triersistemas.estagio_back_end.exceptions.InvalidMargemException;
 import triersistemas.estagio_back_end.exceptions.NotFoundException;
-import triersistemas.estagio_back_end.repository.FilialRepository;
 import triersistemas.estagio_back_end.repository.GrupoProdutoRepository;
 import triersistemas.estagio_back_end.repository.ProdutoRepository;
 import triersistemas.estagio_back_end.services.AtualizaPrecoService;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
 
     private final ProdutoRepository produtoRepository;
     private final GrupoProdutoRepository grupoProdutoRepository;
-    private final FilialRepository filialRepository;
 
 
-    public AtualizaPrecoServiceImpl(ProdutoRepository produtoRepository, GrupoProdutoRepository grupoProdutoRepository, FilialRepository filialRepository) {
+    public AtualizaPrecoServiceImpl(ProdutoRepository produtoRepository, GrupoProdutoRepository grupoProdutoRepository) {
         this.produtoRepository = produtoRepository;
         this.grupoProdutoRepository = grupoProdutoRepository;
-        this.filialRepository = filialRepository;
     }
 
     @Override
-    public List<?> atualizaPreco(AtualizaPrecoDto atualizaPrecoDto) {
-        var filial = filialRepository.findById(atualizaPrecoDto.filialId()).orElseThrow(() -> new NotFoundException("Filial não encontrada"));
-        var grupoProdutos = filial.getGrupoProdutos();
-        var produtos = getProdutos(grupoProdutos);
+    public List<ProdutoResponseDto> atualizaPreco(AtualizaPrecoDto atualizaPrecoDto) {
+        var grupoProdutos = grupoProdutoRepository.buscarGrupoProduto(atualizaPrecoDto.grupoProdutoFilter(), atualizaPrecoDto.filialId());
+        var produtos = produtoRepository.buscarProduto(atualizaPrecoDto.produtoFilter(), atualizaPrecoDto.filialId());
+
         if (!atualizaPrecoDto.all()) {
             if (atualizaPrecoDto.isProduto()) {
                 produtos = produtos.stream().filter(produto -> atualizaPrecoDto.produtoId().contains(produto.getId())).toList();
@@ -44,8 +44,9 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
                 produtos = getProdutos(grupoProdutos);
             }
         }
-
-        var saved = produtoRepository.saveAll(atualiza(produtos, grupoProdutos, atualizaPrecoDto));
+        var produtosAtt = atualiza(produtos, grupoProdutos, atualizaPrecoDto);
+        produtosAtt.forEach(produto -> produto.setDataUltimaAtualizacaoPreco(LocalDate.now()));
+        var saved = produtoRepository.saveAll(produtosAtt);
 
         return saved.stream().map(ProdutoResponseDto::new).toList();
     }
@@ -53,6 +54,7 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
     private List<Produto> atualiza(List<Produto> produtos, List<GrupoProduto> grupoProdutos, AtualizaPrecoDto atualizaPrecoDto) {
         if (atualizaPrecoDto.atualizaPreco() == AtualizaPrecoEnum.MARGEM) {
             if (!atualizaPrecoDto.isProduto()) {
+                grupoProdutos = grupoProdutos.stream().filter(GrupoProduto::getAtualizaPreco).toList();
                 return atualizaGrupoMargem(grupoProdutos, atualizaPrecoDto);
             }
             return atualizaMargem(produtos, atualizaPrecoDto);
@@ -64,10 +66,8 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
 
     private List<Produto> atualizaPrecoProduto(List<Produto> produtos, AtualizaPrecoDto atualizaPrecoDto) {
         produtos = atualizavel(produtos);
+     return atualizaValor(produtos, atualizaPrecoDto);
 
-        if (atualizaPrecoDto.atualizaPreco() == AtualizaPrecoEnum.VALOR_PRODUTO || atualizaPrecoDto.atualizaPreco() == AtualizaPrecoEnum.VALOR_VENDA)
-            return atualizaValor(produtos, atualizaPrecoDto);
-        throw new NotFoundException("Tipo de atualização não encontrado");
 
     }
 
@@ -92,17 +92,22 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
     }
 
     private List<Produto> atualizaMargem(List<Produto> produtos, AtualizaPrecoDto atualizaPrecoDto) {
+        produtos = atualizavel(produtos);
         return produtos.stream().map(produto -> {
-            var valor = valorCalculoRelativo(atualizaPrecoDto.isRelativo(), produto.getMargemLucro().add(atualizaPrecoDto.valor()), atualizaPrecoDto.valor());
+            var margem = Optional.ofNullable(produto.getMargemLucro()).orElse(BigDecimal.ZERO);
+            var valor = valorCalculoRelativo(atualizaPrecoDto.isRelativo(), margem.add(atualizaPrecoDto.valor()), atualizaPrecoDto.valor());
             testeMargem(valor);
             produto.setMargemLucro(valor);
             produto.calculateValorVenda();
             return produto;
-        }).toList();
+        }).collect(Collectors.toList());
     }
 
 
     private List<Produto> atualizaGrupoMargem(List<GrupoProduto> grupoProdutos, AtualizaPrecoDto atualizaPrecoDto) {
+        if(grupoProdutos.isEmpty()){
+            throw new NotFoundException("Nenhum grupo produto encontrado");
+        }
         grupoProdutos = grupoProdutos.stream().map(grupoProduto -> {
             var valor = valorCalculoRelativo(atualizaPrecoDto.isRelativo(), grupoProduto.getMargemLucro().add(atualizaPrecoDto.valor()), atualizaPrecoDto.valor());
             testeMargem(valor);
@@ -142,7 +147,8 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
 
     private static BigDecimal valorCalculo(Boolean isPercentual, Boolean isRelativo, BigDecimal valorOriginal, BigDecimal valor) {
         if (isPercentual) {
-            return valorCalculoRelativo(isRelativo, valorOriginal.multiply(percent(valor)), valorOriginal.multiply(percent(valor)));
+            return valorCalculoRelativo(isRelativo, valorOriginal.multiply(BigDecimal.ONE.add(percent(valor))
+            ), valorOriginal.multiply(percent(valor)));
         }
         return valorCalculoRelativo(isRelativo, valorOriginal.add(valor), valor);
     }

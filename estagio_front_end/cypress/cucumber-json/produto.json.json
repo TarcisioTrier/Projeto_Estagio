@@ -1,0 +1,80 @@
+[
+  {
+    "keyword": "Funcionalidade",
+    "name": "Testes Produto",
+    "line": 4,
+    "id": "testes-produto",
+    "tags": [],
+    "uri": "produto.cy.feature",
+    "elements": [
+      {
+        "id": "testes-produto;cadastrando-produto-com-sucesso.",
+        "keyword": "Scenario",
+        "line": 6,
+        "name": "Cadastrando Produto com sucesso.",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 7,
+            "name": "ao entrar no cadastro de produto",
+            "result": {
+              "status": "failed",
+              "duration": 5261000000,
+              "error_message": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `.p-autocomplete-panel`, but never found it.\n    at Context.eval (cypress/support/page/filial.page.js:39:5)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Quando ",
+            "line": 8,
+            "name": "preenche os dados de produto",
+            "result": {
+              "status": "skipped"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Então ",
+            "line": 9,
+            "name": "valida o cadastro",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      },
+      {
+        "id": "testes-produto;produto-com-campos-vazios",
+        "keyword": "Scenario",
+        "line": 11,
+        "name": "Produto com campos vazios",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 12,
+            "name": "ao entrar no cadastro de produto",
+            "result": {
+              "status": "failed",
+              "error_message": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `.m-1 > .p-ripple`, but never found it.\n    at Context.eval (cypress/support/page/filial.page.js:37:5)"
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Então ",
+            "line": 13,
+            "name": "botao de cadatro desabilitado",
+            "result": {
+              "status": "skipped"
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

@@ -8,24 +8,197 @@ import {
 import { Injectable } from '@angular/core';
 import { Observable, take, throwError } from 'rxjs';
 import { Fornecedor } from '../../models/fornecedor';
-import { FilialPage } from '../../models/filial-page';
 import { catchError } from 'rxjs/operators';
 import { Cep, Cnpj } from '../../models/externalapi';
 import { Produto } from '../../models/produto';
+import { Pager } from '../../models/page';
+import { AtualizaPreco } from '../../models/atualizapreco';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HttpService {
+
+
+  removerFilial(id:number): Observable<any>{
+    return this.http.delete(`filiais/delete/${id}`).pipe(take(1), catchError(this.handleError))
+  }
+
+  removerProduto(id:number): Observable<any>{
+    return this.http.delete(`produto/delete/${id}`).pipe(take(1), catchError(this.handleError))
+  }
+
+  removerGrupoProduto(id:number): Observable<any>{
+    return this.http.delete(`grupos-produtos/delete/${id}`).pipe(take(1), catchError(this.handleError))
+  }
+
+  removerFornecedor(id:number): Observable<any>{
+    return this.http.delete(`fornecedores/delete/${id}`).pipe(take(1), catchError(this.handleError))
+  }
+
+
+  maiorValorProdutoProdutos(filialId: number) : Observable<any> {
+    const pager: Pager = { page: 0, size: 10}
+    const produto:Produto ={
+      filialId: filialId,
+      filter: new Map<string,string>(),
+      disabled: {
+        nome: false,
+        descricao: false
+      },
+      orderer:[
+        {
+          field:"valorProduto",
+          order:-1
+        }
+      ]
+    }
+    return this.getProdutoPaged(pager,produto);
+  }
+
+  filialId(){
+    const data = sessionStorage.getItem('filial');
+    const filial = data ? JSON.parse(data) : undefined;
+    if(filial !== undefined)
+    return filial.id;
+    return undefined;
+  }
+  filial(){
+    const data = sessionStorage.getItem('filial');
+    return data ? JSON.parse(data) : undefined;
+  }
+
+  maiorValorVendaProdutos(filialId: number): Observable<any> {
+    const pager: Pager = { page: 0, size: 10}
+    const produto:Produto ={
+      filialId: filialId,
+      filter: new Map<string,string>(),
+      disabled: {
+        nome: false,
+        descricao: false
+      },
+      orderer:[
+        {
+          field:"valorVenda",
+          order:-1
+        }
+      ]
+    }
+    return this.getProdutoPaged(pager,produto);
+  }
+
+  getProdutosOfGrupos(filialId: number): Observable<any> {
+    return this.http.get(`grupos-produtos/getProdutos/${filialId}`).pipe(take(1), catchError(this.handleError));
+  }
+
+  getFilialChart(): Observable<any> {
+    return this.http.get('filiais/getChart').pipe(take(1), catchError(this.handleError));
+  }
+
+  putForncedor(fornecedor: Fornecedor) {
+    return this.http
+      .put(`fornecedores/update/${fornecedor.id}`, fornecedor)
+      .pipe(take(1), catchError(this.handleError));
+  }
+  getFornecedorPaged(
+    pager: { page: number; size: number },
+    fornecedorFilter: Fornecedor
+  ): Observable<any> {
+    const params = new HttpParams()
+      .set('page', pager.page || '')
+      .set('size', pager.size || '')
+      .set('filialId', this.filialId() || '');
+
+    return this.http
+      .put('fornecedores/getAllPaged', fornecedorFilter, { params })
+      .pipe(take(1), catchError(this.handleError));
+  }
+  getFilialPaged(
+    pager: { page: number; size: number },
+    filialFilter: Filial
+  ): Observable<any> {
+    const params = new HttpParams()
+      .set('page', pager.page || '')
+      .set('size', pager.size || '');
+
+    return this.http
+      .put('filiais/getAllPaged', filialFilter, { params })
+      .pipe(take(1), catchError(this.handleError));
+  }
+  getFornecedor(id: number): Observable<Fornecedor> {
+    return this.http
+      .get<Fornecedor>(`fornecedores/get/${id}`)
+      .pipe(take(1), catchError(this.handleError));
+  }
+
+  editarProduto(produto: Produto) {
+    return this.http
+      .put(`produto/put/${produto.id}`, produto)
+      .pipe(take(1), catchError(this.handleError));
+  }
+
+  editarGrupoProduto(grupoProduto: GrupoProduto) {
+    return this.http
+      .put(`grupos-produtos/put/${grupoProduto.id}`, grupoProduto)
+      .pipe(take(1), catchError(this.handleError));
+  }
+
+  getProduto(produtoId: number): Observable<Produto> {
+    return this.http
+      .get<Produto>(`produto/get/${produtoId}`)
+      .pipe(take(1), catchError(this.handleError));
+  }
+
+  getGrupoProduto(grupoProdutoId: number): Observable<GrupoProduto> {
+    return this.http
+      .get<GrupoProduto>(`grupos-produtos/get/${grupoProdutoId}`)
+      .pipe(take(1), catchError(this.handleError));
+  }
+
+  putAtualizacaoPreco(atualizacao: AtualizaPreco) {
+    return this.http
+      .put('atualiza/put', atualizacao)
+      .pipe(take(1), catchError(this.handleError));
+  }
+
+  getGrupoProdutoPaged(
+    pager: Pager,
+    grupoProduto: GrupoProduto
+  ): Observable<any> {
+
+    return this.http
+      .put('grupos-produtos/getAllPaged', grupoProduto, {
+        params: {
+          page: pager.page || '',
+          size: pager.size || '',
+          filialId: this.filialId() || '',
+        },
+      })
+      .pipe(take(1), catchError(this.handleError));
+  }
+  getProdutoPaged(pager: Pager, produto: Produto): Observable<any> {
+    const params = new HttpParams()
+      .set('page', pager.page || '')
+      .set('size', pager.size || '')
+      .set('filialId', this.filialId() || '');
+
+    return this.http
+      .put('produto/getAllPaged', produto, { params })
+      .pipe(take(1), catchError(this.handleError));
+  }
+
   postProduto(produto: Produto) {
-    return this.http.post('produto/post', produto).pipe(take(1),
-      catchError(this.handleError));
+    produto.filialId = this.filialId();
+    return this.http
+      .post('produto/post', produto)
+      .pipe(take(1), catchError(this.handleError));
   }
   constructor(private http: HttpClient) {}
 
   barcode(barcode: string): Observable<any> {
-    return this.http.get(`/gtins/${barcode}.json`).pipe(take(1),
-    catchError(this.handleError));
+    return this.http
+      .get(`/gtins/${barcode}.json`)
+      .pipe(take(1), catchError(this.handleError));
   }
   viaCep(cep: string): Observable<Cep> {
     return this.http
@@ -43,11 +216,13 @@ export class HttpService {
       .pipe(take(1), catchError(this.handleError));
   }
   postFornecedor(fornecedor: Fornecedor) {
+    fornecedor.filialId = this.filialId();
     return this.http
       .post('fornecedores/post', fornecedor)
       .pipe(take(1), catchError(this.handleError));
   }
   postGrupoProduto(grupoProduto: GrupoProduto) {
+    grupoProduto.filialId = this.filialId();
     return this.http
       .post('grupos-produtos/post', grupoProduto)
       .pipe(take(1), catchError(this.handleError));
@@ -64,30 +239,8 @@ export class HttpService {
       .get('grupos-produtos/getAllFilter', { params: par })
       .pipe(take(1), catchError(this.handleError));
   }
-  getFilialbyId(id: number) {
-    return this.http.get(`filiais/get/${id}`).pipe(take(1));
-  }
-  getFilialPaged(filialPage?: FilialPage) {
-    if (filialPage) {
-      let par = new HttpParams();
-      if (filialPage.size) {
-        par = par.set('size', filialPage.size);
-      }
-      if (filialPage.page) {
-        par = par.set('page', filialPage.page);
-      }
-      if (filialPage.nome) {
-        par = par.set('nome', filialPage.nome);
-      }
-      if (filialPage.cnpj) {
-        par = par.set('cnpj', filialPage.cnpj);
-      }
-      return this.http
-        .get('filiais/getAllPaged', { params: par })
-        .pipe(take(1));
-    } else {
-      return this.http.get('filiais/getAllPaged').pipe(take(1));
-    }
+  getFilialbyId(id: number): Observable<Filial> {
+    return this.http.get<Filial>(`filiais/get/${id}`).pipe(take(1));
   }
   getFilialFiltered(nome: string) {
     return this.http

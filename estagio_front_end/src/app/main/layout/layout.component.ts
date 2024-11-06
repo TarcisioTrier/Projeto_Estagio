@@ -1,11 +1,11 @@
-import { HttpService } from '../../services/http/http.service';
-import { style } from '@angular/animations';
 import { Component, OnInit } from '@angular/core';
-import { MenuItem } from 'primeng/api';
-import { StylesService } from '../../services/styles.service';
-import { Filial } from '../../models/filial';
-import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { Router } from '@angular/router';
+import { MenuItem } from 'primeng/api';
+import { AutoCompleteCompleteEvent } from 'primeng/autocomplete';
+import { Filial } from '../../models/filial';
+import { HttpService } from '../../services/http/http.service';
+import { StylesService } from '../../services/styles.service';
+import { set } from 'lodash';
 
 @Component({
   selector: 'app-layout',
@@ -13,49 +13,81 @@ import { Router } from '@angular/router';
   styleUrl: './layout.component.scss',
 })
 export class LayoutComponent implements OnInit {
-  localFilial?: Filial;
+  click() {
+    const target = document.getElementsByClassName('click')[0] as HTMLElement;
+    target.classList.add('click-1');
+    setTimeout(() => {
+      target.classList.remove('click-1');
+      target.classList.add('click-2');
+      setTimeout(() => {
+        target.classList.remove('click-2');
+        target.classList.add('click-3');
+        setTimeout(() => {
+          target.classList.remove('click-3');
+        }, 50);
+      }, 50);
+    }, 50);
+  }
+
+  localFilial?: any;
   filiaisFilter: Filial[] = [];
   selectedItem: any;
   darkMode!: boolean;
   expanded = false;
   visible = false;
-  imagem = 'https://www.triersistemas.com.br/imagens/logo_topo.png';
-  saveFilial(filial: any) {
-    this.localFilial = filial;
+  imagem = 'src/assets/logo.png';
+  items: MenuItem[] = [];
+  activeIndex: number | null = null;
+
+  constructor(
+    private styleService: StylesService,
+    private http: HttpService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    this.localFilial = this.http.filial()
+    this.menuItem();
+    const data = sessionStorage.getItem('darkTheme');
+    if(data == undefined){
+      sessionStorage.setItem('darkTheme', this.styleService.systemIsDark());
+      window.location.reload();
+    }
+    this.darkMode = this.styleService.isDarkModeEnabled();
+    if (this.darkMode) {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
+  }
+
+  saveFilial(filial: Filial) {
+    this.localFilial = {id: filial.id, nomeFantasia: filial.nomeFantasia};
     sessionStorage.setItem('filial', JSON.stringify(this.localFilial));
     this.menuItem();
+    this.visible = false;
     this.selectedItem = undefined;
-    this.visible = false;
-    this.router.navigate(['']);
+    if (this.router.url == '/') {
+      window.location.reload();
+    } else {
+      this.router.navigate(['/inicial']);
+    }
   }
-  cancel() {
-    this.visible = false;
-  }
+
   filterItems(event: AutoCompleteCompleteEvent) {
     let query = event.query;
     this.http.getFilialFiltered(query).subscribe((filial) => {
       this.filiaisFilter = Object.values(filial);
-      console.log(this.filiaisFilter);
     });
   }
+
   quit() {
     sessionStorage.removeItem('filial');
     this.localFilial = undefined;
     this.menuItem();
-    this.router.navigate(['/filial/cadastro']);
+    this.router.navigate(['/filial']);
   }
 
-  showDialog() {
-    this.visible = true;
-  }
-  constructor(private styleService: StylesService, private http: HttpService, private router:Router) {}
-  ngOnInit(): void {
-    this.darkMode = this.styleService.isDarkMode;
-    const data = sessionStorage.getItem('filial');
-    this.localFilial = data ? JSON.parse(data) : undefined;
-    this.menuItem();
-
-  }
   hoverTest(event: Event, hover: boolean) {
     var local = event.target as HTMLElement;
 
@@ -65,17 +97,23 @@ export class LayoutComponent implements OnInit {
       local.style.color = 'var(--text-color-secundary)';
     }
   }
-  toggleMenu() {
-    this.expanded = !this.expanded;
-  }
+
   toggleMode() {
-    this.styleService.toggleLightDark();
-    this.darkMode = this.styleService.isDarkMode;
+    this.darkMode = this.styleService.toggleLightDark();
     if (this.darkMode) {
       document.body.classList.add('dark');
     } else {
       document.body.classList.remove('dark');
     }
+    window.location.reload();
+  }
+
+  toggleMenu() {
+    this.expanded = !this.expanded;
+  }
+
+  showDialog() {
+    this.visible = true;
   }
 
   menuItem() {
@@ -88,90 +126,39 @@ export class LayoutComponent implements OnInit {
         },
       },
     ];
+
     if (!this.localFilial) {
       this.items.push({
         label: 'Filiais',
         routerLink: 'filial',
-        items: [
-          {
-            label: 'Cadastro de Filiais',
-            routerLink: 'filial/cadastro',
-            command: () => {
-              this.toggleMenu();
-            },
-          },
-          {
-            label: 'Listagem de Filiais',
-            routerLink: 'filial/listagem',
-            command: () => {
-              this.toggleMenu();
-            },
-          },
-        ],
       });
     } else {
       this.items.push({
         label: 'Grupo de Produto',
         routerLink: 'grupo-de-produto',
-        items: [
-          {
-            label: 'Cadastro de Grupo de Produto',
-            routerLink: 'grupo-de-produto/cadastro',
-            command: () => {
-              this.toggleMenu();
-            },
-          },
-          {
-            label: 'Listagem de Grupo de Produto',
-            routerLink: 'grupo-de-produto/listagem',
-            command: () => {
-              this.toggleMenu();
-            },
-          },
-        ],
       });
+
       this.items.push({
         label: 'Fornecedor',
         routerLink: 'fornecedor',
-        items: [
-          {
-            label: 'Cadastro de Fornecedor',
-            routerLink: 'fornecedor/cadastro',
-            command: () => {
-              this.toggleMenu();
-            },
-          },
-          {
-            label: 'Listagem de Fornecedor',
-            routerLink: 'fornecedor/listagem',
-            command: () => {
-              this.toggleMenu();
-            },
-          },
-        ],
       });
+
       this.items.push({
         label: 'Produto',
         routerLink: 'produto',
-        items: [
-          {
-            label: 'Cadastro de Produto',
-            routerLink: 'produto/cadastro',
-            command: () => {
-              this.toggleMenu();
-            },
-          },
-          {
-            label: 'Listagem de Produto',
-            routerLink: 'produto/listagem',
-            command: () => {
-              this.toggleMenu();
-            },
-          },
-        ],
+      });
+      this.items.push({
+        label: 'Atualização de Preço',
+        routerLink: 'atualizacao-de-preco',
       });
     }
   }
 
-  items: MenuItem[] = [];
+  private createMenuItem(label: string, routerLink: string): MenuItem {
+    return {
+      label,
+      routerLink,
+      command: () => this.toggleMenu(),
+    };
+  }
 }

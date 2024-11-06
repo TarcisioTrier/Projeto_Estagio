@@ -1,0 +1,162 @@
+[
+  {
+    "keyword": "Funcionalidade",
+    "name": "Testes Fornecedor",
+    "line": 4,
+    "id": "testes-fornecedor",
+    "tags": [],
+    "uri": "fornecedor.cy.feature",
+    "elements": [
+      {
+        "id": "testes-fornecedor;cadastrando-fornecedor-com-sucesso.",
+        "keyword": "Scenario",
+        "line": 6,
+        "name": "Cadastrando fornecedor com sucesso.",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 7,
+            "name": "ao entrar no cadastro do fornecedor",
+            "result": {
+              "status": "passed",
+              "duration": 1773000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Quando ",
+            "line": 8,
+            "name": "preencher os dados e pressionar para cadastrar",
+            "result": {
+              "status": "passed",
+              "duration": 5214000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Então ",
+            "line": 9,
+            "name": "valida o cadastro",
+            "result": {
+              "status": "passed",
+              "duration": 54000000
+            }
+          }
+        ]
+      },
+      {
+        "id": "testes-fornecedor;fornecedor-com-cnpj-já-cadastrado",
+        "keyword": "Scenario",
+        "line": 11,
+        "name": "Fornecedor com cnpj já cadastrado",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 12,
+            "name": "ao entrar no cadastro do fornecedor",
+            "result": {
+              "status": "passed",
+              "duration": 1440000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Quando ",
+            "line": 13,
+            "name": "tenta cadastrar cnpj ja cadastrado",
+            "result": {
+              "status": "passed",
+              "duration": 2900000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Então ",
+            "line": 14,
+            "name": "invalida cadastro fornecedor cnpj já cadastrado",
+            "result": {
+              "status": "passed",
+              "duration": 28000000
+            }
+          }
+        ]
+      },
+      {
+        "id": "testes-fornecedor;fornecedor-com-cnpj-inválido",
+        "keyword": "Scenario",
+        "line": 16,
+        "name": "Fornecedor com cnpj inválido",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 17,
+            "name": "ao entrar no cadastro do fornecedor",
+            "result": {
+              "status": "passed",
+              "duration": 1333000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Quando ",
+            "line": 18,
+            "name": "tenta cadastrar cnpj invalido",
+            "result": {
+              "status": "passed",
+              "duration": 2863000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Então ",
+            "line": 19,
+            "name": "invalida cadastro cnpj invalido",
+            "result": {
+              "status": "passed",
+              "duration": 5000000
+            }
+          }
+        ]
+      },
+      {
+        "id": "testes-fornecedor;fornecedor-com-dados-vazios",
+        "keyword": "Scenario",
+        "line": 21,
+        "name": "Fornecedor com dados vazios",
+        "tags": [],
+        "type": "scenario",
+        "steps": [
+          {
+            "arguments": [],
+            "keyword": "Dado ",
+            "line": 22,
+            "name": "ao entrar no cadastro do fornecedor",
+            "result": {
+              "status": "passed",
+              "duration": 1490000000
+            }
+          },
+          {
+            "arguments": [],
+            "keyword": "Então ",
+            "line": 23,
+            "name": "botao de cadatro desabilitado",
+            "result": {
+              "status": "passed",
+              "duration": 8000000
+            }
+          }
+        ]
+      }
+    ]
+  }
+]

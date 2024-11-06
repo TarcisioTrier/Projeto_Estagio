@@ -6,7 +6,19 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "cypress-cucumber-preprocessor": {
+    "nonGlobalStepDefinitions": false,
+    "stepDefinitions": "cypress/support/step-definitions/",
+    "cucumberJson": {
+      "generate": true,
+      "outputFolder": "cypress/cucumber-json",
+      "filePrefix": "",
+      "fileSuffix": ".json"
+    }
   },
   "private": true,
   "dependencies": {
@@ -18,7 +30,8 @@
     "@angular/platform-browser": "^17.3.0",
     "@angular/platform-browser-dynamic": "^17.3.0",
     "@angular/router": "^17.3.0",
-    "cypress": "^13.15.0",
+    "@faker-js/faker": "^9.2.0",
+    "chart.js": "^4.4.6",
     "primeflex": "^3.3.1",
     "primeicons": "^7.0.0",
     "primeng": "^17.18.11",
@@ -30,14 +43,19 @@
     "@angular-devkit/build-angular": "^17.3.10",
     "@angular/cli": "^17.3.10",
     "@angular/compiler-cli": "^17.3.0",
+    "@cypress/webpack-preprocessor": "^6.0.2",
+    "@faker-js/faker": "^9.2.0",
     "@types/jasmine": "~5.1.0",
     "@types/lodash": "^4.17.10",
+    "cypress": "^13.15.1",
+    "cypress-cucumber-preprocessor": "^4.3.1",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
+    "ts-loader": "^9.5.1",
     "typescript": "~5.4.2"
   }
 }
