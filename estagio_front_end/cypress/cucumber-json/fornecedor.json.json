@@ -22,7 +22,7 @@
             "name": "ao entrar no cadastro do fornecedor",
             "result": {
               "status": "passed",
-              "duration": 1773000000
+              "duration": 2711000000
             }
           },
           {
@@ -32,7 +32,7 @@
             "name": "preencher os dados e pressionar para cadastrar",
             "result": {
               "status": "passed",
-              "duration": 5214000000
+              "duration": 4864000000
             }
           },
           {
@@ -42,7 +42,7 @@
             "name": "valida o cadastro",
             "result": {
               "status": "passed",
-              "duration": 54000000
+              "duration": 63000000
             }
           }
         ]
@@ -62,7 +62,7 @@
             "name": "ao entrar no cadastro do fornecedor",
             "result": {
               "status": "passed",
-              "duration": 1440000000
+              "duration": 2534000000
             }
           },
           {
@@ -72,7 +72,7 @@
             "name": "tenta cadastrar cnpj ja cadastrado",
             "result": {
               "status": "passed",
-              "duration": 2900000000
+              "duration": 2521000000
             }
           },
           {
@@ -81,8 +81,8 @@
             "line": 14,
             "name": "invalida cadastro fornecedor cnpj já cadastrado",
             "result": {
-              "status": "passed",
-              "duration": 28000000
+              "status": "failed",
+              "error_message": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `.p-toast-message-content`, but never found it.\n    at Context.eval (cypress/support/step-definitions/fornecedor.cy.js:8:37)\n    at Context.resolveAndRunStepDefinition (node_modules/cypress-cucumber-preprocessor/lib/resolveStepDefinition.js:193:0)\n    at Context.eval (node_modules/cypress-cucumber-preprocessor/lib/createTestFromScenario.js:27:0)"
             }
           }
         ]
@@ -102,7 +102,7 @@
             "name": "ao entrar no cadastro do fornecedor",
             "result": {
               "status": "passed",
-              "duration": 1333000000
+              "duration": 2642000000
             }
           },
           {
@@ -112,7 +112,7 @@
             "name": "tenta cadastrar cnpj invalido",
             "result": {
               "status": "passed",
-              "duration": 2863000000
+              "duration": 2506000000
             }
           },
           {
@@ -122,7 +122,7 @@
             "name": "invalida cadastro cnpj invalido",
             "result": {
               "status": "passed",
-              "duration": 5000000
+              "duration": 13000000
             }
           }
         ]
@@ -142,7 +142,7 @@
             "name": "ao entrar no cadastro do fornecedor",
             "result": {
               "status": "passed",
-              "duration": 1490000000
+              "duration": 2291000000
             }
           },
           {
@@ -152,7 +152,7 @@
             "name": "botao de cadatro desabilitado",
             "result": {
               "status": "passed",
-              "duration": 8000000
+              "duration": 12000000
             }
           }
         ]

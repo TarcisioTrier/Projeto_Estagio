@@ -22,7 +22,7 @@
             "name": "ao entrar no cadastro do grupo de produto",
             "result": {
               "status": "passed",
-              "duration": 2130000000
+              "duration": 2768000000
             }
           },
           {
@@ -32,7 +32,7 @@
             "name": "preenche os dados de grupo produto",
             "result": {
               "status": "passed",
-              "duration": 1049000000
+              "duration": 846000000
             }
           },
           {
@@ -42,7 +42,7 @@
             "name": "valida o cadastro",
             "result": {
               "status": "passed",
-              "duration": 86000000
+              "duration": 66000000
             }
           }
         ]
@@ -62,7 +62,7 @@
             "name": "ao entrar no cadastro do grupo de produto",
             "result": {
               "status": "passed",
-              "duration": 1514000000
+              "duration": 2840000000
             }
           },
           {
@@ -72,7 +72,7 @@
             "name": "botao de cadatro desabilitado",
             "result": {
               "status": "passed",
-              "duration": 20000000
+              "duration": 8000000
             }
           }
         ]
@@ -92,7 +92,7 @@
             "name": "ao entrar no cadastro do grupo de produto",
             "result": {
               "status": "passed",
-              "duration": 1489000000
+              "duration": 2311000000
             }
           },
           {
@@ -102,7 +102,7 @@
             "name": "preenche a margem invalida",
             "result": {
               "status": "passed",
-              "duration": 467000000
+              "duration": 349000000
             }
           },
           {
@@ -112,7 +112,7 @@
             "name": "a margem se corrige para o valor maximo",
             "result": {
               "status": "passed",
-              "duration": 32000000
+              "duration": 11000000
             }
           }
         ]

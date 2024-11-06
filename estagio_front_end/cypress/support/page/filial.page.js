@@ -13,8 +13,7 @@ Cypress.Commands.add("acessarCadastro", () => {
   cy.contains(
     ".p-panelmenu-header-content > .p-panelmenu-header-action", "Filiais"
   ).click();
-  cy.contains(".p-menuitem-content > .p-menuitem-link", "Cadastro de Filiais").click();
-  cy.visit("/filial/cadastro");
+  cy.visit("/filial");
 });
 
 Cypress.Commands.add("testaApiCnpj", () => {
