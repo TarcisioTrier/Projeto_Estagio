@@ -10,7 +10,6 @@ import triersistemas.estagio_back_end.validators.EnderecosValidator;
 public class EnderecosValidatorImpl implements EnderecosValidator {
 
     public Enderecos validateEndereco(EnderecosDto enderecoDto) {
-
         validateCep(enderecoDto.cep());
 
         Enderecos endereco = new Enderecos();
@@ -27,7 +26,7 @@ public class EnderecosValidatorImpl implements EnderecosValidator {
     private void validateCep(String cep) {
         cep = cep.replaceAll("[^0-9]", "");
         if (cep.length() != 8) {
-            throw new InvalidCepException("CEP inválido");
+            throw new InvalidCepException("CEP inválido.");
         }
     }
 }

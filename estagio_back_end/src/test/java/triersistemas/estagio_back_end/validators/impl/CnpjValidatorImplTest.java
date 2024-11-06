@@ -36,16 +36,13 @@ class CnpjValidatorImplTest {
     private final Filial filial = new Filial();
     private final Fornecedor fornecedor = new Fornecedor();
 
-    @Captor
-    ArgumentCaptor<String> cnpjArgumentCapture;
-
     @BeforeEach
     void setUp() {
-        filial.setId(1L);
         filial.setCnpj("52.353.295/0001-83");
+        filial.setId(1L);
 
-        fornecedor.setId(1L);
         fornecedor.setCnpj("10.333.032/0001-62");
+        fornecedor.setId(1L);
     }
 
     @Nested
@@ -56,8 +53,69 @@ class CnpjValidatorImplTest {
         void cnpjValidatorTest_V1() {
             var cnpj = "30.860.615/0001-59";
 
-            doReturn(Optional.of(filial)).when(filialRepository).findByCnpj(cnpj);
+            assertDoesNotThrow(() -> cnpjValidator.validateCnpjPostFilial(cnpj));
+        }
 
+        @Test
+        @DisplayName("Não deve lançar InvalidCnpjException ao não ter uma filial com o cnpj no update")
+        void cnpjValidatorTest_V2() {
+            var cnpj = "30.860.615/0001-59";
+            var filialId = 1L;
+
+            doReturn(Optional.empty()).when(filialRepository).findByCnpj(cnpj);
+            assertDoesNotThrow(() -> cnpjValidator.validateCnpjUpdateFilial(cnpj, filialId));
+
+            verify(filialRepository,times(1)).findByCnpj(cnpj);
+        }
+
+        @Test
+        @DisplayName("Não deve lançar InvalidCnpjException ao não ter uma filial com o cnpj não alterado no update")
+        void cnpjValidatorTest_V3() {
+            var cnpj = "52.353.295/0001-83";
+            var filialId = 1L;
+
+            doReturn(Optional.of(filial)).when(filialRepository).findByCnpj(cnpj);
+            assertDoesNotThrow(() -> cnpjValidator.validateCnpjUpdateFilial(cnpj, filialId));
+
+            verify(filialRepository,times(1)).findByCnpj(cnpj);
+        }
+
+        @Test
+        @DisplayName("Não deve lançar InvalidCnpjException ao não ter um fornecedor com o cnpj no post")
+        void cnpjValidatorTest_V4() {
+            var cnpj = "30.860.615/0001-59";
+
+            doReturn(Optional.empty()).when(fornecedorRepository).findByCnpj(cnpj);
+
+            assertDoesNotThrow(() -> cnpjValidator.validateCnpjPostFornecedor(cnpj));
+
+            verify(fornecedorRepository,times(1)).findByCnpj(cnpj);
+        }
+
+        @Test
+        @DisplayName("Não deve lançar InvalidCnpjException ao não ter um fornecedor com o cnpj no update")
+        void cnpjValidatorTest_V5() {
+            var cnpj = "30.860.615/0001-59";
+            var fornecedorId = 1L;
+
+            doReturn(Optional.empty()).when(fornecedorRepository).findByCnpj(cnpj);
+
+            assertDoesNotThrow(() -> cnpjValidator.validateCnpjUpdateFornecedor(cnpj, fornecedorId));
+
+            verify(fornecedorRepository,times(1)).findByCnpj(cnpj);
+        }
+
+        @Test
+        @DisplayName("Não deve lançar InvalidCnpjException ao não ter um fornecedor com o cnpj não alterado no update")
+        void cnpjValidatorTest_V6() {
+            var cnpj = "30.860.615/0001-59";
+            var fornecedorId = 1L;
+
+            doReturn(Optional.of(fornecedor)).when(fornecedorRepository).findByCnpj(cnpj);
+
+            assertDoesNotThrow(() -> cnpjValidator.validateCnpjUpdateFornecedor(cnpj, fornecedorId));
+
+            verify(fornecedorRepository,times(1)).findByCnpj(cnpj);
         }
     }
     @Nested
@@ -125,6 +183,30 @@ class CnpjValidatorImplTest {
         @Test
         @DisplayName("Deve lançar InvalidCnpjException ao ter um cnpj inválido")
         void cnpjValidatorTest_V5() {
+            var cnpj = "04.252.011/0001-89";
+
+            InvalidCnpjException exception = assertThrows(InvalidCnpjException.class,() ->{
+                cnpjValidator.validateCnpjPostFilial(cnpj);
+            });
+
+            assertEquals("CNPJ inválido.", exception.getMessage());
+        }
+
+        @Test
+        @DisplayName("Deve lançar InvalidCnpjException ao ter um cnpj com numeros inválidos")
+        void cnpjValidatorTest_V6() {
+            var cnpj = "04.252.011/0001-89";
+
+            InvalidCnpjException exception = assertThrows(InvalidCnpjException.class,() ->{
+                cnpjValidator.validateCnpjPostFilial(cnpj);
+            });
+
+            assertEquals("CNPJ inválido.", exception.getMessage());
+        }
+
+        @Test
+        @DisplayName("Deve lançar InvalidCnpjException ao ter um cnpj inválido")
+        void cnpjValidatorTest_V7() {
             var cnpj = "cnpj inválido";
 
             InvalidCnpjException exception = assertThrows(InvalidCnpjException.class,() ->{

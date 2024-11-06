@@ -1,6 +1,8 @@
 package triersistemas.estagio_back_end.controller;
 
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,6 +25,8 @@ public class FilialController {
     public FilialController(FilialService filialService) {
         this.filialService = filialService;
     }
+    private static final Logger logger = LoggerFactory.getLogger(FilialController.class);
+
 
     @PostMapping("/post")
     public ResponseEntity<FilialResponseDto> postFilial(@Valid @RequestBody FilialRequestDto filialDto) {
@@ -56,11 +60,6 @@ public class FilialController {
     @PutMapping("/update/{id}")
     public ResponseEntity<FilialResponseDto> updateFilial(@PathVariable Long id, @Valid @RequestBody FilialRequestDto filialDto) {
         return ResponseEntity.ok(filialService.updateFilial(id, filialDto));
-    }
-
-    @DeleteMapping("/remove/{id}")
-    public ResponseEntity<FilialResponseDto> removeFilial(@PathVariable Long id) {
-        return ResponseEntity.ok(filialService.inativaFilial(id));
     }
 
     @DeleteMapping("/delete/{id}")

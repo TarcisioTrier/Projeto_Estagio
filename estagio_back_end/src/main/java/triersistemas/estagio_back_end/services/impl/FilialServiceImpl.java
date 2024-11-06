@@ -83,11 +83,6 @@ public class FilialServiceImpl implements FilialService {
     }
 
     @Override
-    public Page<FilialResponseDto> getFilialFilter(String nome, String cnpj, Pageable pageable) {
-        return filialRepository.buscarFiliais(nome, cnpj, pageable);
-    }
-
-    @Override
     public Optional<Filial> buscaFilialPorId(Long id) {
         return filialRepository.findById(id);
     }
@@ -101,15 +96,6 @@ public class FilialServiceImpl implements FilialService {
     public List<FilialResponseDto> getFilialFilter(String nome) {
         return filialRepository.buscarFiliais(nome);
     }
-
-    @Override
-    public FilialResponseDto inativaFilial(Long id) {
-        var filial = findById(id);
-        filial.setSituacaoContrato(SituacaoContrato.INATIVO);
-        var saved = filialRepository.save(filial);
-        return new FilialResponseDto(saved);
-    }
-
 
     @Override
     public Page<FilialResponseDto> getFilialFPaged(FilialPagedRequestDto filialDto, Pageable pageable) {

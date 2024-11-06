@@ -235,25 +235,6 @@ class FilialServiceImplTest {
     class getFilialFilterTest {
 
         @Test
-        @DisplayName("Deve retornar filiais que batem com o nome e cnpj dado, usando Pageable")
-        void getFilialFilterTest_V1() {
-            Pageable pageable = PageRequest.of(0, 5);
-            String name = "Nome";
-            String cnpj = "52.353.295/0001-83";
-
-            FilialResponseDto responseDto = new FilialResponseDto(filial);
-            Page<FilialResponseDto> expected = new PageImpl<>(List.of(responseDto));
-
-            doReturn(new PageImpl<>(List.of(filial))).when(filialRepository).buscarFiliais(name, cnpj, pageable);
-
-            Page<FilialResponseDto> actual = filialService.getFilialFilter(name, cnpj, pageable);
-
-            assertEquals(expected.getTotalElements(), actual.getTotalElements());
-
-            verify(filialRepository, times(1)).buscarFiliais(name, cnpj, pageable);
-        }
-
-        @Test
         @DisplayName("Deve retornar filiais que batem com o nome dado, em uma lista")
         void getFilialFilterTest_V2() {
             String name = "Nome";
@@ -271,43 +252,5 @@ class FilialServiceImplTest {
             verify(filialRepository, times(1)).buscarFiliais(name);
         }
 
-        @Test
-        @DisplayName("Deve retornar filiais que batem com o cnpj dado, usando Pageable")
-        void getFilialFilterTest_V3() {
-            Pageable pageable = PageRequest.of(0, 5);
-            String cnpj = "52.353.295/0001-83";
-
-            FilialResponseDto responseDto = new FilialResponseDto(filial);
-            Page<FilialResponseDto> expected = new PageImpl<>(List.of(responseDto));
-
-            doReturn(new PageImpl<>(List.of(responseDto))).when(filialRepository).buscarFiliais(null, cnpj, pageable);
-
-            Page<FilialResponseDto> actual = filialService.getFilialFilter(null, cnpj, pageable);
-
-            assertEquals(expected.getTotalElements(), actual.getTotalElements());
-            assertEquals(cnpj, actual.getContent().getFirst().cnpj());
-
-            verify(filialRepository, times(1)).buscarFiliais(null, cnpj, pageable);
-        }
-    }
-
-    @Nested
-    class inativaFilialTest {
-
-        @Test
-        @DisplayName("Deve retornar uma filial com situação cadastro inativo")
-        void inativaFilialTest_V1() {
-
-            var filial = new Filial(requestDto);
-
-            doReturn(Optional.of(filial)).when(filialRepository).findById(filialId);
-            doReturn(filial).when(filialRepository).save(filial);
-
-            var actual = filialService.inativaFilial(filialId);
-
-            assertEquals(SituacaoContrato.INATIVO, actual.situacaoContrato());
-            verify(filialRepository, times(1)).findById(filialId);
-            verify(filialRepository, times(1)).save(filial);
-        }
     }
 }

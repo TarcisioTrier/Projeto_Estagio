@@ -64,7 +64,7 @@ public class CnpjValidatorImpl implements CnpjValidator {
         }
     }
 
-    private static boolean isCNPJ(String CNPJ) {
+    private boolean isCNPJ(String CNPJ) {
 
         if (CNPJ.length() != 14)
             return false;

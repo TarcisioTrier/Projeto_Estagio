@@ -10,10 +10,10 @@ const email = faker.internet.email();
 Cypress.Commands.add("acessarCadastro", () => {
   cy.visit("/");
   cy.get(".p-toolbar-group-left > .flex > .pi").click();
-  cy.get(
-    "#pn_id_5_1_header > .p-panelmenu-header-content > .p-panelmenu-header-action"
+  cy.contains(
+    ".p-panelmenu-header-content > .p-panelmenu-header-action", "Filiais"
   ).click();
-  cy.get("#pn_id_5_1_0 > .p-menuitem-content > .p-menuitem-link").click();
+  cy.contains(".p-menuitem-content > .p-menuitem-link", "Cadastro de Filiais").click();
   cy.visit("/filial/cadastro");
 });
 
