@@ -15,10 +15,7 @@ Cypress.Commands.add("entraCadastroGrupoProduto", () => {
   cy.acessarFilial();
   cy.get(".p-toolbar-group-left > .flex > .pi").click();
   cy.contains(".p-menuitem-text", "Grupo de Produto").click();
-  cy.contains(
-    ".p-menuitem-content > .p-menuitem-link",
-    "Cadastro de grupo de produto"
-  ).click();
+  cy.get('.p-component-overlay').click();
 });
 
 Cypress.Commands.add("preencheGrupoProduto", () => {

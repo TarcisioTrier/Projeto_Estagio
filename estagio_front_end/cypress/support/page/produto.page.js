@@ -19,10 +19,7 @@ Cypress.Commands.add("entraCadastroProduto", () => {
   cy.acessarFilial();
   cy.get(".p-toolbar-group-left > .flex > .pi").click();
   cy.contains(".p-menuitem-text", /^Produto$/).click();
-  cy.contains(
-    ".p-menuitem-content > .p-menuitem-link",
-    "Cadastro de Produto"
-  ).click();
+  cy.get('.p-component-overlay').click()
 });
 
 Cypress.Commands.add("preencheDadosProduto", () => {
@@ -36,14 +33,14 @@ Cypress.Commands.add("preencheDadosProduto", () => {
     .then((options) => {
         cy.buscaAleatoria(options)
     });
-  cy.get("#pn_id_24 > .p-dropdown-label").click();
+  cy.contains(".p-dropdown-label > .ng-star-inserted", "Apresentação").click();
   cy.get(".p-dropdown-item")
     .should("have.length.greaterThan", 0)
     .then((options) => {
         cy.buscaAleatoria(options)
     });
 
-  cy.get("#pn_id_26 > .p-dropdown-label").click();
+    cy.contains(".p-dropdown-label > .ng-star-inserted", "Tipo de Produto").click();
   cy.get(".p-dropdown-item")
     .should("have.length.greaterThan", 0)
     .then((options) => {

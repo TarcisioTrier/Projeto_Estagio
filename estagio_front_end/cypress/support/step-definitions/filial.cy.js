@@ -26,7 +26,7 @@ When("clicar para sair", () => {
   cy.get(".p-element.ng-star-inserted > .p-ripple").click();
 });
 Then("deve voltar para o cadastro", () => {
-  cy.url().should("eq", "http://localhost:4200/filial/cadastro");
+  cy.url().should("eq", "http://localhost:4200/filial");
 });
 
 Given("ao entrar em uma filial", () => {
@@ -36,14 +36,17 @@ When("clica no menu de opcoes", () => {
   cy.get(".p-toolbar-group-left > .flex > .pi").click();
 });
 Then("deve aparecer as opcoes", () => {
-  cy.get(
-    "#pn_id_6_1_header > .p-panelmenu-header-content > .p-panelmenu-header-action"
+  cy.contains(
+    ".p-panelmenu-header-content > .p-panelmenu-header-action", "Grupo de Produto"
   ).should("be.visible");
-  cy.get(
-    "#pn_id_6_2_header > .p-panelmenu-header-content > .p-panelmenu-header-action"
+  cy.contains(
+    ".p-panelmenu-header-content > .p-panelmenu-header-action","Produto"
   ).should("be.visible");
-  cy.get(
-    "#pn_id_6_3_header > .p-panelmenu-header-content > .p-panelmenu-header-action"
+  cy.contains(
+    ".p-panelmenu-header-content > .p-panelmenu-header-action","Fornecedor"
+  ).should("be.visible");
+  cy.contains(
+    ".p-panelmenu-header-content > .p-panelmenu-header-action","Atualização de Preço"
   ).should("be.visible");
 });
 

@@ -225,7 +225,7 @@ class FilialControllerTest {
                     null,
                     null);
 
-            given(filialService.getFilialFPaged(ArgumentMatchers.eq(pagedRequest), ArgumentMatchers.eq(pageable))).willReturn(responseDtoList);
+            given(filialService.getFilialPaged(ArgumentMatchers.eq(pagedRequest), ArgumentMatchers.eq(pageable))).willReturn(responseDtoList);
 
             ResultActions response = mockMvc.perform(put("/filiais/getAllPaged")
                     .contentType(MediaType.APPLICATION_JSON)
