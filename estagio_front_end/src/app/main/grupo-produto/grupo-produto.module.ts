@@ -3,8 +3,9 @@ import { CommonModule } from '@angular/common';
 
 import { GrupoProdutoRoutingModule } from './grupo-produto-routing.module';
 import { GrupoProdutoComponent } from './grupo-produto.component';
-import { GrupoProdutoCadastroModule } from './grupo-produto-cadastro/grupo-produto-cadastro.module';
-import { GrupoProdutoListagemModule } from './grupo-produto-listagem/grupo-produto-listagem.module';
+import { FormModule } from '../forms/form.module';
+import { MessageService } from 'primeng/api';
+import { HttpService } from '../../services/http/http.service';
 
 
 @NgModule({
@@ -14,8 +15,8 @@ import { GrupoProdutoListagemModule } from './grupo-produto-listagem/grupo-produ
   imports: [
     CommonModule,
     GrupoProdutoRoutingModule,
-    GrupoProdutoCadastroModule,
-    GrupoProdutoListagemModule
-  ]
+    FormModule
+  ],
+  providers: [HttpService, MessageService],
 })
 export class GrupoProdutoModule { }

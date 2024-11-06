@@ -60,6 +60,11 @@ export class AtualizacaoPrecoProdutoComponent implements OnInit {
         this.produtos = data.content;
         this.produtos.forEach((produto) => {
           produto.edit = false;
+          if (produto.margemLucro == null){
+            this.http.getGrupoProduto(produto.grupoProdutoId!).subscribe((grupoProduto)=>{
+              produto.margemLucro = "Gp" + grupoProduto.margemLucro;
+            })
+          }
         });
         this.totalProdutos = data.totalElements;
       },

@@ -16,7 +16,7 @@ export interface Produto {
   grupoProduto?: GrupoProduto;
   tipoProduto?: TipoProduto;
   apresentacao?: Apresentacao;
-  margemLucro?: number;
+  margemLucro?: string;
   atualizaPreco?: boolean;
   valorProduto?: number;
   valorVenda?: number;

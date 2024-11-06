@@ -8,6 +8,7 @@ import {
   enumToArray,
   TipoProduto,
 } from '../../../../models/app-enums';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-dashboard-table-produto',
@@ -15,6 +16,33 @@ import {
   styleUrl: './dashboard-table-produto.component.scss',
 })
 export class DashboardTableProdutoComponent {
+  lastEvent:any;
+  remove(event: Event, item: any) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Você tem certeza que deseja deletar ' + item.nome + ' ?',
+      header: 'Deletar',
+      icon: 'pi pi-info-circle',
+      acceptButtonStyleClass:"p-button-danger p-button-text",
+              rejectButtonStyleClass:"p-button-text p-button-text",
+              acceptIcon:"none",
+              rejectIcon:"none",
+              accept: () => {
+                this.http.removerProduto(item.id).subscribe({
+                  next: (data) =>{
+                    this.messageHandler.showSuccessMessage( data.nome + ' foi removido com sucesso.');
+                    this.load(this.lastEvent)
+                  },
+                  error: (error)=>{
+                    this.messageHandler.showErrorMessage(error.error);
+                  }
+                })
+            },
+            reject: () => {
+              this.messageHandler.showErrorMessage('Remoção cancelada');
+            }
+    })
+  }
   isNumber(item: any): boolean {
     return this.isMoney(item) || this.isPercent(item);
   }
@@ -46,7 +74,7 @@ export class DashboardTableProdutoComponent {
   change(produto: Produto) {
     this.http.editarProduto(produto).subscribe({
       next: (retorno) => {
-        this.messageHandler.showCadastroMessage(retorno);
+        this.messageHandler.showSuccessMessage("Produto Atualizado com Sucesso");
       },
       error: (erro) => {
         this.messageHandler.showErrorMessage(erro);
@@ -70,18 +98,9 @@ export class DashboardTableProdutoComponent {
     { field: 'valorVenda', header: 'Valor de Venda' },
   ];
 
-  selectedColumns = [
-    { field: 'codigoBarras', header: 'Codigo de Barras' },
-    { field: 'nome', header: 'Nome' },
-    { field: 'descricao', header: 'Descrição' },
-    { field: 'tipoProduto', header: 'Tipo de Produto' },
-    { field: 'apresentacao', header: 'Apresentação' },
-    { field: 'margemLucro', header: 'Margem de Lucro' },
-    { field: 'atualizaPreco', header: 'Atualização de Preço' },
-    { field: 'valorProduto', header: 'Valor do Produto' },
-    { field: 'valorVenda', header: 'Valor de Venda' },
-  ];
+  selectedColumns = this.cols;
   load(event: any) {
+    this.lastEvent = { ...event };
     this.produtoFilter = objectFix(this.produtoFilter, event);
     this.produtoFilter.orderer = event.multiSortMeta;
     const page = event.first! / event.rows!;
@@ -111,6 +130,7 @@ export class DashboardTableProdutoComponent {
   rows: number = 10;
   constructor(
     private http: HttpService,
-    private messageHandler: MessageHandleService
+    private messageHandler: MessageHandleService,
+    private confirmationService: ConfirmationService
   ) {}
 }

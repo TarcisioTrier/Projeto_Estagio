@@ -15,11 +15,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import triersistemas.estagio_back_end.dto.EnderecosDto;
+import triersistemas.estagio_back_end.dto.request.FilialPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.FilialRequestDto;
+import triersistemas.estagio_back_end.dto.request.ProdutoRequestDto;
+import triersistemas.estagio_back_end.dto.response.FilialChartDto;
 import triersistemas.estagio_back_end.dto.response.FilialResponseDto;
-import triersistemas.estagio_back_end.entity.Enderecos;
-import triersistemas.estagio_back_end.entity.Filial;
+import triersistemas.estagio_back_end.entity.*;
 import triersistemas.estagio_back_end.enuns.SituacaoContrato;
+import triersistemas.estagio_back_end.enuns.TipoProduto;
 import triersistemas.estagio_back_end.repository.FilialRepository;
 import triersistemas.estagio_back_end.validators.CnpjValidator;
 import triersistemas.estagio_back_end.validators.EnderecosValidator;
@@ -52,6 +55,9 @@ class FilialServiceImplTest {
     private FilialServiceImpl filialService;
 
     private Filial filial;
+    private Produto produto;
+    private Fornecedor fornecedor;
+    private GrupoProduto grupoProduto;
     private Enderecos enderecos;
     private EnderecosDto enderecosDto;
     private FilialRequestDto requestDto;
@@ -82,6 +88,7 @@ class FilialServiceImplTest {
         filial = new Filial(requestDto);
         filial.setId(filialId);
         enderecos = new Enderecos(requestDto.endereco());
+
     }
 
     @Nested
@@ -228,6 +235,52 @@ class FilialServiceImplTest {
 
             assertEquals(expected, actual);
             verify(filialRepository, times(1)).findAll();
+        }
+    }
+    @Nested
+    class getChartTest{
+        @Test
+        @DisplayName("Deve retornar a Lista das informações para criar os graficos")
+        void getChartTest_V1(){
+            produto = mock();
+            grupoProduto = mock();
+            fornecedor = mock();
+            filial = mock();
+            var filiais = List.of(filial);
+            var produtos = List.of(produto);
+            var gruposProduto = List.of(grupoProduto);
+            var fornecedores = List.of(fornecedor);
+            doReturn(filiais).when(filialRepository).findAll();
+            doReturn(produtos).when(filial).getProdutos();
+            doReturn(gruposProduto).when(filial).getGrupoProdutos();
+            doReturn(fornecedores).when(filial).getFornecedores();
+            doReturn(grupoProduto).when(produto).getGrupoProduto();
+            var actual = filialService.getChart();
+            assertEquals(filiais.stream().map(FilialChartDto::new).toList(), actual);
+
+        }
+        @Test
+        @DisplayName("Deve retornar a Lista Nula, pois não tem nenhuma filial no repositorio")
+        void getChartTest_v2(){
+            var filiais = List.of();
+            doReturn(filiais).when(filialRepository).findAll();
+            var actual = filialService.getChart();
+            assertEquals(List.of(), actual);
+        }
+    }
+
+    @Nested
+    class getFilialPaged{
+        @Test
+        @DisplayName("Deve retornar a filial paginada")
+        void getFilialPaged_v1(){
+            FilialPagedRequestDto pagedDto = mock();
+            FilialResponseDto responseDto = mock();
+            Pageable pageable = mock();
+            Page<FilialResponseDto> page = mock();
+            doReturn(page).when(filialRepository).buscarFiliais(pagedDto, pageable);
+            var actual = filialService.getFilialPaged(pagedDto,pageable);
+            assertEquals(page, actual);
         }
     }
 

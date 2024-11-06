@@ -17,7 +17,6 @@ const routes: Routes = [
       import('./main/filial/filial.module').then((m) => m.FilialModule),
   },
 
-  // Cadastro de Grupo de Produto
   {
     path: 'grupo-de-produto',
     loadChildren: () =>
@@ -27,7 +26,6 @@ const routes: Routes = [
     canActivateChild: [AuthGuard],
   },
 
-  // Cadastro de Fornecedor
   {
     path: 'fornecedor',
     loadChildren: () =>
@@ -37,7 +35,6 @@ const routes: Routes = [
     canActivateChild: [AuthGuard],
   },
 
-  // Cadastro de Produto
   {
     path: 'produto',
     loadChildren: () =>
@@ -45,25 +42,6 @@ const routes: Routes = [
     canActivateChild: [AuthGuard],
   },
 
-  // Cadastro de Especialidade Médica (BÔNUS)
-  {
-    path: 'especialidade',
-    loadChildren: () =>
-      import('./main/especialidade/especialidade.module').then(
-        (m) => m.EspecialidadeModule
-      ),
-    canActivateChild: [AuthGuard],
-  },
-
-  // Cadastro de Médico (BÔNUS)
-  {
-    path: 'medico',
-    loadChildren: () =>
-      import('./main/medico/medico.module').then((m) => m.MedicoModule),
-    canActivateChild: [AuthGuard],
-  },
-
-  // Atualização de Preço
   {
     path: 'atualizacao-de-preco',
     loadChildren: () =>

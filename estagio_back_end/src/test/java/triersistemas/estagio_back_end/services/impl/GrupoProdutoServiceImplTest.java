@@ -16,12 +16,17 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import triersistemas.estagio_back_end.dto.request.GrupoProdutoPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.GrupoProdutoRequestDto;
+import triersistemas.estagio_back_end.dto.request.ProdutoRequestDto;
 import triersistemas.estagio_back_end.dto.response.FornecedorResponseDto;
+import triersistemas.estagio_back_end.dto.response.GrupoProdutoChartDto;
 import triersistemas.estagio_back_end.dto.response.GrupoProdutoResponseDto;
 import triersistemas.estagio_back_end.entity.Filial;
 import triersistemas.estagio_back_end.entity.GrupoProduto;
+import triersistemas.estagio_back_end.entity.Produto;
+import triersistemas.estagio_back_end.enuns.Apresentacao;
 import triersistemas.estagio_back_end.enuns.SituacaoCadastro;
 import triersistemas.estagio_back_end.enuns.TipoGrupoProduto;
+import triersistemas.estagio_back_end.enuns.TipoProduto;
 import triersistemas.estagio_back_end.repository.GrupoProdutoRepository;
 import triersistemas.estagio_back_end.services.FilialService;
 
@@ -137,6 +142,24 @@ public class GrupoProdutoServiceImplTest {
 
             verify(grupoProdutoRepository, times(1)).findById(grupoProdutoId);
             verify(grupoProdutoRepository, times(1)).delete(grupoProdutoArgumentCaptor.capture());
+        }
+    }
+
+    @Nested
+    class getProdutos{
+        @Test
+        @DisplayName("deve retornar uma lista de GrupoProdutoChartDto")
+        void getProdutoTest_V1(){
+            Produto produto = new Produto(new ProdutoRequestDto("7894561237899", "teste", null, 1L, TipoProduto.NAO_DEFINIDO, Apresentacao.OUTROS, BigDecimal.TEN, true, BigDecimal.TEN, SituacaoCadastro.ATIVO),grupoProduto );
+            var produtos = List.of(produto);
+            filial.setProdutos(produtos);
+            grupoProduto.setProdutos(produtos);
+            var gruposProduto = List.of(grupoProduto);
+            filial.setGrupoProdutos(gruposProduto);
+
+            doReturn(filial).when(filialService).findById(filialId);
+            var actual = grupoProdutoService.getProdutos(filialId);
+            assertEquals(gruposProduto.stream().map(GrupoProdutoChartDto::new).toList(),actual);
         }
     }
 

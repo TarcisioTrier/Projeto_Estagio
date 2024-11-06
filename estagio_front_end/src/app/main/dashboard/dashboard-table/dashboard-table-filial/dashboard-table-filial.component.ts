@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { Filial } from '../../../../models/filial';
 import { HttpService } from '../../../../services/http/http.service';
 import { MessageHandleService } from '../../../../services/message-handle.service';
 import { objectFix } from '../../../../models/externalapi';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'app-dashboard-table-filial',
@@ -10,10 +11,37 @@ import { objectFix } from '../../../../models/externalapi';
   styleUrl: './dashboard-table-filial.component.scss',
 })
 export class DashboardTableFilialComponent {
+lastEvent:any;
+remove(event: Event, item: any) {
+  this.confirmationService.confirm({
+    target: event.target as EventTarget,
+    message: 'Você tem certeza que deseja deletar ' + item.nomeFantasia + ' ?',
+    header: 'Deletar',
+    icon: 'pi pi-info-circle',
+    acceptButtonStyleClass:"p-button-danger p-button-text",
+            rejectButtonStyleClass:"p-button-text p-button-text",
+            acceptIcon:"none",
+            rejectIcon:"none",
+            accept: () => {
+              this.http.removerFilial(item.id).subscribe({
+                next: (data) =>{
+                  this.messageHandler.showSuccessMessage( data.nomeFantasia + ' foi removido com sucesso.');
+                  this.load(this.lastEvent)
+                },
+                error: (error)=>{
+                  this.messageHandler.showErrorMessage(error.error);
+                }
+              })
+          },
+          reject: () => {
+            this.messageHandler.showErrorMessage('Remoção cancelada');
+          }
+  })
+}
   change(filial: Filial) {
     this.http.putFilial(filial).subscribe({
       next: (retorno) => {
-        this.messageHandler.showCadastroMessage(retorno);
+        this.messageHandler.showSuccessMessage("Filial Atualizada com Sucesso");
       },
       error: (erro) => {
         this.messageHandler.showErrorMessage(erro);
@@ -31,8 +59,12 @@ export class DashboardTableFilialComponent {
       let fields = field.split('.');
       let value = item;
       for (let f of fields) {
+        if(!value[f])
+          return "";
         value = value[f];
+
       }
+
       return value;
     } else {
       return item[field];
@@ -63,6 +95,7 @@ export class DashboardTableFilialComponent {
     { field: 'endereco.cep', header: 'CEP' },
   ];
   load(event: any) {
+    this.lastEvent = { ...event };
     this.filialFilter = objectFix(this.filialFilter, event);
     this.filialFilter.orderer = event.multiSortMeta;
     const page = event.first! / event.rows!;
@@ -96,6 +129,7 @@ export class DashboardTableFilialComponent {
   rows: number = 10;
   constructor(
     private http: HttpService,
-    private messageHandler: MessageHandleService
+    private messageHandler: MessageHandleService,
+    private confirmationService: ConfirmationService
   ) {}
 }

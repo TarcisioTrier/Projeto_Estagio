@@ -16,7 +16,6 @@ import { HttpService } from '../../../services/http/http.service';
 export class AtualizacaoPrecoGrupoProdutoComponent implements OnInit {
   @Output() close = new EventEmitter();
   atualizarPreco() {
-    this.atualizacao.valor = this.valor;
     if (this.selectedGrupoProdutos) {
       this.atualizacao.grupoProdutoId = this.selectedGrupoProdutos.map(
         (grupoProduto) => grupoProduto.id!

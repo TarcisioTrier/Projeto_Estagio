@@ -53,6 +53,7 @@ export class FornecedorFormComponent implements OnChanges {
     if (this.fornecedorPut !== undefined) {
       const situacaoCadastro = Object.values(SituacaoCadastro);
       this.fornecedor = {
+        id: this.fornecedorPut.id,
         cnpj: this.fornecedorPut.cnpj,
         telefone: this.fornecedorPut.telefone,
         nomeFantasia: this.fornecedorPut.nomeFantasia,

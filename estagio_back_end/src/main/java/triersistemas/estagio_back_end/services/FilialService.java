@@ -30,7 +30,9 @@ public interface FilialService {
 
     List<FilialResponseDto> getFilialFilter(String nome);
 
-    Page<FilialResponseDto> getFilialFPaged(FilialPagedRequestDto filialDto, Pageable pageable);
+    FilialResponseDto inativaFilial(Long id);
+
+    Page<FilialResponseDto> getFilialPaged(FilialPagedRequestDto filialDto, Pageable pageable);
 
     List<FilialChartDto> getChart();
 }

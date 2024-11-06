@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -34,6 +35,7 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
     public List<ProdutoResponseDto> atualizaPreco(AtualizaPrecoDto atualizaPrecoDto) {
         var grupoProdutos = grupoProdutoRepository.buscarGrupoProduto(atualizaPrecoDto.grupoProdutoFilter(), atualizaPrecoDto.filialId());
         var produtos = produtoRepository.buscarProduto(atualizaPrecoDto.produtoFilter(), atualizaPrecoDto.filialId());
+
         if (!atualizaPrecoDto.all()) {
             if (atualizaPrecoDto.isProduto()) {
                 produtos = produtos.stream().filter(produto -> atualizaPrecoDto.produtoId().contains(produto.getId())).toList();
@@ -52,6 +54,7 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
     private List<Produto> atualiza(List<Produto> produtos, List<GrupoProduto> grupoProdutos, AtualizaPrecoDto atualizaPrecoDto) {
         if (atualizaPrecoDto.atualizaPreco() == AtualizaPrecoEnum.MARGEM) {
             if (!atualizaPrecoDto.isProduto()) {
+                grupoProdutos = grupoProdutos.stream().filter(GrupoProduto::getAtualizaPreco).toList();
                 return atualizaGrupoMargem(grupoProdutos, atualizaPrecoDto);
             }
             return atualizaMargem(produtos, atualizaPrecoDto);
@@ -63,10 +66,8 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
 
     private List<Produto> atualizaPrecoProduto(List<Produto> produtos, AtualizaPrecoDto atualizaPrecoDto) {
         produtos = atualizavel(produtos);
+     return atualizaValor(produtos, atualizaPrecoDto);
 
-        if (atualizaPrecoDto.atualizaPreco() == AtualizaPrecoEnum.VALOR_PRODUTO || atualizaPrecoDto.atualizaPreco() == AtualizaPrecoEnum.VALOR_VENDA)
-            return atualizaValor(produtos, atualizaPrecoDto);
-        throw new NotFoundException("Tipo de atualização não encontrado");
 
     }
 
@@ -91,8 +92,10 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
     }
 
     private List<Produto> atualizaMargem(List<Produto> produtos, AtualizaPrecoDto atualizaPrecoDto) {
+        produtos = atualizavel(produtos);
         return produtos.stream().map(produto -> {
-            var valor = valorCalculoRelativo(atualizaPrecoDto.isRelativo(), produto.getMargemLucro().add(atualizaPrecoDto.valor()), atualizaPrecoDto.valor());
+            var margem = Optional.ofNullable(produto.getMargemLucro()).orElse(BigDecimal.ZERO);
+            var valor = valorCalculoRelativo(atualizaPrecoDto.isRelativo(), margem.add(atualizaPrecoDto.valor()), atualizaPrecoDto.valor());
             testeMargem(valor);
             produto.setMargemLucro(valor);
             produto.calculateValorVenda();
@@ -102,6 +105,9 @@ public class AtualizaPrecoServiceImpl implements AtualizaPrecoService {
 
 
     private List<Produto> atualizaGrupoMargem(List<GrupoProduto> grupoProdutos, AtualizaPrecoDto atualizaPrecoDto) {
+        if(grupoProdutos.isEmpty()){
+            throw new NotFoundException("Nenhum grupo produto encontrado");
+        }
         grupoProdutos = grupoProdutos.stream().map(grupoProduto -> {
             var valor = valorCalculoRelativo(atualizaPrecoDto.isRelativo(), grupoProduto.getMargemLucro().add(atualizaPrecoDto.valor()), atualizaPrecoDto.valor());
             testeMargem(valor);

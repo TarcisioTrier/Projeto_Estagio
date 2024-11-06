@@ -51,7 +51,6 @@ public class FornecedorController {
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<FornecedorResponseDto> deleteFornecedor(@PathVariable Long id) {
-        fornecedorService.deleteFornecedor(id);
         return ResponseEntity.ok(fornecedorService.deleteFornecedor(id));
     }
 

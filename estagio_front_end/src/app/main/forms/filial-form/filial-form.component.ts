@@ -12,7 +12,7 @@ import {
 } from '../../../models/externalapi';
 import { Filial, Endereco } from '../../../models/filial';
 import { HttpService } from '../../../services/http/http.service';
-import { debounce } from 'lodash';
+import { debounce, first, isNull } from 'lodash';
 import { MessageHandleService } from '../../../services/message-handle.service';
 
 @Component({
@@ -22,7 +22,6 @@ import { MessageHandleService } from '../../../services/message-handle.service';
 })
 export class FilialFormComponent implements OnInit {
   ngOnInit(): void {
-    console.log(this.filialPut);
     if (this.filialPut !== undefined) {
       const situacaoContrato = Object.values(SituacaoContrato);
       console.log(situacaoContrato.indexOf(this.filialPut.situacaoContrato!));
@@ -36,14 +35,21 @@ export class FilialFormComponent implements OnInit {
         situacaoContrato: situacaoContrato.indexOf(
           this.filialPut.situacaoContrato!
         ),
-        endereco: {
-          cep: this.filialPut.endereco.cep,
-          logradouro: this.filialPut.endereco.logradouro,
-          numero: this.filialPut.endereco.numero,
-          complemento: this.filialPut.endereco.complemento,
-          bairro: this.filialPut.endereco.bairro,
-          localidade: this.filialPut.endereco.localidade,
-          estado: this.filialPut.endereco.estado,
+        disabled: {
+          nomeFantasia: false,
+          razaoSocial: false,
+          email: false,
+        }
+      }
+      if(this.filialPut.endereco !== null){
+        this.cadastroFilial.endereco = {
+          cep: this.filialPut.endereco!.cep,
+          logradouro: this.filialPut.endereco!.logradouro,
+          numero: this.filialPut.endereco!.numero,
+          complemento: this.filialPut.endereco!.complemento,
+          bairro: this.filialPut.endereco!.bairro,
+          localidade: this.filialPut.endereco!.localidade,
+          estado: this.filialPut.endereco!.estado,
           disabled: {
             logradouro: false,
             numero: false,
@@ -52,13 +58,21 @@ export class FilialFormComponent implements OnInit {
             localidade: false,
             estado: false,
           },
-        },
-        disabled: {
-          nomeFantasia: false,
-          razaoSocial: false,
-          email: false,
-        },
-      };
+        }
+      }else{
+        this.cadastroFilial.endereco = {
+          cep: '',
+          disabled: {
+            logradouro: false,
+            numero: false,
+            complemento: false,
+            bairro: false,
+            localidade: false,
+            estado: false,
+          },
+        }
+      }
+
     }
   }
   isValidFone(): boolean {
@@ -72,13 +86,26 @@ export class FilialFormComponent implements OnInit {
   loading = false;
   load() {
     this.loading = true;
-    console.log(this.cadastroFilial.telefone!.replace(/[_]/g, ''));
-    let filial = this.cadastroFilial;
-    filial.telefone = this.cadastroFilial.telefone!.replace(/[_]/g, '');
-    if (this.cadastroFilial.endereco!.cep !== '') {
-      filial.endereco = this.cadastroFilial.endereco;
+
+    let filial: Filial = {
+      id: this.cadastroFilial.id,
+      nomeFantasia: this.cadastroFilial.nomeFantasia,
+      razaoSocial: this.cadastroFilial.razaoSocial,
+      cnpj: this.cadastroFilial.cnpj,
+      telefone: this.cadastroFilial.telefone,
+      email: this.cadastroFilial.email,
+      situacaoContrato: this.cadastroFilial.situacaoContrato,
+      disabled: {
+        nomeFantasia: false,
+        razaoSocial: false,
+        email: false
+      }
     }
-    console.log(filial);
+    if(this.cadastroFilial.endereco?.cep !== ''){
+      filial.endereco = this.cadastroFilial.endereco!;
+      }
+
+    filial.telefone = this.cadastroFilial.telefone!.replace(/[_]/g, '');
     this.filialChange.emit(filial);
     this.loading = false;
   }

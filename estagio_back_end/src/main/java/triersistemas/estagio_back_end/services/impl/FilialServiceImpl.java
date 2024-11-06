@@ -41,6 +41,7 @@ public class FilialServiceImpl implements FilialService {
 
     @Override
     public FilialResponseDto addFilial(FilialRequestDto filialDto) {
+        cnpjValidator.validateCnpjPostFilial(filialDto.cnpj());
         validateFilial(filialDto);
         var filial = new Filial(filialDto);
         Optional.ofNullable(filialDto.endereco()).map(enderecosValidator::validateEndereco).ifPresent(filial::setEndereco);
@@ -98,7 +99,16 @@ public class FilialServiceImpl implements FilialService {
     }
 
     @Override
-    public Page<FilialResponseDto> getFilialFPaged(FilialPagedRequestDto filialDto, Pageable pageable) {
+    public FilialResponseDto inativaFilial(Long id) {
+        var filial = findById(id);
+        filial.setSituacaoContrato(SituacaoContrato.INATIVO);
+        var saved = filialRepository.save(filial);
+        return new FilialResponseDto(saved);
+    }
+
+
+    @Override
+    public Page<FilialResponseDto> getFilialPaged(FilialPagedRequestDto filialDto, Pageable pageable) {
         return filialRepository.buscarFiliais(filialDto, pageable);
     }
 
@@ -112,7 +122,6 @@ public class FilialServiceImpl implements FilialService {
     }
 
     private void validateFilial(FilialRequestDto requestDto) {
-        cnpjValidator.validateCnpjPostFilial(requestDto.cnpj());
         foneValidator.validateFone(requestDto.telefone());
     }
 

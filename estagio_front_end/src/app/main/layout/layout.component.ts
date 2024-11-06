@@ -29,7 +29,7 @@ export class LayoutComponent implements OnInit {
     }, 50);
   }
 
-  localFilial?: Filial;
+  localFilial?: any;
   filiaisFilter: Filial[] = [];
   selectedItem: any;
   darkMode!: boolean;
@@ -46,15 +46,23 @@ export class LayoutComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.darkMode = this.styleService.isDarkMode;
-    const data = sessionStorage.getItem('filial');
-    this.localFilial = data ? JSON.parse(data) : undefined;
+    this.localFilial = this.http.filial()
     this.menuItem();
+    const data = sessionStorage.getItem('darkTheme');
+    if(data == undefined){
+      sessionStorage.setItem('darkTheme', this.styleService.systemIsDark());
+      window.location.reload();
+    }
+    this.darkMode = this.styleService.isDarkModeEnabled();
+    if (this.darkMode) {
+      document.body.classList.add('dark');
+    } else {
+      document.body.classList.remove('dark');
+    }
   }
 
   saveFilial(filial: Filial) {
-    this.localFilial = filial;
-    console.log(this.http.filialId);
+    this.localFilial = {id: filial.id, nomeFantasia: filial.nomeFantasia};
     sessionStorage.setItem('filial', JSON.stringify(this.localFilial));
     this.menuItem();
     this.visible = false;
@@ -70,7 +78,6 @@ export class LayoutComponent implements OnInit {
     let query = event.query;
     this.http.getFilialFiltered(query).subscribe((filial) => {
       this.filiaisFilter = Object.values(filial);
-      console.log(this.filiaisFilter);
     });
   }
 
@@ -78,7 +85,7 @@ export class LayoutComponent implements OnInit {
     sessionStorage.removeItem('filial');
     this.localFilial = undefined;
     this.menuItem();
-    this.router.navigate(['/filial/cadastro']);
+    this.router.navigate(['/filial']);
   }
 
   hoverTest(event: Event, hover: boolean) {
@@ -92,13 +99,13 @@ export class LayoutComponent implements OnInit {
   }
 
   toggleMode() {
-    this.styleService.toggleLightDark();
-    this.darkMode = this.styleService.isDarkMode;
+    this.darkMode = this.styleService.toggleLightDark();
     if (this.darkMode) {
       document.body.classList.add('dark');
     } else {
       document.body.classList.remove('dark');
     }
+    window.location.reload();
   }
 
   toggleMenu() {
@@ -124,43 +131,21 @@ export class LayoutComponent implements OnInit {
       this.items.push({
         label: 'Filiais',
         routerLink: 'filial',
-        items: [
-          this.createMenuItem('Cadastro de Filiais', 'filial/cadastro'),
-          this.createMenuItem('Listagem de Filiais', 'filial/listagem'),
-        ],
       });
     } else {
       this.items.push({
         label: 'Grupo de Produto',
         routerLink: 'grupo-de-produto',
-        items: [
-          this.createMenuItem(
-            'Cadastro de grupo de produtos',
-            'grupo-de-produto/cadastro'
-          ),
-          this.createMenuItem(
-            'Listagem de grupo de produtos',
-            'grupo-de-produto/listagem'
-          ),
-        ],
       });
 
       this.items.push({
         label: 'Fornecedor',
         routerLink: 'fornecedor',
-        items: [
-          this.createMenuItem('Cadastro de fornecedor', 'fornecedor/cadastro'),
-          this.createMenuItem('Listagem de fornecedor', 'fornecedor/listagem'),
-        ],
       });
 
       this.items.push({
         label: 'Produto',
         routerLink: 'produto',
-        items: [
-          this.createMenuItem('Cadastro de Produto', 'produto/cadastro'),
-          this.createMenuItem('Listagem de Produto', 'produto/listagem'),
-        ],
       });
       this.items.push({
         label: 'Atualização de Preço',

@@ -18,6 +18,25 @@ import { AtualizaPreco } from '../../models/atualizapreco';
   providedIn: 'root',
 })
 export class HttpService {
+
+
+  removerFilial(id:number): Observable<any>{
+    return this.http.delete(`filiais/delete/${id}`).pipe(take(1), catchError(this.handleError))
+  }
+
+  removerProduto(id:number): Observable<any>{
+    return this.http.delete(`produto/delete/${id}`).pipe(take(1), catchError(this.handleError))
+  }
+
+  removerGrupoProduto(id:number): Observable<any>{
+    return this.http.delete(`grupos-produtos/delete/${id}`).pipe(take(1), catchError(this.handleError))
+  }
+
+  removerFornecedor(id:number): Observable<any>{
+    return this.http.delete(`fornecedores/delete/${id}`).pipe(take(1), catchError(this.handleError))
+  }
+
+
   maiorValorProdutoProdutos(filialId: number) : Observable<any> {
     const pager: Pager = { page: 0, size: 10}
     const produto:Produto ={
@@ -43,6 +62,10 @@ export class HttpService {
     if(filial !== undefined)
     return filial.id;
     return undefined;
+  }
+  filial(){
+    const data = sessionStorage.getItem('filial');
+    return data ? JSON.parse(data) : undefined;
   }
 
   maiorValorVendaProdutos(filialId: number): Observable<any> {
@@ -74,7 +97,7 @@ export class HttpService {
 
   putForncedor(fornecedor: Fornecedor) {
     return this.http
-      .put(`fornecedores/put/${fornecedor.id}`, fornecedor)
+      .put(`fornecedores/update/${fornecedor.id}`, fornecedor)
       .pipe(take(1), catchError(this.handleError));
   }
   getFornecedorPaged(
@@ -165,6 +188,7 @@ export class HttpService {
   }
 
   postProduto(produto: Produto) {
+    produto.filialId = this.filialId();
     return this.http
       .post('produto/post', produto)
       .pipe(take(1), catchError(this.handleError));
@@ -192,11 +216,13 @@ export class HttpService {
       .pipe(take(1), catchError(this.handleError));
   }
   postFornecedor(fornecedor: Fornecedor) {
+    fornecedor.filialId = this.filialId();
     return this.http
       .post('fornecedores/post', fornecedor)
       .pipe(take(1), catchError(this.handleError));
   }
   postGrupoProduto(grupoProduto: GrupoProduto) {
+    grupoProduto.filialId = this.filialId();
     return this.http
       .post('grupos-produtos/post', grupoProduto)
       .pipe(take(1), catchError(this.handleError));
