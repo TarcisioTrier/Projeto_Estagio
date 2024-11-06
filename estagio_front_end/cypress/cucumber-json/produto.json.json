@@ -21,8 +21,9 @@
             "line": 7,
             "name": "ao entrar no cadastro de produto",
             "result": {
-              "status": "passed",
-              "duration": 5127000000
+              "status": "failed",
+              "duration": 5261000000,
+              "error_message": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `.p-autocomplete-panel`, but never found it.\n    at Context.eval (cypress/support/page/filial.page.js:39:5)"
             }
           },
           {
@@ -31,8 +32,7 @@
             "line": 8,
             "name": "preenche os dados de produto",
             "result": {
-              "status": "passed",
-              "duration": 5082000000
+              "status": "skipped"
             }
           },
           {
@@ -41,8 +41,7 @@
             "line": 9,
             "name": "valida o cadastro",
             "result": {
-              "status": "passed",
-              "duration": 30000000
+              "status": "skipped"
             }
           }
         ]
@@ -61,8 +60,8 @@
             "line": 12,
             "name": "ao entrar no cadastro de produto",
             "result": {
-              "status": "passed",
-              "duration": 4651000000
+              "status": "failed",
+              "error_message": "AssertionError: Timed out retrying after 4000ms: Expected to find element: `.m-1 > .p-ripple`, but never found it.\n    at Context.eval (cypress/support/page/filial.page.js:37:5)"
             }
           },
           {
@@ -71,8 +70,7 @@
             "line": 13,
             "name": "botao de cadatro desabilitado",
             "result": {
-              "status": "passed",
-              "duration": 671000000
+              "status": "skipped"
             }
           }
         ]

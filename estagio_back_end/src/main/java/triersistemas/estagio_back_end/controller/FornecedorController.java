@@ -3,6 +3,7 @@ package triersistemas.estagio_back_end.controller;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import triersistemas.estagio_back_end.dto.request.FornecedorPagedRequestDto;
@@ -32,14 +33,15 @@ public class FornecedorController {
     public ResponseEntity<FornecedorResponseDto> getFornecedorById(@PathVariable Long id) {
         return ResponseEntity.ok(fornecedorService.getFornecedorById(id));
     }
-    //Todo: Atualizar metodo para receber filialId
+
     @PutMapping("/getAllPaged")
     public Page<FornecedorResponseDto> getFornecedorPaged(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
             @Valid @RequestParam(required = false) Long filialId,
             @RequestBody(required = false) FornecedorPagedRequestDto fornecedorDto) {
-        return fornecedorService.getFornecedorPaged(filialId, fornecedorDto, PageRequest.of(page, size));
+        Pageable pageable = PageRequest.of(page, size);
+        return fornecedorService.getFornecedorPaged(filialId, fornecedorDto, pageable);
     }
 
     @PutMapping("/update/{id}")
@@ -47,7 +49,7 @@ public class FornecedorController {
         return ResponseEntity.ok(fornecedorService.updateFornecedor(id, fornecedorDto));
     }
 
-    @DeleteMapping("/situacao/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<FornecedorResponseDto> deleteFornecedor(@PathVariable Long id) {
         fornecedorService.deleteFornecedor(id);
         return ResponseEntity.ok(fornecedorService.deleteFornecedor(id));

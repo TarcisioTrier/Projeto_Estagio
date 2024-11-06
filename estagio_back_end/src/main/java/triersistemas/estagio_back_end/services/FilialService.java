@@ -23,15 +23,12 @@ public interface FilialService {
 
     List<FilialResponseDto> getAllFilial();
 
-    Page<FilialResponseDto> getFilialFilter(String nome, String cnpj, Pageable pageable);
 
     Optional<Filial> buscaFilialPorId(Long id);
 
     Filial findById(Long id);
 
     List<FilialResponseDto> getFilialFilter(String nome);
-
-    FilialResponseDto inativaFilial(Long id);
 
     Page<FilialResponseDto> getFilialFPaged(FilialPagedRequestDto filialDto, Pageable pageable);
 

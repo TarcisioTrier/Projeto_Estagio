@@ -48,8 +48,8 @@ public class FornecedorServiceImpl implements FornecedorService {
     }
 
     @Override
-    public Page<FornecedorResponseDto> getFornecedorPaged(Long filialId, FornecedorPagedRequestDto fornecedorDto, PageRequest of) {
-        return fornecedorRepository.buscarFornecedores(filialId, fornecedorDto, of);
+    public Page<FornecedorResponseDto> getFornecedorPaged(Long filialId, FornecedorPagedRequestDto fornecedorDto, Pageable pageable) {
+        return fornecedorRepository.buscarFornecedores(filialId, fornecedorDto, pageable);
     }
 
     @Override

@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { HttpService } from '../../../services/http/http.service';
-import { Title } from 'chart.js';
 
 @Component({
   selector: 'app-dashboard-graph',

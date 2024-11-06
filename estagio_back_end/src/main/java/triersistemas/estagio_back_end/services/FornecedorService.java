@@ -3,6 +3,7 @@ package triersistemas.estagio_back_end.services;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import triersistemas.estagio_back_end.dto.request.FornecedorPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.FornecedorRequestDto;
 import triersistemas.estagio_back_end.dto.response.FornecedorResponseDto;
@@ -19,5 +20,5 @@ public interface FornecedorService {
 
     FornecedorResponseDto updateFornecedor(Long id, @Valid FornecedorRequestDto requestDto);
 
-    Page<FornecedorResponseDto> getFornecedorPaged(@Valid Long filialId, FornecedorPagedRequestDto fornecedorDto, PageRequest of);
+    Page<FornecedorResponseDto> getFornecedorPaged(@Valid Long filialId, FornecedorPagedRequestDto fornecedorDto, Pageable pageable);
 }

@@ -1,5 +1,6 @@
 package triersistemas.estagio_back_end.services.impl;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -45,6 +46,7 @@ class AtualizaPrecoServiceImplTest {
     @Captor
     ArgumentCaptor<List<Produto>> produtoArgumentCaptor;
 
+    @BeforeEach
     void setUp() {
         produtoFilter = new ProdutoPagedRequestDto(
                 null, null, null, null, null, null,
@@ -211,12 +213,14 @@ class AtualizaPrecoServiceImplTest {
             var grupoProduto2 = createGrupoProduto(2L);
             var produto1 = createProduto(1L, "produto 1", 1L, null, BigDecimal.TEN, grupoProduto);
             var produto2 = createProduto(2L, "produto 2", 2L, BigDecimal.ONE, new BigDecimal("50"), grupoProduto2);
-            List<Produto> produtosList = List.of(produto1, produto2);
-
             grupoProduto.setProdutos(List.of(produto1));
             grupoProduto2.setProdutos(List.of(produto2));
 
             List<GrupoProduto> grupoProdutosList = List.of(grupoProduto, grupoProduto2);
+
+            List<Produto> produtosList = List.of(produto1, produto2);
+
+
 
             var expectedValuesVenda = expectedValue("11.11", "50.51");
             var expectedValuesMargemGrupo = expectedValue("10", "10");

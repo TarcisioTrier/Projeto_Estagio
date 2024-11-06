@@ -215,7 +215,7 @@ class FornecedorServiceImplTest {
         @Test
         @DisplayName("Deve retornar fornecedores que batem com o nome,cnpj e situação cadastro dados, usando Pageable")
         void getFornecedorPagedTest_V2() {
-            PageRequest pageable = PageRequest.of(0, 5);
+            Pageable pageable = PageRequest.of(0, 5);
             FornecedorPagedRequestDto fornecedorPaged = new FornecedorPagedRequestDto("nome", null, "52.353.295/0001-83",null, null, SituacaoCadastro.ATIVO,List.of(), Map.of());
             String cnpj = "52.353.295/0001-83";
             String name = "Nome";

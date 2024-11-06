@@ -12,6 +12,7 @@ import jakarta.persistence.PersistenceContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import triersistemas.estagio_back_end.dto.request.FornecedorPagedRequestDto;
 import triersistemas.estagio_back_end.dto.request.Orderer;
 import triersistemas.estagio_back_end.dto.response.FornecedorResponseDto;
@@ -32,7 +33,7 @@ public class FornecedorRepositoryImpl implements FornecedorRepositoryCustom {
 
 
     @Override
-    public Page<FornecedorResponseDto> buscarFornecedores(Long filialId, FornecedorPagedRequestDto fornecedorDto, PageRequest pageable) {
+    public Page<FornecedorResponseDto> buscarFornecedores(Long filialId, FornecedorPagedRequestDto fornecedorDto, Pageable pageable) {
         JPAQuery<Fornecedor> query = new JPAQuery<>(entityManager);
         List<OrderSpecifier<?>> sort = new ArrayList<>();
         BooleanBuilder builder = new BooleanBuilder();
