@@ -72,15 +72,15 @@ class AtualizaPrecoControllerTest {
                 null, null, null, true,
                 SituacaoCadastro.ATIVO, null, null);
 
-        filial =new Filial();
-        filial.setId(1L);
-
-        var grupoProduto = createGrupoProduto(grupoProdutoId);
-        var produto1 = createProduto(1L, "produto 1", grupoProdutoId, BigDecimal.ONE, BigDecimal.TEN, grupoProduto);
-        var produto2 = createProduto(2L, "produto 2", grupoProdutoId, BigDecimal.ONE, new BigDecimal("50"), grupoProduto);
-        List<Produto> produtosList = List.of(produto1, produto2);
-        filial.setGrupoProdutos(List.of(grupoProduto));
-        filial.setProdutos(produtosList);
+//        filial =new Filial();
+//        filial.setId(1L);
+//
+//        var grupoProduto = createGrupoProduto(grupoProdutoId);
+//        var produto1 = createProduto(1L, "produto 1", grupoProdutoId, BigDecimal.ONE, BigDecimal.TEN, grupoProduto);
+//        var produto2 = createProduto(2L, "produto 2", grupoProdutoId, BigDecimal.ONE, new BigDecimal("50"), grupoProduto);
+//        List<Produto> produtosList = List.of(produto1, produto2);
+//        filial.setGrupoProdutos(List.of(grupoProduto));
+//        filial.setProdutos(produtosList);
     }
 
     @Nested
@@ -103,7 +103,8 @@ class AtualizaPrecoControllerTest {
                     .content(objectMapper.writeValueAsString(atualizaPrecoDto)));
 
             response.andExpect(status().isOk())
-                    .andExpect(jsonPath("$[0].margemLucro").value(BigDecimal.TEN));
+                    .andExpect(jsonPath("$[0].margemLucro").value(BigDecimal.TEN))
+                    .andExpect(jsonPath("$[1].margemLucro").value(BigDecimal.TEN));
         }
 
     }
